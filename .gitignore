@@ -2,3 +2,4 @@ D-OS Save Editor/obj/
 packages/
 .vs/
 D-OS Save Editor/bin/
+*.DotSettings
