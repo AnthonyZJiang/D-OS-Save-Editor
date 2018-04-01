@@ -235,10 +235,10 @@ namespace D_OS_Save_Editor
             item.LockLevel = LockLevelTextBox.Text;
             item.Vitality = VitalityTextBox.Text;
             item.MaxVitalityPatchCheck = MaxVitalityPatchCheckTextBox.Text;
-            MaxDurabilityPatchCheckTextBox.Text = item.MaxDurabilityPatchCheck;
             if (item.Stats != null)
             {
                 item.Stats.Durability = DurabilityTextBox.Text;
+                item.MaxDurabilityPatchCheck = MaxDurabilityPatchCheckTextBox.Text;
                 item.Stats.DurabilityCounter = DurabilityCounterTextBox.Text;
                 item.Stats.RepairDurabilityPenalty = RepairDurabilityPenaltyTextBox.Text;
                 item.Stats.Level = LevelTextBox.Text;
