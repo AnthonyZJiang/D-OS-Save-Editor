@@ -6,29 +6,88 @@ using System.Threading.Tasks;
 
 namespace D_OS_Save_Editor
 {
-    public class Player : ICloneable
+    public class Player
     {
+        private string _maxVitalityPatchCheck;
+
+        private string _vitality;
+
+        private string _inventoryId;
+
+        private string _experience;
+
+        private string _reputation;
+
+        private string _attributePoints;
+
+        private string _abilityPoints;
+
+        private string _talentPoints;
+
+        private string _gold;
         //<node id="Character">
         #region ...
+
         //<attribute id="MaxVitalityPatchCheck" value="522" type="4" />
-        public int MaxVitalityPatchCheck { get; set; }
+        public string MaxVitalityPatchCheck
+        {
+            get => _maxVitalityPatchCheck;
+            set
+            {
+                if (!XmlUtilities.IsUnint(value))
+                    throw new XmlValidationException("MaxVitalityPatchCheck", value);
+                _maxVitalityPatchCheck = value;
+            }
+        }
+
         //<attribute id="Vitality" value="522" type="4" />
-        public int Vitality { get; set; }
+        public string Vitality
+        {
+            get => _vitality;
+            set
+            {
+                if (!XmlUtilities.IsUnint(value))
+                    throw new XmlValidationException("Vitality", value);
+                _vitality = value; }
+        }
+
         //<attribute id="Inventory" value="335610004" type="5" />
-        public string InventoryId { get; set; }
+        public string InventoryId
+        {
+            get => _inventoryId;
+            set
+            {
+                if (!XmlUtilities.IsUnint(value))
+                    throw new XmlValidationException("InventoryId", value);
+                _inventoryId = value; }
+        }
+
         #endregion
 
         #region .../children/node id=Stats
-        //<attribute id="Experience" value="163375" type="4" />
-        public int Experience { get; set; }
-        //<attribute id="Reputation" value="2" type="4" />
-        public int Reputation { get; set; }
-        #endregion
 
-        #region .../children/node id=MovementMachine
-        //<attribute id="IsLeaderNPC" value="False" type="19" />
-        //if value is True, this term is voided
-        public bool IsLeaderNPC { get; set; } = true;
+        //<attribute id="Experience" value="163375" type="4" />
+        public string Experience
+        {
+            get => _experience;
+            set
+            {
+                if (!XmlUtilities.IsUnint(value))
+                    throw new XmlValidationException("Experience", value);
+                _experience = value; }
+        }
+
+        //<attribute id="Reputation" value="2" type="4" />
+        public string Reputation
+        {
+            get => _reputation;
+            set
+            {
+                if (!XmlUtilities.IsInt(value))
+                    throw new XmlValidationException("Reputation", value);
+                _reputation = value; }
+        }
+
         #endregion
 
         #region .../children/node id=SkillManager/children
@@ -41,12 +100,40 @@ namespace D_OS_Save_Editor
         #endregion
 
         #region .../children/node id=PlayerData/children/node id=PlayerUpgrade
+
         //<attribute id = "AttributePoints" value="0" type="4" />
-        public int AttributePoints { get; set; }
+        public string AttributePoints
+        {
+            get => _attributePoints;
+            set
+            {
+                if (!XmlUtilities.IsUnint(value))
+                    throw new XmlValidationException("AttributePoints", value);
+                _attributePoints = value; }
+        }
+
         //<attribute id = "AbilityPoints" value="0" type="4" />
-        public int AbilityPoints { get; set; }
+        public string AbilityPoints
+        {
+            get => _abilityPoints;
+            set
+            {
+                if (!XmlUtilities.IsUnint(value))
+                    throw new XmlValidationException("AbilityPoints", value);
+                _abilityPoints = value; }
+        }
+
         //<attribute id = "TalentPoints" value="0" type="4" />
-        public int TalentPoints { get; set; }
+        public string TalentPoints
+        {
+            get => _talentPoints;
+            set
+            {
+                if (!XmlUtilities.IsUnint(value))
+                    throw new XmlValidationException("TalentPoints", value);
+                _talentPoints = value; }
+        }
+
         #endregion
 
         #region .../children/node id=PlayerData/children/node id=PlayerUpgrade/children
@@ -76,10 +163,29 @@ namespace D_OS_Save_Editor
         //<attribute id="ClassType" value="" type="22" />
         public string ClassType { get; set; }
         //<attribute id = "IsMale" value="False" type="19" />
-        public bool IsMale { get; set; }
+        public string IsMale { get; set; }
         #endregion
 
-        public object Clone()
+        #region items
+        public Item[] Items { get; set; }
+
+        public string Gold
+        {
+            get => _gold;
+            set
+            {
+                if (!XmlUtilities.IsUnint(value))
+                    throw new XmlValidationException("Gold", value);
+                _gold = value;
+            }
+        }
+
+        public bool[] SlotsOccupation = new bool[16384];
+
+        public Dictionary<string, ItemChange> ItemChanges { get; set; } = new Dictionary<string, ItemChange>();
+        #endregion
+
+        public Player DeepClone()
         {
             var player = this.MemberwiseClone() as Player;
             player.Skills = new Dictionary<string, bool>(player.Skills);
@@ -87,6 +193,14 @@ namespace D_OS_Save_Editor
             player.Abilities = new Dictionary<int, int>(player.Abilities);
             player.Talents = new Dictionary<int, int>(player.Attributes);
             player.Traits = new Dictionary<int, int>(player.Traits);
+            
+            //player.Items = new Item[Items.Length];
+            //for (var i = 0; i < Items.Length; i++)
+            //{
+            //    player.Items[i] = Items[i].DeepClone();
+            //}
+
+            player.Items = Items.Select(a => a.DeepClone()).ToArray();
             return player;
         }
     }

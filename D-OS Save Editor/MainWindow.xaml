@@ -68,8 +68,8 @@
                 <TextBlock Grid.Row="2" Text="Time:" VerticalAlignment="Center" Margin="0,0,10,0"/>
                 <TextBlock Grid.Row="2" Grid.Column="1"  x:Name="SavegameTimeTextBox" Margin="5"/>
                 <StackPanel Grid.Row="3" Grid.ColumnSpan="4" HorizontalAlignment="Right" Orientation="Horizontal">
-                    <Button x:Name="BackupButton" Content="Backup" Width="60" Margin="0,30,10,0" Click="BackupButton_OnClick"/>
-                    <Button x:Name="RestoreButton" Content="Restore" Width="60" Margin="0,30,80,0" Click="RestoreButton_OnClick"/>
+                    <Button x:Name="BackupButton" Content="Backup" Width="60" Margin="0,30,10,0" Click="BackupButton_OnClick" IsEnabled="False"/>
+                    <Button x:Name="RestoreButton" Content="Restore" Width="60" Margin="0,30,80,0" Click="RestoreButton_OnClick" IsEnabled="False"/>
                     <Button x:Name="LoadButton" Content="Load" HorizontalAlignment="Right" IsEnabled="False" Width="60" Margin="0,30,0,0" Click="LoadButton_OnClick"/>
                 </StackPanel>
             </Grid>

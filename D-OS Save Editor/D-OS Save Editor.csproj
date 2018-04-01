@@ -55,7 +55,9 @@
       <HintPath>..\packages\winapicp.1.1\lib\Microsoft.WindowsAPICodePack.ShellExtensions.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -78,6 +80,11 @@
       <DependentUpon>AbilitiesTab.xaml</DependentUpon>
     </Compile>
     <Compile Include="ConversionTable.cs" />
+    <Compile Include="InventoryTab.xaml.cs">
+      <DependentUpon>InventoryTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Item.cs" />
+    <Compile Include="LsxParser.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="SaveEditor.xaml.cs">
       <DependentUpon>SaveEditor.xaml</DependentUpon>
@@ -86,7 +93,12 @@
     <Compile Include="StatsTab.xaml.cs">
       <DependentUpon>StatsTab.xaml</DependentUpon>
     </Compile>
+    <Compile Include="XmlUtilities.cs" />
     <Page Include="AbilitiesTab.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="InventoryTab.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -161,6 +173,7 @@
     <Content Include="lslib\zlib.net.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\NoImage.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -33,7 +33,7 @@ namespace D_OS_Save_Editor
 
             Savegame = savegame;
             // make a copy of players
-            EditingPlayers = Savegame.Players.Select(a => (Player)a.Clone()).ToArray();
+            EditingPlayers = Savegame.Players.Select(a => a?.DeepClone()).ToArray();
 
             foreach (var p in Savegame.Players)
             {
@@ -47,6 +47,7 @@ namespace D_OS_Save_Editor
         {
             StatsTab.Player = EditingPlayers[id];
             AbilitiesTab.Player = EditingPlayers[id];
+            InventoryTab.Player = EditingPlayers[id];
         }
 
         private void PlayerSelectionComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -69,13 +70,13 @@ namespace D_OS_Save_Editor
                 // pack up files
                 Savegame.PackSavegame();
 
-                MessageBox.Show("Successfuly saved Savegame file.");
+                MessageBox.Show(this, "Successfuly saved Savegame file.");
                 this.Close();
             }
             catch (Exception ex)
             {
                 SaveButton.IsEnabled = true;
-                MessageBox.Show($"Failed to save changes.\n\n{ex}", "Failed", MessageBoxButton.OK,
+                MessageBox.Show(this, $"Failed to save changes.\n\n{ex}", "Failed", MessageBoxButton.OK,
                     MessageBoxImage.Error);
             }
             finally
@@ -87,7 +88,7 @@ namespace D_OS_Save_Editor
 
         private void ResetButton_OnClick(object sender, RoutedEventArgs e)
         {
-            EditingPlayers = Savegame.Players.Select(a => (Player)a.Clone()).ToArray();
+            EditingPlayers = Savegame.Players.Select(a => (Player)a.DeepClone()).ToArray();
             StatsTab.UpdateForm();
             AbilitiesTab.UpdateForm();
         }

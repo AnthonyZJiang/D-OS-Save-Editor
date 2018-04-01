@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:D_OS_Save_Editor"
         mc:Ignorable="d"
-        Title="Save editor" SizeToContent="WidthAndHeight" MaxWidth="800">
+        Title="Save editor" SizeToContent="WidthAndHeight" MaxWidth="850" Width="843.636">
     <Window.Resources>
         <Style TargetType="TextBox">
             <Setter Property="Height" Value="23"/>
@@ -29,17 +29,13 @@
         </StackPanel>
         <TabControl Grid.Row="2" Margin="20" Grid.ColumnSpan="2">
             <TabItem Header="Stats">
-                <Grid>
-                    <local:StatsTab x:Name="StatsTab" Margin="10"/>
-                </Grid>
+                <local:StatsTab x:Name="StatsTab" Margin="10"/>
             </TabItem>
             <TabItem Header="Skills">
                 <Grid/>
             </TabItem>
             <TabItem Header="Abilities">
-                <Grid>
-                    <local:AbilitiesTab x:Name="AbilitiesTab" Margin="10"/>
-                </Grid>
+                <local:AbilitiesTab x:Name="AbilitiesTab" Margin="10"/>
             </TabItem>
             <TabItem Header="Talents">
                 <Grid/>
@@ -48,7 +44,7 @@
                 <Grid/>
             </TabItem>
             <TabItem Header="Inventory">
-                <Grid/>
+                <local:InventoryTab x:Name="InventoryTab" Margin="10"/>
             </TabItem>
         </TabControl>
 

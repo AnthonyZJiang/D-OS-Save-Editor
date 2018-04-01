@@ -42,13 +42,13 @@ namespace D_OS_Save_Editor
 
         public void UpdateForm()
         {
-            ExpTextBox.Text = Player.Experience.ToString();
-            ReputationTextBox.Text = Player.Reputation.ToString();
-            HpCurrentTextBox.Text = Player.Vitality.ToString();
-            HpMaxTextBox.Text = Player.MaxVitalityPatchCheck.ToString();
-            AttributePointsTextBox.Text = Player.AttributePoints.ToString();
-            AbilityPointsTextBox.Text = Player.AbilityPoints.ToString();
-            TalentPointsTextBox.Text = Player.TalentPoints.ToString();
+            ExpTextBox.Text = Player.Experience;
+            ReputationTextBox.Text = Player.Reputation;
+            HpCurrentTextBox.Text = Player.Vitality;
+            HpMaxTextBox.Text = Player.MaxVitalityPatchCheck;
+            AttributePointsTextBox.Text = Player.AttributePoints;
+            AbilityPointsTextBox.Text = Player.AbilityPoints;
+            TalentPointsTextBox.Text = Player.TalentPoints;
             StrengthTextBox.Text = Player.Attributes[(int)ConversionTable.Attributes.Strength].ToString();
             DexterityTextBox.Text = Player.Attributes[(int)ConversionTable.Attributes.Dexerity].ToString();
             IntelligenceTextBox.Text = Player.Attributes[(int)ConversionTable.Attributes.Intelligence].ToString();
@@ -59,13 +59,13 @@ namespace D_OS_Save_Editor
 
         public void SaveEdits()
         {
-            Player.Experience = int.Parse(ExpTextBox.Text);
-            Player.Reputation = int.Parse(ReputationTextBox.Text);
-            Player.Vitality = int.Parse(HpCurrentTextBox.Text);
-            Player.MaxVitalityPatchCheck = int.Parse(HpMaxTextBox.Text);
-            Player.AttributePoints = int.Parse(AttributePointsTextBox.Text);
-            Player.AbilityPoints = int.Parse(AbilityPointsTextBox.Text);
-            Player.TalentPoints = int.Parse(TalentPointsTextBox.Text);
+            Player.Experience = ExpTextBox.Text;
+            Player.Reputation = ReputationTextBox.Text;
+            Player.Vitality = HpCurrentTextBox.Text;
+            Player.MaxVitalityPatchCheck = HpMaxTextBox.Text;
+            Player.AttributePoints = AttributePointsTextBox.Text;
+            Player.AbilityPoints = AbilityPointsTextBox.Text;
+            Player.TalentPoints = TalentPointsTextBox.Text;
             Player.Attributes[(int) ConversionTable.Attributes.Strength] = int.Parse(StrengthTextBox.Text);
             Player.Attributes[(int)ConversionTable.Attributes.Dexerity] = int.Parse(DexterityTextBox.Text);
             Player.Attributes[(int)ConversionTable.Attributes.Intelligence] = int.Parse(IntelligenceTextBox.Text);

@@ -1,4 +1,6 @@
-﻿using System;
+﻿//#define AVOIDUNPACK
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -29,6 +31,7 @@ namespace D_OS_Save_Editor
     public partial class MainWindow : Window
     {
         private string _defaultProfileDir = $"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}{DirectorySeparatorChar}Larian Studios{DirectorySeparatorChar}Divinity Original Sin Enhanced Edition{DirectorySeparatorChar}PlayerProfiles";
+        private enum BackupStatus { None, Current, Old, NoChecksum, NoImage }
 
         public MainWindow()
         {
@@ -71,7 +74,7 @@ namespace D_OS_Save_Editor
 
             if (!Directory.Exists(dir))
             {
-                MessageBox.Show("Savegame directory invalid.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(this, "Savegame directory invalid.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
@@ -79,7 +82,7 @@ namespace D_OS_Save_Editor
             var gameVer = GetGameVersion(dir);
             if (gameVer == null)
             {
-                MessageBox.Show("Unidentified game version. Please check if you have entered a correct savegames path.",
+                MessageBox.Show(this, "Unidentified game version. Please check if you have entered a correct savegames path.",
                     "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
@@ -132,18 +135,20 @@ namespace D_OS_Save_Editor
             try
             {
                 Cursor = Cursors.Wait;
+#if (!DEBUG || !AVOIDUNPACK)
                 savegame.UnpackSavegame();
+#endif
                 savegame.ParseLsx();
             }
             catch (NotAPackageException)
             {
-                MessageBox.Show($"The specified package ({savegame.SavegameFullFile}) is not a savegame file.",
+                MessageBox.Show(this, $"The specified package ({savegame.SavegameFullFile}) is not a savegame file.",
                     "Failed", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Internal error!\n\n{ex}", "Failed", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(this, $"Internal error!\n\n{ex}", "Failed", MessageBoxButton.OK, MessageBoxImage.Error);
                 return false;
             }
             finally
@@ -164,6 +169,68 @@ namespace D_OS_Save_Editor
                     return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
                 }
             }
+        }
+
+        private BackupStatus IsBackedUp(string saveGameName)
+        {
+            var backupfile = DirectoryTextBox.Text + DirectorySeparatorChar + saveGameName + DirectorySeparatorChar +
+                             saveGameName + ".bak";
+            var imagefile = DirectoryTextBox.Text + DirectorySeparatorChar + saveGameName + DirectorySeparatorChar +
+                            saveGameName + ".png";
+            var checksumfile = DirectoryTextBox.Text + DirectorySeparatorChar + saveGameName + DirectorySeparatorChar +
+                               saveGameName + ".cks";
+
+            // backup file not exist
+            if (!File.Exists(backupfile)) return BackupStatus.None;
+
+            // checksum not exist
+            if (!File.Exists(checksumfile))
+            {
+                return BackupStatus.NoChecksum;
+            }
+
+            // image not exist
+            if (!File.Exists(imagefile))
+            {
+                return BackupStatus.NoImage;
+            }
+
+            // compare checksum
+            string cks;
+            using (var sr = new StreamReader(checksumfile))
+            {
+                cks = sr.ReadToEnd().Trim();
+            }
+
+            return cks != CalculateChecksumFromPng(imagefile) ? BackupStatus.Old : BackupStatus.Current;
+        }
+
+        private void BackupSavegame(string saveGameName)
+        {
+            var savegamefile = DirectoryTextBox.Text + DirectorySeparatorChar + saveGameName + DirectorySeparatorChar +
+                               saveGameName + ".lsv";
+            var backupfile = DirectoryTextBox.Text + DirectorySeparatorChar + saveGameName + DirectorySeparatorChar +
+                             saveGameName + ".bak";
+            var imagefile = DirectoryTextBox.Text + DirectorySeparatorChar + saveGameName + DirectorySeparatorChar +
+                            saveGameName + ".png";
+            var checksumfile = DirectoryTextBox.Text + DirectorySeparatorChar + saveGameName + DirectorySeparatorChar +
+                               saveGameName + ".cks";
+
+            File.Copy(savegamefile, backupfile, true);
+
+            // generate checksum 
+            var isNoImage = false;
+            if (!File.Exists(imagefile))
+            {
+                isNoImage = true;
+                Properties.Resources.NoImage.Save(imagefile);
+            }
+            using (var sw = new StreamWriter(checksumfile))
+            {
+                sw.WriteLine(CalculateChecksumFromPng(imagefile));
+            }
+
+            MessageBox.Show(this, isNoImage? "Backup successful!\n\n However, no savegame snapshot is found, a blank image is used for computing checksum." : "Backup successful!", "Successful");
         }
         #endregion private methods
 
@@ -197,6 +264,8 @@ namespace D_OS_Save_Editor
         private void SavegameListBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             LoadButton.IsEnabled = true;
+            BackupButton.IsEnabled = true;
+            RestoreButton.IsEnabled = true;
             SavegameTimeTextBox.Text = ((TextBlock)e.AddedItems[e.AddedItems.Count - 1]).Tag.ToString().Split('|')[1];
             SavegameDateTextBox.Text = ((TextBlock)e.AddedItems[e.AddedItems.Count - 1]).Tag.ToString().Split('|')[0];
             var saveGameName = ((TextBlock) e.AddedItems[e.AddedItems.Count-1]).Uid;
@@ -210,15 +279,48 @@ namespace D_OS_Save_Editor
         private void LoadButton_OnClick(object sender, RoutedEventArgs e)
         {
             LoadButton.IsEnabled = false;
-
+            
             if (SavegameListBox.SelectedItem == null) return;
 
             var unpackDir = GetTempPath() + "DOSSE" + DirectorySeparatorChar + "unpackaged";
             var saveGameName = ((TextBlock)SavegameListBox.SelectedItem).Uid;
+
+            // check backup
+            switch (IsBackedUp(saveGameName))
+            {
+                case BackupStatus.None:
+                    var dlgResult = MessageBox.Show(this, "The savegame is not backed up. Do you want to make a backup first?",
+                        "No backup found.", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                    if (dlgResult == MessageBoxResult.Yes)
+                        BackupSavegame(saveGameName);
+                    break;
+                case BackupStatus.Current:
+                    break;
+                case BackupStatus.Old:
+                    dlgResult = MessageBox.Show(this,
+                        "The backup seems to be old because it failed checksum validation. Do you want to make a new backup?",
+                        "Old backup found", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                    if (dlgResult == MessageBoxResult.Yes)
+                        BackupSavegame(saveGameName);
+                    break;
+                case BackupStatus.NoChecksum:
+                    dlgResult = MessageBox.Show(this,
+                        "The backup may be old because it does not have a checksum file. Do you want to make a new backup?",
+                        "No checksum file", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                    if (dlgResult == MessageBoxResult.No) return;
+                    else break;
+                case BackupStatus.NoImage:
+                    dlgResult = MessageBox.Show(this,
+                        "The backup may be old because it does not have a checksum file. Do you want to make a new backup?",
+                        "No image file", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                    if (dlgResult == MessageBoxResult.No) return;
+                    else break;
+            }
+
             var savegame = new Savegame(
-                DirectoryTextBox.Text + DirectorySeparatorChar + saveGameName + DirectorySeparatorChar + saveGameName + ".lsv", 
-                unpackDir,
-                (Game)GameEditionTextBlock.Tag);
+            DirectoryTextBox.Text + DirectorySeparatorChar + saveGameName + DirectorySeparatorChar + saveGameName + ".lsv", 
+            unpackDir,
+            (Game)GameEditionTextBlock.Tag);
 
             // unpack
             if (!UnpackSave(savegame)) return;
@@ -232,87 +334,50 @@ namespace D_OS_Save_Editor
             if (SavegameListBox.SelectedItem == null) return;
 
             var saveGameName = ((TextBlock)SavegameListBox.SelectedItem).Uid;
-            var savegamefile = DirectoryTextBox.Text + DirectorySeparatorChar + saveGameName + DirectorySeparatorChar +
-                               saveGameName + ".lsv";
-            var backupfile = DirectoryTextBox.Text + DirectorySeparatorChar + saveGameName + DirectorySeparatorChar +
-                             saveGameName + ".bak";
-            var imagefile = DirectoryTextBox.Text + DirectorySeparatorChar + saveGameName + DirectorySeparatorChar +
-                            saveGameName + ".png";
-            var checksumfile = DirectoryTextBox.Text + DirectorySeparatorChar + saveGameName + DirectorySeparatorChar +
-                               saveGameName + ".cks";
-
-            File.Copy(savegamefile, backupfile, true);
-
-            // generate checksum 
-            if (!File.Exists(imagefile))
-            {
-                MessageBox.Show("Savegame has been backed up! However, no image file was found.", "Successful");
-                return;
-            }
-            using (var sw = new StreamWriter(checksumfile))
-            {
-                sw.WriteLine(CalculateChecksumFromPng(imagefile));
-            }
-
-            MessageBox.Show("Backup successful!", "Successful");
+            BackupSavegame(saveGameName);
         }
-        #endregion ui events
-
 
         private void RestoreButton_OnClick(object sender, RoutedEventArgs e)
         {
             if (SavegameListBox.SelectedItem == null) return;
 
             var saveGameName = ((TextBlock)SavegameListBox.SelectedItem).Uid;
+
             var savegamefile = DirectoryTextBox.Text + DirectorySeparatorChar + saveGameName + DirectorySeparatorChar +
                                saveGameName + ".lsv";
             var backupfile = DirectoryTextBox.Text + DirectorySeparatorChar + saveGameName + DirectorySeparatorChar +
                              saveGameName + ".bak";
-            var imagefile = DirectoryTextBox.Text + DirectorySeparatorChar + saveGameName + DirectorySeparatorChar +
-                            saveGameName + ".png";
-            var checksumfile = DirectoryTextBox.Text + DirectorySeparatorChar + saveGameName + DirectorySeparatorChar +
-                               saveGameName + ".cks";
 
-            if (!File.Exists(backupfile))
+            switch (IsBackedUp(saveGameName))
             {
-                MessageBox.Show("No backup found.");
-                return;
-            }
-
-            if (!File.Exists(checksumfile))
-            {
-                var dlgResult = MessageBox.Show(
-                    "No checksum file was found. Do you still want to restore the savegame? The backup could be an old savegame.",
-                    "No checksum file", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                if (dlgResult == MessageBoxResult.No) return;
-            }
-            else if (!File.Exists(imagefile))
-            {
-                var dlgResult = MessageBox.Show(
-                    "No image file was found. Do you still want to restore the savegame? The backup could be an old savegame.",
-                    "No image file", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                if (dlgResult == MessageBoxResult.No) return;
-            }
-            else
-            {
-                //load check sum
-                string cks;
-                using (var sr = new StreamReader(checksumfile))
-                {
-                    cks = sr.ReadToEnd().Trim();
-                }
-
-                if (cks != CalculateChecksumFromPng(imagefile))
-                {
-                    var dlgResult = MessageBox.Show(
+                case BackupStatus.None:
+                    MessageBox.Show("No backup found.");
+                    return;
+                case BackupStatus.Current:
+                    break;
+                case BackupStatus.Old:
+                    var dlgResult = MessageBox.Show(this,
                         "The backup failed checksum validation. Do you still want to restore the savegame? The backup could be an old savegame.",
                         "Checksum failed", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                     if (dlgResult == MessageBoxResult.No) return;
-                }
+                    else break;
+                case BackupStatus.NoChecksum:
+                    dlgResult = MessageBox.Show(this,
+                        "No checksum file was found. Do you still want to restore the savegame? The backup could be an old savegame.",
+                        "No checksum file", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                    if (dlgResult == MessageBoxResult.No) return;
+                    else break;
+                case BackupStatus.NoImage:
+                    dlgResult = MessageBox.Show(this,
+                        "No image file was found. Do you still want to restore the savegame? The backup could be an old savegame.",
+                        "No image file", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                    if (dlgResult == MessageBoxResult.No) return;
+                    else break;
             }
 
             File.Copy(backupfile, savegamefile, true);
-            MessageBox.Show("Restore successful!","Successful");
+            MessageBox.Show(this, "Restore successful!", "Successful");
         }
+        #endregion ui events
     }
 }
