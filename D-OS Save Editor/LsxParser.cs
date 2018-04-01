@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Xml;
-using LSLib.Granny;
-using LSLib.LS.Story;
 
 namespace D_OS_Save_Editor
 {

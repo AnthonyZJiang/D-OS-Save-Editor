@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Windows.Media;
 using System.Xml;
 
 namespace D_OS_Save_Editor
