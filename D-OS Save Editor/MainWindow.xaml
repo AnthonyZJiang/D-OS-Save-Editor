@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:D_OS_Save_Editor"
         mc:Ignorable="d"
-        Title="Select a save" Height="450" Width="624.947">
+        Title="D-OS Save Editor: Select a save" Height="450" Width="624.947">
     <Window.Resources>
         <Style TargetType="Button">
             <Setter Property="Padding" Value="5,0"></Setter>
@@ -15,9 +15,14 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
+        <StackPanel x:Name="UpdatePanel" Orientation="Horizontal" HorizontalAlignment="Right">
+            <TextBlock x:Name="UpdateTextBox" Text="A new version is avaiable!" Foreground="#FFD62E2E" HorizontalAlignment="Right" Margin="0,5,10,10"/>
+            <Button x:Name="UpdateButton" Content="Update" Margin="0,5,0,10" Click="UpdateButton_OnClick"/>
+        </StackPanel>
+        <Grid Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
@@ -37,17 +42,19 @@
             <TextBox x:Name="DirectoryTextBox"  Grid.Row="1" Grid.Column="0" Margin="0,0,10,0" TextChanged="DirectoryTextBox_OnTextChanged"/>
             <Button x:Name="BrowseButton" Grid.Row="1" Grid.Column="1" Content="..." Click="BrowseButton_OnClick"/>
         </Grid>
-        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,20,0,0">
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,20,0,0">
             <TextBlock Text="Game edition:" Margin="0,0,10,0"/>
             <TextBlock x:Name="GameEditionTextBlock" Foreground="#FFC70202"/>
         </StackPanel>
-        <Grid Grid.Row="2">
+        <Grid Grid.Row="3">
+            <Grid.RowDefinitions><RowDefinition/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="250"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <ListBox x:Name="SavegameListBox" Margin="0,10,10,0" SelectionChanged="SavegameListBox_OnSelectionChanged"/>
-            <Grid Grid.Column="1" Margin="20,20,0,0" >
+            <Button Content="About" Grid.Row="1" HorizontalAlignment="Left" Margin="0,30,0,0" Click="AboutButton_OnClick"/>
+            <Grid Grid.Column="1" Grid.RowSpan="2"  Margin="20,20,0,0" >
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition Height="Auto"/>

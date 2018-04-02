@@ -1,0 +1,25 @@
+﻿<Window x:Class="D_OS_Save_Editor.About"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:D_OS_Save_Editor"
+        mc:Ignorable="d"
+        Title="About" ResizeMode="NoResize" SizeToContent="WidthAndHeight" WindowStyle="ToolWindow">
+    <StackPanel Orientation="Vertical">
+        <StackPanel Orientation="Vertical" Margin="30,20,30,0" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Text="D-OS Save Editor" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18"/>
+            <TextBlock Text="{Binding Path=(local:MainWindow.Version)}" Margin="10,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </StackPanel>
+        <StackPanel Orientation="Vertical" Margin="30,20,30,0" HorizontalAlignment="Left" VerticalAlignment="Center">
+            <TextBlock Text="Copyright tmxkn1, 2018." HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <TextBlock Text="MIT License" Margin="0,5,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <TextBlock Text="For license information, check LICENSE file at the open source website." FontSize="10" Margin="0,2,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="30,20,30,0" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Text="Open source at:" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <TextBlock Margin="10,0,0,0"><Hyperlink>https://github.com/tmxkn1/D-OS-Save-Editor</Hyperlink></TextBlock>
+        </StackPanel>
+        <Button Content="OK" Width="70" Margin="0,20,20,20" HorizontalAlignment="Right" VerticalAlignment="Bottom" IsCancel="True"/>
+    </StackPanel>
+</Window>

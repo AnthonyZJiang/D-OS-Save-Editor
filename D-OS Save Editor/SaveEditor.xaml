@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:D_OS_Save_Editor"
         mc:Ignorable="d"
-        Title="Save editor" SizeToContent="WidthAndHeight" MaxWidth="850" Width="843.636" Closed="SaveEditor_OnClosed">
+        Title="D-OS Save Editor: Save editor" SizeToContent="WidthAndHeight" MaxWidth="850" Width="843.636" Closed="SaveEditor_OnClosed">
     <Window.Resources>
         <Style TargetType="TextBox">
             <Setter Property="Height" Value="23"/>

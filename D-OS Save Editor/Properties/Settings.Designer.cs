@@ -22,5 +22,17 @@ namespace D_OS_Save_Editor.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool RemindUpdate {
+            get {
+                return ((bool)(this["RemindUpdate"]));
+            }
+            set {
+                this["RemindUpdate"] = value;
+            }
+        }
     }
 }

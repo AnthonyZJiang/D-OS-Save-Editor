@@ -5,11 +5,14 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Security.Cryptography;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using LSLib.LS;
 using LSLib.LS.Enums;
@@ -26,6 +29,10 @@ namespace D_OS_Save_Editor
         private string _defaultProfileDir = $"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}{DirectorySeparatorChar}Larian Studios{DirectorySeparatorChar}Divinity Original Sin Enhanced Edition{DirectorySeparatorChar}PlayerProfiles";
         private enum BackupStatus { None, Current, Old, NoChecksum, NoImage }
 
+        public static string Version { get; } = "v1.2.1";
+        private string _updateLink;
+
+
         public MainWindow()
         {
             InitializeComponent();
@@ -34,9 +41,45 @@ namespace D_OS_Save_Editor
             DirectoryTextBox.Text = GetMostRecentProfile();
 
             LoadSavegamesPath(DirectoryTextBox.Text);
+
+            // update
+            CheckUpdate();
         }
 
         #region private methods
+        private void CheckUpdate()
+        {
+            const string urlAddress = "https://github.com/tmxkn1/D-OS-Save-Editor/blob/master/UpdateCheck";
+            _updateLink = null;
+            UpdatePanel.Visibility = Visibility.Collapsed;
+
+            var request = (HttpWebRequest)WebRequest.Create(urlAddress);
+            using (var response = (HttpWebResponse)request.GetResponse())
+            {
+                if (response.StatusCode != HttpStatusCode.OK) return;
+
+                using (var reader = new StreamReader(response.GetResponseStream()))
+                {
+                    var data = reader.ReadToEnd();
+                    // handshake fail
+                    if (!data.Contains("HandShake={ABCQWEZXCrtyfghvbnUIOJKLNM}"))
+                        return;
+                    // app is latest
+                    if (data.Contains($"LatestVersion={{{Version}}}"))
+                        return;
+
+                    // app is outdated
+                    var reg = new Regex(@"Link=linkStart\{(.*)\}linkEnd");
+                    var matches = reg.Matches(data);
+                    if (matches.Count <= 0) return;
+                    if (matches[0].Groups.Count <= 1) return;
+                    // link found
+                    _updateLink = matches[0].Groups[1].Value;
+                    UpdatePanel.Visibility = Visibility.Visible;
+                }
+            }
+        }
+
         private string GetMostRecentProfile()
         {
             var dirs = Directory.GetDirectories(_defaultProfileDir);
@@ -372,5 +415,17 @@ namespace D_OS_Save_Editor
             MessageBox.Show(this, "Restore successful!", "Successful");
         }
         #endregion ui events
+
+        private void UpdateButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start(_updateLink);
+
+        }
+
+        private void AboutButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            var about = new About();
+            about.ShowDialog();
+        }
     }
 }
