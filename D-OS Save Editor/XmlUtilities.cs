@@ -49,6 +49,9 @@ namespace D_OS_Save_Editor
 
     public class XmlValidationException : Exception
     {
+        public string Name { get; }
+        public string Value { get; }
+
         public XmlValidationException()
         {
         }
@@ -63,6 +66,8 @@ namespace D_OS_Save_Editor
 
         public XmlValidationException(string name, string value) : base($"Invalid value '{value}' for variable '{name}'.")
         {
+            Name = name;
+            Value = value;
         }
     }
 }

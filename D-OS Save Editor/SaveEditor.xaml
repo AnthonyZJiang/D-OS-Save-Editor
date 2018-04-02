@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:D_OS_Save_Editor"
         mc:Ignorable="d"
-        Title="Save editor" SizeToContent="WidthAndHeight" MaxWidth="850" Width="843.636">
+        Title="Save editor" SizeToContent="WidthAndHeight" MaxWidth="850" Width="843.636" Closed="SaveEditor_OnClosed">
     <Window.Resources>
         <Style TargetType="TextBox">
             <Setter Property="Height" Value="23"/>
@@ -25,7 +25,7 @@
         <StackPanel Orientation="Horizontal" Grid.Column="1">
             <Button x:Name="ResetButton" Content="Reset" VerticalAlignment="Center" Padding="10,2" Margin ="10,20,40,0" Width="60" Click="ResetButton_OnClick"/>
             <Button x:Name="SaveButton" Content="Save" VerticalAlignment="Center" Padding="10,2" Margin="0,20,0,0" Width="60" Click="SaveButton_OnClick"/>
-            <Button x:Name="CancelButton" Content="Cancel" VerticalAlignment="Center" Padding="10,2" Margin ="10,20,20,0" Width="60" Click="CancelButton_OnClick"/>
+            <Button x:Name="CancelButton" Content="Cancel" VerticalAlignment="Center" Padding="10,2" Margin ="10,20,20,0" Width="60" IsCancel="True"/>
         </StackPanel>
         <TabControl Grid.Row="2" Margin="20" Grid.ColumnSpan="2">
             <TabItem Header="Stats">
@@ -45,6 +45,22 @@
             </TabItem>
             <TabItem Header="Inventory">
                 <local:InventoryTab x:Name="InventoryTab" Margin="10"/>
+            </TabItem>
+            <TabItem Header="Debug">
+                <TabItem.Resources>
+                    <Style TargetType="Button">
+                        <Setter Property="Width" Value="200"/>
+                        <Setter Property="Height" Value="auto"/>
+                        <Setter Property="Padding" Value="5,2"/>
+                        <Setter Property="Margin" Value="20, 5"/>
+                        <EventSetter Event="Click" Handler="DebugButton_OnClick"></EventSetter>
+                    </Style>
+                </TabItem.Resources>
+                <StackPanel>
+                    <Button x:Name="DumpAllPlayersButton" Content="Dump All Player" Tag="AllPlayer"/>
+                    <Button x:Name="DumpAllPlayerInventoryButton" Content="Dump All Player Inventory" Tag="AllInv"/>
+                    <Button x:Name="DumpAllItemModifier" Content="Dump All Item Modifier" Tag="AllMod"/>
+                </StackPanel>
             </TabItem>
         </TabControl>
 

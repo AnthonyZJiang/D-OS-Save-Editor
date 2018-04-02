@@ -1,9 +1,15 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.IO.Compression;
+using System.IO.Packaging;
 using System.Linq;
+using System.Reflection;
 using System.Xml;
 using LSLib.LS;
 using LSLib.LS.Enums;
+using Newtonsoft.Json;
 
 namespace D_OS_Save_Editor
 {
@@ -78,6 +84,104 @@ namespace D_OS_Save_Editor
             // packup to .lsv
             var packager = new Packager();
             packager.CreatePackage(SavegameFullFile, UnpackDirectory, PackageVersion.V13, CompressionMethod.LZ4, false);
+        }
+
+        public void DumpAllPlayer()
+        {
+            var fileName = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}{Path.DirectorySeparatorChar}AllPlayer{DateTime.Now:yyMMdd_HHmmss}";
+            using (var file = File.CreateText(fileName+ ".json"))
+            {
+                var serializer = new JsonSerializer();
+                serializer.Serialize(file, Players);
+            }
+
+            using (var zip = ZipFile.Open(fileName + ".zip", ZipArchiveMode.Create))
+            {
+                zip.CreateEntryFromFile(fileName + ".json", "AllPlayer.txt");
+            }
+#if !DEBUG
+            File.Delete(fileName + ".json");
+#endif
+        }
+
+        public void DumpAllInventory()
+        {
+            var fileName =
+                $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}{Path.DirectorySeparatorChar}AllInventory_{DateTime.Now:yyMMdd_HHmmss}";
+            var fileNames = new string[Players.Length];
+            for (var i = 0; i < Players.Length; i++)
+            {
+                fileNames[i] = $"{fileName}_{i}";
+                using (var file = File.CreateText(fileNames[i] + ".json"))
+                {
+                    var serializer = new JsonSerializer();
+                    serializer.Serialize(file, Players[i].Items);
+                }
+            }
+
+            using (var zip = ZipFile.Open(fileName + ".zip", ZipArchiveMode.Create))
+            {
+                for (var i = 0; i < fileNames.Length; i++)
+                {
+                    zip.CreateEntryFromFile(fileNames[i] + ".json", $"AllInventory_{i}.json");
+                }
+            }
+#if !DEBUG
+            foreach (var s in fileNames)
+                File.Delete(s + ".json");
+#endif
+        }
+
+        public static string DumpItem(Item item, string msg)
+        {
+            var name = $"{item.StatsName}_{DateTime.Now:yyMMdd_HHmmss}";
+            var fileName =
+                $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}{Path.DirectorySeparatorChar}{name}";
+            using (var file = File.CreateText(fileName + ".json"))
+            {
+                var serializer = new JsonSerializer();
+                serializer.Serialize(file, item);
+                serializer.Serialize(file, msg);
+            }
+
+            using (var zip = ZipFile.Open(fileName + ".zip", ZipArchiveMode.Create))
+            {
+                zip.CreateEntryFromFile(fileName + ".json", fileName + ".json");
+            }
+#if !DEBUG
+            File.Delete(fileName + ".json");
+#endif
+            return name + ".zip";
+        }
+
+        public void DumpAllModifier()
+        {
+            var fileName = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}{Path.DirectorySeparatorChar}AllModifier{DateTime.Now:yyMMdd_HHmmss}";
+            var modList = new List<string>();
+            using (var file = new StreamWriter(fileName + ".txt"))
+            {
+                foreach (var player in Players)
+                {
+                    foreach (var item in player.Items)
+                    {
+                        if (item.Generation == null) continue;
+                        foreach (var boost in item.Generation.Boosts)
+                        {
+                            if (modList.Contains(item.ItemSort+boost)) continue;
+                            file.WriteLine(item.ItemSort + " " + boost);
+                            modList.Add(item.ItemSort+boost);
+                        }
+                    }
+                }
+            }
+
+            using (var zip = ZipFile.Open(fileName + ".zip", ZipArchiveMode.Create))
+            {
+                zip.CreateEntryFromFile(fileName + ".txt", "AllModifier.txt");
+            }
+#if !DEBUG
+            File.Delete(fileName + ".json");
+#endif
         }
     }
 }

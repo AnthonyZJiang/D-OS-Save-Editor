@@ -69,10 +69,17 @@
     <Reference Include="Microsoft.WindowsAPICodePack.ShellExtensions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\winapicp.1.1\lib\Microsoft.WindowsAPICodePack.ShellExtensions.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -94,6 +101,9 @@
     <Compile Include="AbilitiesTab.xaml.cs">
       <DependentUpon>AbilitiesTab.xaml</DependentUpon>
     </Compile>
+    <Compile Include="AddBoostDialog.xaml.cs">
+      <DependentUpon>AddBoostDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ConversionTable.cs" />
     <Compile Include="InventoryTab.xaml.cs">
       <DependentUpon>InventoryTab.xaml</DependentUpon>
@@ -110,6 +120,10 @@
     </Compile>
     <Compile Include="XmlUtilities.cs" />
     <Page Include="AbilitiesTab.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AddBoostDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

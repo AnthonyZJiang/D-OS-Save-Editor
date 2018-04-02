@@ -16,7 +16,6 @@ namespace D_OS_Save_Editor
         public static readonly string[] GoldNames = {"small_gold", "inbetween_gold", "trader_large_gold"};
         public static readonly string[] ArrowNames = {"arrow", "arrowhead", "arrowshaft"};
 
-
         private string _flags;
         private string _isKey;
         private string _parent;
@@ -27,6 +26,7 @@ namespace D_OS_Save_Editor
         private string _maxVitalityPatchCheck;
         private string _maxDurabilityPatchCheck;
         private string _itemType;
+        private string _isGenerated;
 
         public string Xml { get; set; }
 
@@ -93,6 +93,17 @@ namespace D_OS_Save_Editor
                 if (!XmlUtilities.IsUnint(value))
                     throw new XmlValidationException("Amount", value);
                 _amount = value;
+            }
+        }
+
+        public string IsGenerated
+        {
+            get => _isGenerated;
+            set
+            {
+                if (!XmlUtilities.IsBool(value))
+                    throw new XmlValidationException("IsKey", value);
+                _isGenerated = value;
             }
         }
 
@@ -166,24 +177,9 @@ namespace D_OS_Save_Editor
 
         public class GenerationNode
         {
-            private string _level;
             private string _random;
             public string Base { get; set; }
-
-            public string ItemType { get; set; }
-
-            // level of the item at Generation, only applies to a piece of equipment
-            public string Level
-            {
-                get => _level;
-                set
-                {
-                    if (!XmlUtilities.IsUnint(value))
-                        throw new XmlValidationException("Level", value);
-                    _level = value;
-                }
-            }
-
+            
             public string Random
             {
                 get => _random;
@@ -196,6 +192,14 @@ namespace D_OS_Save_Editor
             }
 
             public List<string> Boosts { get; set; }
+
+            public GenerationNode() { }
+
+            public GenerationNode(string baseStats, string random)
+            {
+                Base = baseStats;
+                Random = random;
+            }
 
             public GenerationNode DeepClone()
             {
@@ -331,6 +335,49 @@ namespace D_OS_Save_Editor
 
                 return doc;
             }
+        }
+
+        public string GetAllowedChangeType()
+        {
+            var s = "";
+            if (Vitality != "-1")
+            {
+                s += nameof(Vitality);
+            }
+
+            if (ItemSort == ItemSortType.Armor || ItemSort == ItemSortType.Weapon)
+            {
+                s += nameof(ItemRarity);
+                s += nameof(Generation);
+            }
+
+            if (ItemSort == ItemSortType.Potion ||
+                ItemSort == ItemSortType.Gold ||
+                ItemSort == ItemSortType.Granade ||
+                ItemSort == ItemSortType.Scroll ||
+                ItemSort == ItemSortType.Food)
+            {
+                s += nameof(Amount);
+            }
+
+            if (ItemSort == ItemSortType.Furniture)
+            {
+                s += nameof(LockLevel);
+            }
+
+            // generation
+            if (Generation != null)
+            {
+                s += nameof(Generation);
+            }
+
+            // stats
+            if (Stats != null)
+            {
+                s += nameof(Stats);
+            }
+
+            return s;
         }
     }
 

@@ -1,4 +1,5 @@
 ﻿//#define AVOIDUNPACK
+//#define LOG_ITEMXML
 
 using System;
 using System.Collections.Generic;

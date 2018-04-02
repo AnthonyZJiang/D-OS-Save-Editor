@@ -11,7 +11,7 @@ namespace D_OS_Save_Editor
     /// </summary>
     public partial class SaveEditor : Window
     {
-        private Savegame Savegame { get; }
+        private Savegame Savegame { get; set; }
         private Player[] EditingPlayers { get; set; }
 
         public SaveEditor(Savegame savegame)
@@ -58,7 +58,7 @@ namespace D_OS_Save_Editor
                 Savegame.PackSavegame();
 
                 MessageBox.Show(this, "Successfuly saved Savegame file.");
-                this.Close();
+                DialogResult = true;
             }
             catch (Exception ex)
             {
@@ -75,14 +75,34 @@ namespace D_OS_Save_Editor
 
         private void ResetButton_OnClick(object sender, RoutedEventArgs e)
         {
-            EditingPlayers = Savegame.Players.Select(a => (Player)a.DeepClone()).ToArray();
+            EditingPlayers = Savegame.Players.Select(a => a.DeepClone()).ToArray();
             StatsTab.UpdateForm();
             AbilitiesTab.UpdateForm();
+            InventoryTab.UpdateForm();
         }
 
-        private void CancelButton_OnClick(object sender, RoutedEventArgs e)
+        private void SaveEditor_OnClosed(object sender, EventArgs e)
         {
-            this.Close();
+            Savegame = null;
+            EditingPlayers = null;
+        }
+
+        private void DebugButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            switch (((Button)sender).Tag)
+            {
+                case "AllPlayer":
+                    Savegame.DumpAllPlayer();
+                    break;
+                case "AllInv":
+                    Savegame.DumpAllInventory();
+                    break;
+                case "AllMod":
+                    Savegame.DumpAllModifier();
+                    break;
+            }
+
+            MessageBox.Show("Dump has been created. Thank you!");
         }
     }
 }

@@ -1,4 +1,7 @@
-﻿using System.Windows;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -30,6 +33,8 @@ namespace D_OS_Save_Editor
         {
             InitializeComponent();
             DefaultTextBoxBorderBrush = AmountTextBox.BorderBrush;
+
+            RarityComboBox.ItemsSource = Enum.GetValues(typeof(Item.ItemRarityType)).Cast<Item.ItemRarityType>();
         }
 
         public void UpdateForm()
@@ -86,74 +91,30 @@ namespace D_OS_Save_Editor
                 return;
             var item = Player.Items[lb.SelectedIndex];
 
-            #region enable disable textboxes
-            // generation and stats related controls are enabled/disabled later on
-            if (item.Vitality == "-1")
-            {
-                VitalityTextBox.IsEnabled = false;
-                MaxVitalityPatchCheckTextBox.IsEnabled = false;
-            }
-            else
+
+            var allowedChanges = item.GetAllowedChangeType();
+            #region enable disable controls
+
+            if (allowedChanges.Contains(nameof(item.Vitality)))
             {
                 VitalityTextBox.IsEnabled = true;
                 MaxVitalityPatchCheckTextBox.IsEnabled = true;
             }
-
-            if (item.ItemSort == ItemSortType.Potion ||
-                item.ItemSort == ItemSortType.Gold ||
-                item.ItemSort == ItemSortType.Granade ||
-                item.ItemSort == ItemSortType.Scroll ||
-                item.ItemSort == ItemSortType.Food)
-            {
-                AmountTextBox.IsEnabled = true;
-            }
             else
             {
-                AmountTextBox.IsEnabled = false;
+                VitalityTextBox.IsEnabled = false;
+                MaxVitalityPatchCheckTextBox.IsEnabled = false;
             }
 
-            LockLevelTextBox.IsEnabled = item.ItemSort == ItemSortType.Furniture;
-            #endregion
+            RarityComboBox.IsEnabled = allowedChanges.Contains(nameof(item.ItemRarity));
+            AmountTextBox.IsEnabled = allowedChanges.Contains(nameof(item.Amount));
+            LockLevelTextBox.IsEnabled = allowedChanges.Contains(nameof(item.LockLevel));
+            BoostsListBox.IsEnabled = allowedChanges.Contains(nameof(item.Generation));
 
-#if DEBUG
-            Console.WriteLine(item.Xml);
-#endif
-            // textbox contents
-            AmountTextBox.Text = item.Amount;
-            LockLevelTextBox.Text = item.LockLevel;
-            VitalityTextBox.Text = item.Vitality;
-            MaxVitalityPatchCheckTextBox.Text = item.MaxVitalityPatchCheck;
-            DurabilityTextBox.Text = item.Stats?.Durability;
-            DurabilityCounterTextBox.Text = item.Stats?.DurabilityCounter;
-            MaxDurabilityPatchCheckTextBox.Text = item.MaxDurabilityPatchCheck;
-            RepairDurabilityPenaltyTextBox.Text = item.Stats?.RepairDurabilityPenalty;
-            LevelTextBox.Text = item.Stats?.Level;
-
-            // generation
-            if (item.Generation != null)
+            if (allowedChanges.Contains(nameof(item.Stats)))
             {
-                foreach (var m in item.Generation.Boosts)
-                {
-                    BoostsListBox.Items.Add(m);
-                }
-
-                BoostsListBox.IsEnabled = true;
-            }
-            else
-            {
-                BoostsListBox.IsEnabled = false;
-
-            }
-
-            // stats
-            if (item.Stats != null)
-            {
-                foreach (var m in item.Stats.PermanentBoost)
-                {
-                    PermBoostsListBox.Items.Add($"{m.Key} - {m.Value}");
-                }
                 DurabilityTextBox.IsEnabled = true;
-                MaxDurabilityPatchCheckTextBox.IsEnabled = true;
+                MaxDurabilityPatchCheckTextBox.IsEnabled = false;
                 DurabilityCounterTextBox.IsEnabled = true;
                 RepairDurabilityPenaltyTextBox.IsEnabled = true;
                 LevelTextBox.IsEnabled = true;
@@ -167,6 +128,42 @@ namespace D_OS_Save_Editor
                 RepairDurabilityPenaltyTextBox.IsEnabled = false;
                 LevelTextBox.IsEnabled = false;
                 PermBoostsListBox.IsEnabled = false;
+            }
+            #endregion
+
+#if DEBUG && LOG_ITEMXML
+            Console.WriteLine(item.Xml);
+#endif
+            // textbox contents
+            AmountTextBox.Text = item.Amount;
+            LockLevelTextBox.Text = item.LockLevel;
+            VitalityTextBox.Text = item.Vitality;
+            MaxVitalityPatchCheckTextBox.Text = item.MaxVitalityPatchCheck;
+            DurabilityTextBox.Text = item.Stats?.Durability;
+            DurabilityCounterTextBox.Text = item.Stats?.DurabilityCounter;
+            MaxDurabilityPatchCheckTextBox.Text = item.MaxDurabilityPatchCheck;
+            RepairDurabilityPenaltyTextBox.Text = item.Stats?.RepairDurabilityPenalty;
+            LevelTextBox.Text = item.Stats?.Level;
+
+            // combobox
+            RarityComboBox.SelectedIndex = (int) item.ItemRarity;
+
+            // generation
+            if (item.Generation != null)
+            {
+                foreach (var m in item.Generation.Boosts)
+                {
+                    BoostsListBox.Items.Add(m);
+                }
+            }
+
+            // stats
+            if (item.Stats != null)
+            {
+                foreach (var m in item.Stats.PermanentBoost)
+                {
+                    PermBoostsListBox.Items.Add($"{m.Key} - {m.Value}");
+                }
             }
         }
         
@@ -220,30 +217,115 @@ namespace D_OS_Save_Editor
             if (ItemsListBox.SelectedIndex < 0)
                 return;
 
-            var item = Player.Items[ItemsListBox.SelectedIndex];
-            item.Amount = AmountTextBox.Text;
-            item.LockLevel = LockLevelTextBox.Text;
-            item.Vitality = VitalityTextBox.Text;
-            item.MaxVitalityPatchCheck = MaxVitalityPatchCheckTextBox.Text;
-            if (item.Stats != null)
+            try
             {
-                item.Stats.Durability = DurabilityTextBox.Text;
-                item.MaxDurabilityPatchCheck = MaxDurabilityPatchCheckTextBox.Text;
-                item.Stats.DurabilityCounter = DurabilityCounterTextBox.Text;
-                item.Stats.RepairDurabilityPenalty = RepairDurabilityPenaltyTextBox.Text;
-                item.Stats.Level = LevelTextBox.Text;
-            }
+                // apply changes to a copy of the item
+                var item = Player.Items[ItemsListBox.SelectedIndex].DeepClone();
+                var allowedChanges = item.GetAllowedChangeType();
+                if (allowedChanges.Contains(nameof(item.Amount)))
+                    item.Amount = AmountTextBox.Text;
 
-            if (Player.ItemChanges.ContainsKey(item.Slot))
-            {
-                Player.ItemChanges[item.Slot] = new ItemChange(item, Player.ItemChanges[item.Slot].ChangeType, ItemsListBox.SelectedIndex);
-            }
-            else
-            {
-                Player.ItemChanges.Add(item.Slot, new ItemChange(item, ChangeType.Modify, ItemsListBox.SelectedIndex));
-            }
+                if (allowedChanges.Contains(nameof(item.LockLevel)))
+                    item.LockLevel = LockLevelTextBox.Text;
 
-            MessageBox.Show("Changes have been applied.");
+                if (allowedChanges.Contains(nameof(item.Vitality)))
+                {
+                    item.Vitality = VitalityTextBox.Text;
+                    item.MaxVitalityPatchCheck = MaxVitalityPatchCheckTextBox.Text;
+                }
+                
+                if (allowedChanges.Contains(nameof(item.ItemRarity)))
+                    item.ItemRarity = (Item.ItemRarityType) RarityComboBox.SelectedIndex;
+
+                if (allowedChanges.Contains(nameof(item.Stats)))
+                {
+                    item.Stats.Durability = DurabilityTextBox.Text;
+                    item.Stats.DurabilityCounter = DurabilityCounterTextBox.Text;
+                    item.Stats.RepairDurabilityPenalty = RepairDurabilityPenaltyTextBox.Text;
+                    item.Stats.Level = LevelTextBox.Text;
+                }
+
+                if (allowedChanges.Contains(nameof(item.Generation)))
+                {
+                    if (item.Generation == null)
+                    {
+                        //TODO if Item.Stats is null, an error will occur later on when writing xml because Geneartion.Level is taken from Stats.Level.
+                        //Since Item.Stats == null is not likely to be possible, let's handle it later on if we have an report of this case.
+                        if (item.Stats == null)
+                        {
+                            var dlgResult = MessageBox.Show(
+                                "Sorry, it is not possible to add modifier to this item yet. No changes have been applied. If you would like to help, please click \"Yes\".", "Error", MessageBoxButton.YesNo, MessageBoxImage.Error);
+                            if (dlgResult == MessageBoxResult.No) return;
+
+                            var fn = Savegame.DumpItem(item, "Item.Stats null");
+                            dlgResult = MessageBox.Show(
+                                $"Thank you for your help. Now please click \"OK\" to go to Github and file an issue. \n\nYou only need to go through the following steps:\n\n1. navigate to the application root folder;\n2. locate the {fn} file;\n3. drag {fn} to the issue reporting window;\n4. submit.",
+                                "Thank you",MessageBoxButton.OKCancel,MessageBoxImage.Information);
+                            if (dlgResult == MessageBoxResult.Cancel) return;
+
+                            System.Diagnostics.Process.Start("https://github.com/tmxkn1/D-OS-Save-Editor/issues/new");
+                            return;
+                        }
+                        item.Generation = new Item.GenerationNode(item.StatsName, "0");
+                    }
+
+                    item.Generation.Boosts = new List<string>();
+                    foreach (string s in BoostsListBox.Items)
+                    {
+                        item.Generation.Boosts.Add(s);
+                    }
+                }
+
+                // add changes
+                if (Player.ItemChanges.ContainsKey(item.Slot))
+                {
+                    Player.ItemChanges[item.Slot] = new ItemChange(item, Player.ItemChanges[item.Slot].ChangeType,
+                        ItemsListBox.SelectedIndex);
+                }
+                else
+                {
+                    Player.ItemChanges.Add(item.Slot,
+                        new ItemChange(item, ChangeType.Modify, ItemsListBox.SelectedIndex));
+                }
+
+                // apply changes to the original item
+                Player.Items[ItemsListBox.SelectedIndex] = item;
+
+                // change colour
+                ((ListBoxItem) ItemsListBox.Items[ItemsListBox.SelectedIndex]).Foreground =
+                    _itemRarityColor[(int) item.ItemRarity];
+
+                MessageBox.Show("Changes have been applied.");
+            }
+            catch (XmlValidationException ex)
+            {
+                MessageBox.Show($"Invalid value entered: {ex.Name}: {ex.Value}. No change has been applied.\n\n{ex.Message}", "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Internal error. No change has been applied.\n\n{ex.Message}", "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void BoostsContextMenu_Click(object sender, RoutedEventArgs e)
+        {
+            switch (((MenuItem)sender).Header)
+            {
+                case "Add":
+                    var dlg = new AddBoostDialog();
+                    dlg.ShowDialog();
+                    if (dlg.DialogResult == true)
+                        BoostsListBox.Items.Add(dlg.BoostText);
+                    break;
+                case "Copy text":
+                    Clipboard.SetText((string)BoostsListBox.SelectedValue);
+                    break;
+                case "Delete":
+                    BoostsListBox.Items.RemoveAt(BoostsListBox.SelectedIndex);
+                    break;
+            }
         }
     }
 }

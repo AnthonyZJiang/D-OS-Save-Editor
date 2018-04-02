@@ -81,37 +81,55 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Text="Amount:"/>
-                    <TextBlock Text="Lock level:" Grid.Row="1"/>
-                    <TextBlock Text="Required level:" Grid.Row="2"/>
-                    <TextBlock Text="HP:" Grid.Row="3"/>
-                    <TextBlock Text="Durability:" Grid.Column="2" Margin="30,0,0,0"/>
-                    <TextBlock Text="Durability counter:" Grid.Row="1" Grid.Column="2" Margin="30,0,0,0"/>
-                    <TextBlock Text="Repair durability penalty:" Grid.Row="2" Grid.Column="2" Margin="30,0,0,0"/>
+                    <TextBlock Text="Rarity:" Grid.Row="1"/>
+                    <TextBlock Text="Lock level:" Grid.Row="2"/>
+                    <TextBlock Text="Required level:" Grid.Row="3"/>
+                    <TextBlock Text="HP:" Grid.Row="0" Grid.Column="2" Margin="30,0,0,0"/>
+                    <TextBlock Text="Durability:" Grid.Row="1" Grid.Column="2" Margin="30,0,0,0"/>
+                    <TextBlock Text="Durability counter:" Grid.Row="2" Grid.Column="2" Margin="30,0,0,0"/>
+                    <TextBlock Text="Repair durability penalty:" Grid.Row="3" Grid.Column="2" Margin="30,0,0,0"/>
                     <TextBox x:Name="AmountTextBox" Grid.Column="1" Width="85"/>
-                    <TextBox x:Name="LockLevelTextBox" Grid.Row="1" Grid.Column="1"/>
-                    <TextBox x:Name="LevelTextBox" Grid.Row="2" Grid.Column="1"/>
-                    <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal">
+                    <ComboBox x:Name="RarityComboBox" Grid.Column="1" Grid.Row="1" Width="85" Height="19" Margin="20,0,0,0"/>
+                    <TextBox x:Name="LockLevelTextBox" Grid.Row="2" Grid.Column="1"/>
+                    <TextBox x:Name="LevelTextBox" Grid.Row="3" Grid.Column="1"/>
+                    <StackPanel Grid.Row="0" Grid.Column="3" Orientation="Horizontal">
                         <TextBox x:Name="VitalityTextBox" Margin="20,5,5,5" Width="35"/>
                         <TextBlock Text="/"/>
                         <TextBox x:Name="MaxVitalityPatchCheckTextBox" Margin="5,5,0,5" Width="35"/>
                     </StackPanel>
-                    <StackPanel Grid.Row="0" Grid.Column="3" Orientation="Horizontal">
+                    <StackPanel Grid.Row="1" Grid.Column="3" Orientation="Horizontal">
                         <TextBox x:Name="DurabilityTextBox" Margin="20,5,5,5" Width="35"/>
                         <TextBlock Text="/"/>
                         <TextBox x:Name="MaxDurabilityPatchCheckTextBox" Margin="5,5,0,5" Width="35"/>
                     </StackPanel>
-                    <TextBox x:Name="DurabilityCounterTextBox" Grid.Row="1" Grid.Column="3"/>
-                    <TextBox x:Name="RepairDurabilityPenaltyTextBox" Grid.Row="2" Grid.Column="3"/>
+                    <TextBox x:Name="DurabilityCounterTextBox" Grid.Row="2" Grid.Column="3"/>
+                    <TextBox x:Name="RepairDurabilityPenaltyTextBox" Grid.Row="3" Grid.Column="3"/>
                 </Grid>
             </GroupBox>
             <GroupBox Header="Modifiers">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <ListBox x:Name="BoostsListBox" MinWidth="200" MinHeight="150" Margin="10"></ListBox>
-                    <ListBox Grid.Column="1" x:Name="PermBoostsListBox" MinWidth="200" MinHeight="150" Margin="10"></ListBox>
+                    <ListBox x:Name="BoostsListBox" Width="330" Height="150" Margin="10">
+                        <ListBox.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Add" Click="BoostsContextMenu_Click"/>
+                            </ContextMenu>
+                        </ListBox.ContextMenu>
+                        <ListBox.Resources>
+                            <ContextMenu x:Key="BoostsContextMenu">
+                                <MenuItem Header="Add" Click="BoostsContextMenu_Click"/>
+                                <MenuItem Header="Delete" Click="BoostsContextMenu_Click"/>
+                                <MenuItem Header="Copy text" Click="BoostsContextMenu_Click"/>
+                            </ContextMenu>
+                            <Style TargetType="{x:Type ListBoxItem}">
+                                <Setter Property="ContextMenu" Value="{StaticResource BoostsContextMenu}"/>
+                            </Style>
+                        </ListBox.Resources>
+                    </ListBox>
+                    <ListBox Grid.Column="1" x:Name="PermBoostsListBox" MinWidth="100" Height="150" Margin="10"/>
                 </Grid>
             </GroupBox>
         </WrapPanel>
