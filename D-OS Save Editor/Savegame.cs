@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.IO.Compression;
@@ -86,18 +87,18 @@ namespace D_OS_Save_Editor
             packager.CreatePackage(SavegameFullFile, UnpackDirectory, PackageVersion.V13, CompressionMethod.LZ4, false);
         }
 
-        public void DumpAllPlayer()
+        public void DumpSaveGame()
         {
-            var fileName = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}{Path.DirectorySeparatorChar}AllPlayer{DateTime.Now:yyMMdd_HHmmss}";
-            using (var file = File.CreateText(fileName+ ".json"))
+            var fileName = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}{Path.DirectorySeparatorChar}SaveGame_{DateTime.Now:yyMMdd_HHmmss}";
+            using (var file = File.CreateText(fileName + ".json"))
             {
                 var serializer = new JsonSerializer();
-                serializer.Serialize(file, Players);
+                serializer.Serialize(file, this);
             }
 
             using (var zip = ZipFile.Open(fileName + ".zip", ZipArchiveMode.Create))
             {
-                zip.CreateEntryFromFile(fileName + ".json", "AllPlayer.txt");
+                zip.CreateEntryFromFile(fileName + ".json", "SaveGame.json");
             }
 #if !DEBUG
             File.Delete(fileName + ".json");
@@ -156,7 +157,7 @@ namespace D_OS_Save_Editor
 
         public void DumpAllModifier()
         {
-            var fileName = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}{Path.DirectorySeparatorChar}AllModifier{DateTime.Now:yyMMdd_HHmmss}";
+            var fileName = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}{Path.DirectorySeparatorChar}AllModifier_{DateTime.Now:yyMMdd_HHmmss}";
             var modList = new List<string>();
             using (var file = new StreamWriter(fileName + ".txt"))
             {
@@ -182,6 +183,17 @@ namespace D_OS_Save_Editor
 #if !DEBUG
             File.Delete(fileName + ".json");
 #endif
+        }
+
+        public static Savegame GetSavegameFromJson(string jsonFile)
+        {
+            Savegame sg;
+            using (var sr = new StreamReader(jsonFile))
+            {
+                sg = JsonConvert.DeserializeObject<Savegame>(sr.ReadToEnd());
+            }
+
+            return sg;
         }
     }
 }

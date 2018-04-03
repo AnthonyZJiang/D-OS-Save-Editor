@@ -55,6 +55,50 @@
 
         }
 
+        public static string[] TraitNames =
+        {
+            "Forgiving",
+            "Vindictive",
+            "Bold",
+            "Cautious",
+            "Altruistic",
+            "Egotistical",
+            "Independent",
+            "Obedient",
+            "Pragmatic",
+            "Romantic",
+            "Spiritual",
+            "Materialistic",
+            "Righteous",
+            "Renegade",
+            "Blunt",
+            "Considerate",
+            "Compassionate",
+            "Heartless"
+        };
+
+        public static string[] TraitEffects =
+        {
+            "Immune to Cursed",
+            "+20% chance to hit on attacks of opportunity",
+            "+1 Initiative",
+            "+1 Sneaking",
+            "+2 Reputation",
+            "+1 Bartering",
+            "+1 Willpower",
+            "+1 Willpower when an ally with Leadership is in sight (+2 Willpower if ally has Leadership 5 or higher)",
+            "+1 Crafting",
+            "+1 Lucky Charm",
+            "Immune to Fear",
+            "+1 Loremaster",
+            "+1 Leadership",
+            "+1 Pickpocketing",
+            "Immune to Charmed",
+            "+1 Charisma",
+            "`+3% Critical Chance",
+            "+20% chance to hit when backstabbing"
+        };
+
         public static string[] BoostTexts =
         {
             "Armor_Boost_STR_Mod_Ring",

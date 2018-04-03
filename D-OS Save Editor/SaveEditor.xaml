@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:D_OS_Save_Editor"
         mc:Ignorable="d"
-        Title="D-OS Save Editor: Save editor" SizeToContent="WidthAndHeight" MaxWidth="850" Width="843.636" Closed="SaveEditor_OnClosed">
+        Title="D-OS Save Editor: Save editor" SizeToContent="WidthAndHeight" MaxWidth="850" Width="655.916" Closed="SaveEditor_OnClosed">
     <Window.Resources>
         <Style TargetType="TextBox">
             <Setter Property="Height" Value="23"/>
@@ -21,7 +21,10 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
-        <ComboBox x:Name="PlayerSelectionComboBox" HorizontalAlignment="Left" Margin="20,20,0,0" VerticalAlignment="Top" Width="120" Height="21.24" SelectionChanged="PlayerSelectionComboBox_OnSelectionChanged"/>
+        <StackPanel Orientation="Horizontal">
+            <ComboBox x:Name="PlayerSelectionComboBox" HorizontalAlignment="Left" Margin="20,20,0,0" VerticalAlignment="Top" Width="120" Height="21.24" SelectionChanged="PlayerSelectionComboBox_OnSelectionChanged"/>
+            <Button x:Name="SavePlayer" Content="Apply" Width="60" Margin="20,20,0,0" Click="SavePlayer_OnClick"/>
+        </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Column="1">
             <Button x:Name="ResetButton" Content="Reset" VerticalAlignment="Center" Padding="10,2" Margin ="10,20,40,0" Width="60" Click="ResetButton_OnClick"/>
             <Button x:Name="SaveButton" Content="Save" VerticalAlignment="Center" Padding="10,2" Margin="0,20,0,0" Width="60" Click="SaveButton_OnClick"/>
@@ -41,7 +44,7 @@
                 <Grid/>
             </TabItem>
             <TabItem Header="Traits">
-                <Grid/>
+                <local:TraitsTab x:Name="TraitsTab" Margin="10"/>
             </TabItem>
             <TabItem Header="Inventory">
                 <local:InventoryTab x:Name="InventoryTab" Margin="10"/>

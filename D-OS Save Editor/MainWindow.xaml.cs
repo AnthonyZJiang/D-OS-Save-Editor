@@ -1,5 +1,6 @@
 ﻿//#define AVOIDUNPACK
 //#define LOG_ITEMXML
+//#define LOAD_FROM_JSON
 
 using System;
 using System.Collections.Generic;
@@ -7,12 +8,10 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using LSLib.LS;
 using LSLib.LS.Enums;
@@ -35,7 +34,15 @@ namespace D_OS_Save_Editor
 
         public MainWindow()
         {
+
             InitializeComponent();
+
+#if LOAD_FROM_JSON
+            var se = new SaveEditor(@"E:\Documents\Visual Studio 2017\Projects\D-OS SE\D-OS Save Editor\test\SaveGame180403_010144.json");
+            //var se = new SaveEditor(@"E:\Documents\Visual Studio 2017\Projects\D-OS SE\D-OS Save Editor\test\SaveGame180403_011306.json");
+            se.Show();
+            this.Visibility = Visibility.Hidden;
+#endif
 
             // set default savegame directory
             DirectoryTextBox.Text = GetMostRecentProfile();

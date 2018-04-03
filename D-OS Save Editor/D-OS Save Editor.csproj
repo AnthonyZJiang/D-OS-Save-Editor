@@ -114,12 +114,19 @@
     <Compile Include="Item.cs" />
     <Compile Include="LsxParser.cs" />
     <Compile Include="Player.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="SaveEditor.xaml.cs">
       <DependentUpon>SaveEditor.xaml</DependentUpon>
     </Compile>
     <Compile Include="Savegame.cs" />
     <Compile Include="StatsTab.xaml.cs">
       <DependentUpon>StatsTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TraitCouple.xaml.cs">
+      <DependentUpon>TraitCouple.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TraitsTab.xaml.cs">
+      <DependentUpon>TraitsTab.xaml</DependentUpon>
     </Compile>
     <Compile Include="XmlUtilities.cs" />
     <Page Include="AbilitiesTab.xaml">
@@ -155,6 +162,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="StatsTab.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TraitCouple.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TraitsTab.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -221,6 +236,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Resources\NoImage.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="test\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

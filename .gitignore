@@ -3,3 +3,4 @@ packages/
 .vs/
 D-OS Save Editor/bin/
 *.DotSettings
+D-OS Save Editor/test/

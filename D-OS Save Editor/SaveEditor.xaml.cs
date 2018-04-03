@@ -14,6 +14,22 @@ namespace D_OS_Save_Editor
         private Savegame Savegame { get; set; }
         private Player[] EditingPlayers { get; set; }
 
+        public SaveEditor(string jsonFile)
+        {
+            InitializeComponent();
+
+            Savegame = Savegame.GetSavegameFromJson(jsonFile);
+            // make a copy of players
+            EditingPlayers = Savegame.Players.Select(a => a?.DeepClone()).ToArray();
+
+            foreach (var p in Savegame.Players)
+            {
+                PlayerSelectionComboBox.Items.Add(p.Name);
+            }
+
+            PlayerSelectionComboBox.SelectedIndex = 0;
+        }
+
         public SaveEditor(Savegame savegame)
         {
             InitializeComponent();
@@ -35,6 +51,12 @@ namespace D_OS_Save_Editor
             StatsTab.Player = EditingPlayers[id];
             AbilitiesTab.Player = EditingPlayers[id];
             InventoryTab.Player = EditingPlayers[id];
+            TraitsTab.Player = EditingPlayers[id];
+
+            if (EditingPlayers[id].Name == "Henchman")
+            {
+                //TraitsTab.IsEnabled = false;
+            }
         }
 
         private void PlayerSelectionComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -50,6 +72,7 @@ namespace D_OS_Save_Editor
                 Cursor = Cursors.Wait;
                 StatsTab.SaveEdits();
                 AbilitiesTab.SaveEdits();
+                TraitsTab.SaveEdits();
 
                 // apply changes
                 Savegame.Players = EditingPlayers;
@@ -92,7 +115,7 @@ namespace D_OS_Save_Editor
             switch (((Button)sender).Tag)
             {
                 case "AllPlayer":
-                    Savegame.DumpAllPlayer();
+                    Savegame.DumpSaveGame();
                     break;
                 case "AllInv":
                     Savegame.DumpAllInventory();
@@ -103,6 +126,29 @@ namespace D_OS_Save_Editor
             }
 
             MessageBox.Show("Dump has been created. Thank you!");
+        }
+
+        private void SavePlayer_OnClick(object sender, RoutedEventArgs e)
+        {
+            SavePlayer.IsEnabled = false;
+            try
+            {
+                StatsTab.SaveEdits();
+                AbilitiesTab.SaveEdits();
+                TraitsTab.SaveEdits();
+
+                MessageBox.Show(this, "Changes have been applied to the selected character.", "Successful");
+            }
+            catch (Exception ex)
+            {
+                SavePlayer.IsEnabled = true;
+                MessageBox.Show(this, $"Failed to save changes.\n\n{ex}", "Failed", MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+            finally
+            {
+                SavePlayer.IsEnabled = true;
+            }
         }
     }
 }
