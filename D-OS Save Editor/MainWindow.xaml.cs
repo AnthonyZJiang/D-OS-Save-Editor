@@ -23,9 +23,9 @@ namespace D_OS_Save_Editor
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
-        private string _defaultProfileDir = $"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}{DirectorySeparatorChar}Larian Studios{DirectorySeparatorChar}Divinity Original Sin Enhanced Edition{DirectorySeparatorChar}PlayerProfiles";
+        private readonly string _defaultProfileDir = $"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}{DirectorySeparatorChar}Larian Studios{DirectorySeparatorChar}Divinity Original Sin Enhanced Edition{DirectorySeparatorChar}PlayerProfiles";
         private enum BackupStatus { None, Current, Old, NoChecksum, NoImage }
 
         public static string Version { get; } = "v1.3";
@@ -45,15 +45,21 @@ namespace D_OS_Save_Editor
 #endif
 
             // set default savegame directory
-            DirectoryTextBox.Text = GetMostRecentProfile();
-
-            LoadSavegamesPath(DirectoryTextBox.Text);
+            var dir = GetMostRecentProfile();
+            if (dir != null)
+            {
+                DirectoryTextBox.Text = dir;
+                LoadSavegamesPath(DirectoryTextBox.Text);
+            }
 
             // update
             CheckUpdate();
         }
 
         #region private methods
+        /// <summary>
+        /// Checks for update on github
+        /// </summary>
         private void CheckUpdate()
         {
             const string urlAddress = "https://github.com/tmxkn1/D-OS-Save-Editor/blob/master/UpdateCheck";
@@ -65,7 +71,10 @@ namespace D_OS_Save_Editor
             {
                 if (response.StatusCode != HttpStatusCode.OK) return;
 
-                using (var reader = new StreamReader(response.GetResponseStream()))
+                var stream = response.GetResponseStream();
+                if (stream == null) return;
+
+                using (var reader = new StreamReader(stream))
                 {
                     var data = reader.ReadToEnd();
                     // handshake fail
@@ -87,8 +96,15 @@ namespace D_OS_Save_Editor
             }
         }
 
+        /// <summary>
+        /// get the user profile that is access most recently
+        /// </summary>
+        /// <returns>full path to "Savegames_patch"</returns>
         private string GetMostRecentProfile()
         {
+            if (!Directory.Exists(_defaultProfileDir))
+                return null;
+
             var dirs = Directory.GetDirectories(_defaultProfileDir);
             var idx = 0;
             var saveTime = DateTime.MinValue;
@@ -109,6 +125,10 @@ namespace D_OS_Save_Editor
             return dirs[idx] + DirectorySeparatorChar + "Savegames_patch";
         }
 
+        /// <summary>
+        /// load all savegames to list box
+        /// </summary>
+        /// <param name="dir">full path to Savegames_path</param>
         private void LoadSavegamesPath(string dir)
         {
             // clear ui
@@ -150,12 +170,12 @@ namespace D_OS_Save_Editor
 
             // order by time
             var idx = Enumerable.Range(0, dates.Count).ToArray();
-            Array.Sort<int>(idx, (a, b) => dates[b].CompareTo(dates[a]));
+            Array.Sort(idx, (a, b) => dates[b].CompareTo(dates[a]));
 
             // add to list box
-            for (int i = 0; i < dates.Count; i++)
+            for (var i = 0; i < dates.Count; i++)
             {
-                SavegameListBox.Items.Add(new TextBlock()
+                SavegameListBox.Items.Add(new TextBlock
                 {
                     Text = String.Join(" ", fnames[idx[i]].Split('_')),
                     Uid = fnames[idx[i]],
@@ -164,6 +184,11 @@ namespace D_OS_Save_Editor
             }
         }
 
+        /// <summary>
+        /// checks for game version
+        /// </summary>
+        /// <param name="path">savegame directory</param>
+        /// <returns>game version</returns>
         private static Game? GetGameVersion(string path)
         {
             if (path.Contains("Divinity Original Sin Enhanced Edition")) return Game.DivinityOriginalSinEE;
@@ -173,6 +198,11 @@ namespace D_OS_Save_Editor
             return null;
         }
 
+        /// <summary>
+        /// Unpacks lsv files
+        /// </summary>
+        /// <param name="savegame">Savegame object</param>
+        /// <returns>true for successful, otherwise fail</returns>
         private bool UnpackSave(Savegame savegame)
         {
             try
@@ -202,6 +232,11 @@ namespace D_OS_Save_Editor
             return true;
         }
 
+        /// <summary>
+        /// compute checksum from savegame snapshot (the png file in the savegame folder)
+        /// </summary>
+        /// <param name="imagefile">snapshot path + name</param>
+        /// <returns>checksum</returns>
         private string CalculateChecksumFromPng(string imagefile)
         {
             using (var md5 = MD5.Create())
@@ -214,6 +249,11 @@ namespace D_OS_Save_Editor
             }
         }
 
+        /// <summary>
+        /// check if a back up exists
+        /// </summary>
+        /// <param name="saveGameName">savegame name, excluding path</param>
+        /// <returns>backup stats</returns>
         private BackupStatus IsBackedUp(string saveGameName)
         {
             var backupfile = DirectoryTextBox.Text + DirectorySeparatorChar + saveGameName + DirectorySeparatorChar +
@@ -248,6 +288,10 @@ namespace D_OS_Save_Editor
             return cks != CalculateChecksumFromPng(imagefile) ? BackupStatus.Old : BackupStatus.Current;
         }
 
+        /// <summary>
+        /// create a backup of the savegame
+        /// </summary>
+        /// <param name="saveGameName">savegame name excluding path</param>
         private void BackupSavegame(string saveGameName)
         {
             var savegamefile = DirectoryTextBox.Text + DirectorySeparatorChar + saveGameName + DirectorySeparatorChar +

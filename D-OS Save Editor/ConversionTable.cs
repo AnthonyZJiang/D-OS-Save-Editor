@@ -1,4 +1,6 @@
-﻿namespace D_OS_Save_Editor
+﻿using System.Collections.Generic;
+
+namespace D_OS_Save_Editor
 {
     public class ConversionTable
     {
@@ -50,10 +52,12 @@
             Wand
         }
 
-        public enum Traits
+        public static Dictionary<string, string> Traits;
+
+        public static string[] Skills =
         {
 
-        }
+        };
 
         public static string[] TraitNames =
         {

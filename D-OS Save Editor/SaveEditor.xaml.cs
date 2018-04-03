@@ -115,7 +115,7 @@ namespace D_OS_Save_Editor
             switch (((Button)sender).Tag)
             {
                 case "AllPlayer":
-                    Savegame.DumpSaveGame();
+                    Savegame.DumpSavegame();
                     break;
                 case "AllInv":
                     Savegame.DumpAllInventory();

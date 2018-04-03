@@ -5,15 +5,28 @@ using System.Xml;
 
 namespace D_OS_Save_Editor
 {
+    /// <summary>
+    /// The type of change made to the item
+    /// </summary>
     public enum ChangeType { Modify, Add, Delete}
+    /// <summary>
+    /// Item category or type
+    /// </summary>
     public enum ItemSortType { Item = 0, Potion, Armor, Weapon, Gold, Skillbook, Scroll, Granade, Food, Furniture, Loot, Quest, Tool, Unique, Book, Other, Key, Arrow }
     public class Item
     {
+        /// <summary>
+        /// Rarity of the item
+        /// </summary>
         public enum ItemRarityType { Common = 0, Uncommon, Rare, Epic, Legendary, Divine, Unique}
 
-        
-
+        /// <summary>
+        /// Names used for Gold category items
+        /// </summary>
         public static readonly string[] GoldNames = {"small_gold", "inbetween_gold", "trader_large_gold"};
+        /// <summary>
+        /// Names used for Arrow category items. Arrow items have prefix WPN which is shared with the Weapon category. Therefore, we need these strings to identify the Arrow category.
+        /// </summary>
         public static readonly string[] ArrowNames = {"arrow", "arrowhead", "arrowshaft"};
 
         private string _flags;
@@ -28,12 +41,24 @@ namespace D_OS_Save_Editor
         private string _itemType;
         private string _isGenerated;
 
+        /// <summary>
+        /// The origianl beautified xml content of the item, only available in debug mode.
+        /// </summary>
         public string Xml { get; set; }
 
+        /// <summary>
+        /// Item category
+        /// </summary>
         public ItemSortType ItemSort { get; set; }
 
+        /// <summary>
+        /// Item rarity
+        /// </summary>
         public ItemRarityType ItemRarity { get; set; }
 
+        /// <summary>
+        /// Xml node name: Flag of the item, not sure what this does.
+        /// </summary>
         public string Flags
         {
             get => _flags;
@@ -45,7 +70,9 @@ namespace D_OS_Save_Editor
             }
         }
 
-        // True if it is a key
+        /// <summary>
+        /// Xml node name: Indicates if the item is a key or not.
+        /// </summary>
         public string IsKey
         {
             get => _isKey;
@@ -57,10 +84,14 @@ namespace D_OS_Save_Editor
             }
         }
 
-        // name of the item (Xml attribute id: Stats)
+        /// <summary>
+        /// Xml node name: Name of the item (Xml attribute id: Stats)
+        /// </summary>
         public string StatsName { get; set; }
 
-        // inventory key
+        /// <summary>
+        /// Xml node name: Inventory id of the item
+        /// </summary>
         public string Parent
         {
             get => _parent;
@@ -72,7 +103,9 @@ namespace D_OS_Save_Editor
             }
         }
 
-        // inventory slot
+        /// <summary>
+        /// Xml node name: Inventory slot that the item occupies
+        /// </summary>
         public string Slot
         {
             get => _slot;
@@ -84,7 +117,9 @@ namespace D_OS_Save_Editor
             }
         }
 
-        // quantity
+        /// <summary>
+        /// Xml node name: Quantity of the itme
+        /// </summary>
         public string Amount
         {
             get => _amount;
@@ -96,6 +131,9 @@ namespace D_OS_Save_Editor
             }
         }
 
+        /// <summary>
+        /// Xml node name: Indicates whether the item is generated or not. This property must be set to True to enable anything specified in the Generation node.
+        /// </summary>
         public string IsGenerated
         {
             get => _isGenerated;
@@ -107,7 +145,9 @@ namespace D_OS_Save_Editor
             }
         }
 
-        // only makes sense to a chest; for all other items, it is a constant 1; for unlocked chests -1
+        /// <summary>
+        /// Xml node name: Lock level of the tiem. only makes sense to a chest; for all other items, it is a constant 1; for unlocked chests -1
+        /// </summary>
         public string LockLevel
         {
             get => _lockLevel;
@@ -119,7 +159,9 @@ namespace D_OS_Save_Editor
             }
         }
 
-        // current hp of an item, makes sense to items such as chests; for items with no hp, it is a constant -1
+        /// <summary>
+        /// Xml node name: Current hp of an item, makes sense to items such as chests; for items with no hp, it is a constant -1
+        /// </summary>
         public string Vitality
         {
             get => _vitality;
@@ -131,7 +173,9 @@ namespace D_OS_Save_Editor
             }
         }
 
-        // the same as above but the max hp
+        /// <summary>
+        /// Xml node name: Max hp of an item, makes sense to items such as chests; for items with no hp, it is a constant -1
+        /// </summary>
         public string MaxVitalityPatchCheck
         {
             get => _maxVitalityPatchCheck;
@@ -143,7 +187,9 @@ namespace D_OS_Save_Editor
             }
         }
 
-        // common, rare etc.
+        /// <summary>
+        /// Xml node name: Rarity of the item.
+        /// </summary>
         public string ItemType
         {
             get => _itemType;
@@ -158,7 +204,9 @@ namespace D_OS_Save_Editor
             }
         }
 
-        // max durability of an item, makes sense to a piece of equipment
+        /// <summary>
+        /// Xml node name: max durability of an item, makes sense to a piece of equipment
+        /// </summary>
         public string MaxDurabilityPatchCheck
         {
             get => _maxDurabilityPatchCheck;
@@ -170,16 +218,29 @@ namespace D_OS_Save_Editor
             }
         }
 
+        /// <summary>
+        /// Xml node name: the children of this node contains generated item stats and modifiers
+        /// </summary>
         public GenerationNode Generation { get; set; }
 
+        /// <summary>
+        /// Xml node name: stats of the item
+        /// </summary>
         public StatsNode Stats { get; set; }
 
 
         public class GenerationNode
         {
             private string _random;
+
+            /// <summary>
+            /// Xml node name: Item base
+            /// </summary>
             public string Base { get; set; }
-            
+
+            /// <summary>
+            /// Xml node name: Random seed, seems like can be safely set to any arbitary value
+            /// </summary>
             public string Random
             {
                 get => _random;
@@ -191,6 +252,9 @@ namespace D_OS_Save_Editor
                 }
             }
 
+            /// <summary>
+            /// Xml node name: Modifiers generated on the item
+            /// </summary>
             public List<string> Boosts { get; set; }
 
             public GenerationNode() { }
@@ -201,6 +265,10 @@ namespace D_OS_Save_Editor
                 Random = random;
             }
 
+            /// <summary>
+            /// Create a deep copy of the object
+            /// </summary>
+            /// <returns></returns>
             public GenerationNode DeepClone()
             {
                 var stats = this.MemberwiseClone() as GenerationNode;
@@ -217,6 +285,9 @@ namespace D_OS_Save_Editor
             private string _level;
             private string _charges;
 
+            /// <summary>
+            /// Xml node name: Current durability of the item
+            /// </summary>
             public string Durability
             {
                 get => _durability;
@@ -228,6 +299,9 @@ namespace D_OS_Save_Editor
                 }
             }
 
+            /// <summary>
+            /// Xml node name: Not sure what this does. Supposedly, this indicates how many times left for this item to be usable after repare
+            /// </summary>
             public string DurabilityCounter
             {
                 get => _durabilityCounter;
@@ -239,6 +313,9 @@ namespace D_OS_Save_Editor
                 }
             }
 
+            /// <summary>
+            /// Xml node name: Penalty to the item max durability caused by repair
+            /// </summary>
             public string RepairDurabilityPenalty
             {
                 get => _repairDurabilityPenalty;
@@ -250,6 +327,9 @@ namespace D_OS_Save_Editor
                 }
             }
 
+            /// <summary>
+            /// Xml node name: Item level.
+            /// </summary>
             public string Level
             {
                 get => _level;
@@ -261,6 +341,9 @@ namespace D_OS_Save_Editor
                 }
             }
 
+            /// <summary>
+            /// Xml node name: Not sure what this does. A signed integer, can be negative, can be very large, can be very small.
+            /// </summary>
             public string Charges
             {
                 get => _charges;
@@ -272,8 +355,15 @@ namespace D_OS_Save_Editor
                 }
             }
 
+            /// <summary>
+            /// Xml node name: Not sure what this does. Most items have a boost called HasReflect.
+            /// </summary>
             public Dictionary<string, string> PermanentBoost { get; set; }
 
+            /// <summary>
+            /// Create a deep copy of the object
+            /// </summary>
+            /// <returns></returns>
             public StatsNode DeepClone()
             {
                 var stats = this.MemberwiseClone() as StatsNode;
@@ -282,6 +372,10 @@ namespace D_OS_Save_Editor
             }
         }
 
+        /// <summary>
+        /// Create a deep copy of the object
+        /// </summary>
+        /// <returns></returns>
         public Item DeepClone()
         {
             var item = this.MemberwiseClone() as Item;
@@ -290,6 +384,9 @@ namespace D_OS_Save_Editor
             return item;
         }
 
+        /// <summary>
+        /// Generate an item with some fixed property set
+        /// </summary>
         public class GenerateItem
         {
             public XmlDocument GenerateEquipment(string flags, string statsName, string parent, string itemType, string maxDurabilityPatchCheck, GenerationNode generation, StatsNode stats)
@@ -337,6 +434,10 @@ namespace D_OS_Save_Editor
             }
         }
 
+        /// <summary>
+        /// Get the names of the properties that can be safely and meaningfully changed.
+        /// </summary>
+        /// <returns>The names of the properties</returns>
         public string GetAllowedChangeType()
         {
             var s = "";
@@ -381,6 +482,9 @@ namespace D_OS_Save_Editor
         }
     }
 
+    /// <summary>
+    /// Changes made to an item
+    /// </summary>
     public class ItemChange
     {
         public Item Item { get; }
