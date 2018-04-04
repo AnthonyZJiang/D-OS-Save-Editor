@@ -9,6 +9,7 @@ using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -28,7 +29,7 @@ namespace D_OS_Save_Editor
         private readonly string _defaultProfileDir = $"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}{DirectorySeparatorChar}Larian Studios{DirectorySeparatorChar}Divinity Original Sin Enhanced Edition{DirectorySeparatorChar}PlayerProfiles";
         private enum BackupStatus { None, Current, Old, NoChecksum, NoImage }
 
-        public static string Version { get; } = "v1.3";
+        public static string Version { get; } = "v1.3.1";
         private string _updateLink;
 
 
@@ -38,7 +39,7 @@ namespace D_OS_Save_Editor
             InitializeComponent();
 
 #if LOAD_FROM_JSON
-            var se = new SaveEditor(@"E:\Documents\Visual Studio 2017\Projects\D-OS SE\D-OS Save Editor\test\SaveGame180403_010144.json");
+            var se = new SaveEditor(@"E:\Documents\Visual Studio 2017\Projects\D-OS SE\D-OS Save Editor\test\SaveGame_180404_120803.json");
             //var se = new SaveEditor(@"E:\Documents\Visual Studio 2017\Projects\D-OS SE\D-OS Save Editor\test\SaveGame180403_011306.json");
             se.Show();
             this.Visibility = Visibility.Hidden;
@@ -47,10 +48,7 @@ namespace D_OS_Save_Editor
             // set default savegame directory
             var dir = GetMostRecentProfile();
             if (dir != null)
-            {
                 DirectoryTextBox.Text = dir;
-                LoadSavegamesPath(DirectoryTextBox.Text);
-            }
 
             // update
             CheckUpdate();
@@ -135,11 +133,7 @@ namespace D_OS_Save_Editor
             GameEditionTextBlock.Text = "";
             SavegameListBox.Items.Clear();
 
-            if (!Directory.Exists(dir))
-            {
-                MessageBox.Show(this, "Savegame directory invalid.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
+            if (!Directory.Exists(dir)) return;
 
             // get game version
             var gameVer = GetGameVersion(dir);
@@ -325,7 +319,6 @@ namespace D_OS_Save_Editor
         private void DirectoryTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
         {
             LoadSavegamesPath(DirectoryTextBox.Text);
-
         }
 
         private void BrowseButton_OnClick(object sender, RoutedEventArgs e)
@@ -350,11 +343,23 @@ namespace D_OS_Save_Editor
 
         private void SavegameListBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (e.AddedItems.Count == 0 || ((ListBox) sender).Items.Count < 1)
+            {
+                LoadButton.IsEnabled = false;
+                BackupButton.IsEnabled = false;
+                RestoreButton.IsEnabled = false;
+                SavegameTimeTextBox.Text = "";
+                SavegameDateTextBox.Text = "";
+                SavegameImage.Source = null;
+                return;
+            }
+                
+
             LoadButton.IsEnabled = true;
             BackupButton.IsEnabled = true;
             RestoreButton.IsEnabled = true;
-            SavegameTimeTextBox.Text = ((TextBlock)e.AddedItems[e.AddedItems.Count - 1]).Tag.ToString().Split('|')[1];
-            SavegameDateTextBox.Text = ((TextBlock)e.AddedItems[e.AddedItems.Count - 1]).Tag.ToString().Split('|')[0];
+            SavegameTimeTextBox.Text = ((TextBlock)e.AddedItems[0]).Tag.ToString().Split('|')[1];
+            SavegameDateTextBox.Text = ((TextBlock)e.AddedItems[0]).Tag.ToString().Split('|')[0];
             var saveGameName = ((TextBlock) e.AddedItems[e.AddedItems.Count-1]).Uid;
             var imageDir = DirectoryTextBox.Text + DirectorySeparatorChar + saveGameName + DirectorySeparatorChar + saveGameName + ".png";
             if (File.Exists(imageDir))
@@ -477,6 +482,22 @@ namespace D_OS_Save_Editor
         {
             var about = new About();
             about.ShowDialog();
+        }
+
+        private void RefreshButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            LoadSavegamesPath(DirectoryTextBox.Text);
+            var tooltip = new ToolTip { Content = "Refresed!" };
+            RefreshButton.ToolTip = tooltip;
+            tooltip.Opened += async delegate (object o, RoutedEventArgs args)
+            {
+                var s = o as ToolTip;
+                await Task.Delay(1000);
+                s.IsOpen = false;
+                await Task.Delay(1000);
+                s.Content = "Refresh savegame list";
+            };
+            tooltip.IsOpen = true;
         }
     }
 }

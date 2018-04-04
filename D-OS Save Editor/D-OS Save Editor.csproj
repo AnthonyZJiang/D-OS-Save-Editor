@@ -235,7 +235,16 @@
     <Content Include="lslib\zlib.net.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="Resources\NoImage.png" />
+    <Resource Include="Resources\ic_refresh3_blue.png" />
+    <Resource Include="Resources\ic_refresh2_blue.png" />
+    <Resource Include="Resources\ic_refresh2_black.png" />
+    <Resource Include="Resources\ic_openbrowser_blue.png" />
+    <Resource Include="Resources\ic_openbrowser_black.png" />
+    <Resource Include="Resources\ic_refresh_blue.png" />
+    <Resource Include="Resources\ic_refresh_black.png" />
+    <Resource Include="Resources\ic_download2_blue.png" />
+    <Resource Include="Resources\ic_download2_black.png" />
+    <Resource Include="Resources\NoImage.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="test\" />

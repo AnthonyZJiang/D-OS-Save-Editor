@@ -10,6 +10,69 @@
         <Style TargetType="Button">
             <Setter Property="Padding" Value="5,0"></Setter>
         </Style>
+        <Image x:Key="GetUpdateImage" Source="Resources/ic_download2_black.png"/>
+        <Image x:Key="RefreshImage" Source="Resources/ic_refresh2_black.png"/>
+        <Image x:Key="OpenBrowserImage" Source="Resources/ic_openbrowser_black.png"/>
+        <Image x:Key="GetUpdateImageMO" Source="Resources/ic_download2_blue.png"/>
+        <Image x:Key="RefreshImageMO" Source="Resources/ic_refresh3_blue.png"/>
+        <Image x:Key="OpenBrowserImageMO" Source="Resources/ic_openbrowser_blue.png"/>
+        <Style x:Key="UpdateImageButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Content" Value="{StaticResource GetUpdateImage}"></Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <ContentPresenter/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Content" Value="{StaticResource GetUpdateImageMO}"></Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="BrowseImageButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Content" Value="{StaticResource OpenBrowserImage}"></Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <ContentPresenter/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Content" Value="{StaticResource OpenBrowserImageMO}"></Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="RefreshImageButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Content" Value="{StaticResource RefreshImage}"></Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <ContentPresenter/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Content" Value="{StaticResource RefreshImageMO}"></Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
     <Grid Margin="20,10">
         <Grid.RowDefinitions>
@@ -19,8 +82,8 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <StackPanel x:Name="UpdatePanel" Orientation="Horizontal" HorizontalAlignment="Right">
-            <TextBlock x:Name="UpdateTextBox" Text="A new version is avaiable!" Foreground="#FFD62E2E" HorizontalAlignment="Right" Margin="0,5,10,10"/>
-            <Button x:Name="UpdateButton" Content="Update" Margin="0,5,0,10" Click="UpdateButton_OnClick"/>
+            <TextBlock x:Name="UpdateTextBox" Text="A new version is avaiable!" Foreground="#FFD62E2E" HorizontalAlignment="Right" Margin="0,5,10,10" VerticalAlignment="Center"/>
+            <Button x:Name="UpdateButton" Style="{StaticResource UpdateImageButtonStyle}" Margin="0,5,0,10" Click="UpdateButton_OnClick" Width="20" Height="20" Padding="0" ToolTip="Go to download site"/>
         </StackPanel>
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
@@ -40,21 +103,25 @@
                 <TextBlock Text ="\Savegames_patch)" FontSize="10" VerticalAlignment="Center"/>
             </StackPanel>
             <TextBox x:Name="DirectoryTextBox"  Grid.Row="1" Grid.Column="0" Margin="0,0,10,0" TextChanged="DirectoryTextBox_OnTextChanged"/>
-            <Button x:Name="BrowseButton" Grid.Row="1" Grid.Column="1" Content="..." Click="BrowseButton_OnClick"/>
+            <Button x:Name="BrowseButton" Grid.Row="1" Grid.Column="1" Style="{StaticResource BrowseImageButtonStyle}" Width="20" Padding="0" Click="BrowseButton_OnClick"/>
         </Grid>
         <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,20,0,0">
             <TextBlock Text="Game edition:" Margin="0,0,10,0"/>
             <TextBlock x:Name="GameEditionTextBlock" Foreground="#FFC70202"/>
         </StackPanel>
         <Grid Grid.Row="3">
-            <Grid.RowDefinitions><RowDefinition/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="250"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <ListBox x:Name="SavegameListBox" Margin="0,10,10,0" SelectionChanged="SavegameListBox_OnSelectionChanged"/>
+            <ListBox Grid.Row="0" x:Name="SavegameListBox" Margin="0,10,10,0" SelectionChanged="SavegameListBox_OnSelectionChanged"/>
+            <Button x:Name="RefreshButton" Style="{StaticResource RefreshImageButtonStyle}" Grid.Row="1" Width="20" Height="20" HorizontalAlignment="Right" Margin="0, 5,10,0" Padding="0" VerticalAlignment="Top" Click="RefreshButton_OnClick"/>
             <Button Content="About" Grid.Row="1" HorizontalAlignment="Left" Margin="0,30,0,0" Click="AboutButton_OnClick"/>
-            <Grid Grid.Column="1" Grid.RowSpan="2"  Margin="20,20,0,0" >
+            <Grid Grid.Column="1" Grid.RowSpan="3"  Margin="20,20,0,0" >
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition Height="Auto"/>

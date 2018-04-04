@@ -66,7 +66,7 @@
             <CheckBox x:Name="ShowOtherCheckBox" Content="Other" Tag="{x:Static local:ItemSortType.Other}"/>
         </WrapPanel>
         <WrapPanel x:Name="ValueWrapPanel" Grid.Column="1" Grid.Row="2">
-            <GroupBox Header="Stats">
+            <GroupBox Header="Stats" x:Name="StatsGroupBox">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition/>
@@ -88,8 +88,8 @@
                     <TextBlock Text="Durability:" Grid.Row="1" Grid.Column="2" Margin="30,0,0,0"/>
                     <TextBlock Text="Durability counter:" Grid.Row="2" Grid.Column="2" Margin="30,0,0,0"/>
                     <TextBlock Text="Repair durability penalty:" Grid.Row="3" Grid.Column="2" Margin="30,0,0,0"/>
-                    <TextBox x:Name="AmountTextBox" Grid.Column="1" Width="85"/>
-                    <ComboBox x:Name="RarityComboBox" Grid.Column="1" Grid.Row="1" Width="85" Height="19" Margin="20,0,0,0"/>
+                    <TextBox x:Name="AmountTextBox" Grid.Column="1" Margin="20,5,0,5" Width="90"/>
+                    <ComboBox x:Name="RarityComboBox" Grid.Column="1" Grid.Row="1" Width="90" Height="22" Margin="20,0,0,0"/>
                     <TextBox x:Name="LockLevelTextBox" Grid.Row="2" Grid.Column="1"/>
                     <TextBox x:Name="LevelTextBox" Grid.Row="3" Grid.Column="1"/>
                     <StackPanel Grid.Row="0" Grid.Column="3" Orientation="Horizontal">
@@ -106,13 +106,13 @@
                     <TextBox x:Name="RepairDurabilityPenaltyTextBox" Grid.Row="3" Grid.Column="3"/>
                 </Grid>
             </GroupBox>
-            <GroupBox Header="Modifiers">
+            <GroupBox Header="Modifiers" Width="{Binding Width, ElementName=StatsGroupBox, Mode=OneWay}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <ListBox x:Name="BoostsListBox" Width="330" Height="150" Margin="10">
+                    <ListBox x:Name="BoostsListBox" Width="333" Height="150" Margin="10">
                         <ListBox.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="Add" Click="BoostsContextMenu_Click"/>
@@ -129,7 +129,7 @@
                             </Style>
                         </ListBox.Resources>
                     </ListBox>
-                    <ListBox Grid.Column="1" x:Name="PermBoostsListBox" MinWidth="100" Height="150" Margin="10"/>
+                    <ListBox Grid.Column="1" x:Name="PermBoostsListBox" Width="100" Height="150" Margin="10"/>
                 </Grid>
             </GroupBox>
         </WrapPanel>

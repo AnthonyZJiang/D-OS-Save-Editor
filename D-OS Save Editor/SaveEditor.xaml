@@ -62,7 +62,9 @@
                 <StackPanel>
                     <Button x:Name="DumpAllPlayersButton" Content="Dump All Player" Tag="AllPlayer"/>
                     <Button x:Name="DumpAllPlayerInventoryButton" Content="Dump All Player Inventory" Tag="AllInv"/>
-                    <Button x:Name="DumpAllItemModifier" Content="Dump All Item Modifier" Tag="AllMod"/>
+                    <Button Content="Dump All Player Skills" Tag="AllSkills"/>
+                    <Button x:Name="DumpAllItemModifier" Content="Dump All Item Modifiers" Tag="AllMod"/>
+                    <Button Content="Dump All Item Stats Boosts" Tag="AllPerBoost"/>
                 </StackPanel>
             </TabItem>
         </TabControl>

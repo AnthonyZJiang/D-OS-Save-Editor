@@ -121,11 +121,17 @@ namespace D_OS_Save_Editor
                     Savegame.DumpAllInventory();
                     break;
                 case "AllMod":
-                    Savegame.DumpAllModifier();
+                    Savegame.DumpAllModifiers();
+                    break;
+                case "AllPerBoost":
+                    Savegame.DumpAllPermanentBoosts();
+                    break;
+                case "AllSkills":
+                    Savegame.DumpAllSkills();
                     break;
             }
 
-            MessageBox.Show("Dump has been created. Thank you!");
+            MessageBox.Show("A dump file has been created. Thank you!");
         }
 
         private void SavePlayer_OnClick(object sender, RoutedEventArgs e)

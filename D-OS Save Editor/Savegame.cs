@@ -174,9 +174,9 @@ namespace D_OS_Save_Editor
         /// <summary>
         /// Writes all unique modifiers found in current savegame to a txt file.
         /// </summary>
-        public void DumpAllModifier()
+        public void DumpAllModifiers()
         {
-            var fileName = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}{Path.DirectorySeparatorChar}AllModifier_{DateTime.Now:yyMMdd_HHmmss}";
+            var fileName = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}{Path.DirectorySeparatorChar}AllModifiers_{DateTime.Now:yyMMdd_HHmmss}";
             var modList = new List<string>();
             using (var file = new StreamWriter(fileName + ".txt"))
             {
@@ -188,7 +188,7 @@ namespace D_OS_Save_Editor
                         foreach (var boost in item.Generation.Boosts)
                         {
                             if (modList.Contains(item.ItemSort+boost)) continue;
-                            file.WriteLine(item.ItemSort + " " + boost);
+                            file.WriteLine(boost);
                             modList.Add(item.ItemSort+boost);
                         }
                     }
@@ -197,10 +197,72 @@ namespace D_OS_Save_Editor
 
             using (var zip = ZipFile.Open(fileName + ".zip", ZipArchiveMode.Create))
             {
-                zip.CreateEntryFromFile(fileName + ".txt", "AllModifier.txt");
+                zip.CreateEntryFromFile(fileName + ".txt", "AllModifiers.txt");
             }
 #if !DEBUG
-            File.Delete(fileName + ".json");
+            File.Delete(fileName + ".txt");
+#endif
+        }
+
+        /// <summary>
+        /// Writes all unique modifiers found in current savegame to a txt file.
+        /// </summary>
+        public void DumpAllPermanentBoosts()
+        {
+            var fileName = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}{Path.DirectorySeparatorChar}AlllPermanentBoosts_{DateTime.Now:yyMMdd_HHmmss}";
+            var modList = new List<string>();
+            using (var file = new StreamWriter(fileName + ".txt"))
+            {
+                foreach (var player in Players)
+                {
+                    foreach (var item in player.Items)
+                    {
+                        if (item.Stats == null) continue;
+                        foreach (var boost in item.Stats.PermanentBoost)
+                        {
+                            if (modList.Contains(item.ItemSort + boost.Key + boost.Value)) continue;
+                            file.WriteLine(item.StatsName + " " + boost.Key + " " + boost.Value);
+                            modList.Add(item.ItemSort + boost.Key + boost.Value);
+                        }
+                    }
+                }
+            }
+
+            using (var zip = ZipFile.Open(fileName + ".zip", ZipArchiveMode.Create))
+            {
+                zip.CreateEntryFromFile(fileName + ".txt", "AlllPermanentBoosts.txt");
+            }
+#if !DEBUG
+            File.Delete(fileName + ".txt");
+#endif
+        }
+
+        /// <summary>
+        /// Writes all unique skills found in current savegame to a txt file.
+        /// </summary>
+        public void DumpAllSkills()
+        {
+            var fileName = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}{Path.DirectorySeparatorChar}AllSkills_{DateTime.Now:yyMMdd_HHmmss}";
+            var skillList = new List<string>();
+            using (var file = new StreamWriter(fileName + ".txt"))
+            {
+                foreach (var player in Players)
+                {
+                    foreach (var skill in player.Skills.Keys)
+                    {
+                        if (skillList.Contains(skill)) continue;
+                        file.WriteLine(skill);
+                        skillList.Add(skill);
+                    }
+                }
+            }
+
+            using (var zip = ZipFile.Open(fileName + ".zip", ZipArchiveMode.Create))
+            {
+                zip.CreateEntryFromFile(fileName + ".txt", "AllSkills.txt");
+            }
+#if !DEBUG
+            File.Delete(fileName + ".txt");
 #endif
         }
 

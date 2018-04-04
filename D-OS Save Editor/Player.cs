@@ -228,8 +228,8 @@ namespace D_OS_Save_Editor
             get => _gold;
             set
             {
-                if (!XmlUtilities.IsUnint(value))
-                    throw new XmlValidationException("Gold", value);
+                //if (!XmlUtilities.IsUnint(value))
+                //    throw new XmlValidationException("Gold", value);
                 _gold = value;
             }
         }
