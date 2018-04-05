@@ -89,6 +89,17 @@ namespace D_OS_Save_Editor
                     if (matches[0].Groups.Count <= 1) return;
                     // link found
                     _updateLink = matches[0].Groups[1].Value;
+
+                    // message
+                    reg = new Regex(@"Msg=msgStart\{(.*)\}msgEnd");
+                    matches = reg.Matches(data);
+                    var msg = "A new version is avaiable!";
+
+                    if (matches.Count > 0)
+                        if (matches[0].Groups.Count <= 1)
+                            msg = matches[0].Groups[1].Value;
+
+                    UpdateTextBox.Text = msg;
                     UpdatePanel.Visibility = Visibility.Visible;
                 }
             }

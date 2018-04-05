@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:D_OS_Save_Editor"
         mc:Ignorable="d"
-        Title="About" ResizeMode="NoResize" SizeToContent="WidthAndHeight" WindowStyle="ToolWindow">
+        Title="About" ResizeMode="NoResize" SizeToContent="WidthAndHeight" WindowStyle="ToolWindow" WindowStartupLocation="CenterOwner">
     <StackPanel Orientation="Vertical">
         <StackPanel Orientation="Vertical" Margin="30,20,30,0" HorizontalAlignment="Center" VerticalAlignment="Center">
             <TextBlock Text="D-OS Save Editor" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18"/>
@@ -16,10 +16,13 @@
             <TextBlock Text="MIT License" Margin="0,5,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
             <TextBlock Text="For license information, check LICENSE file at the open source website." FontSize="10" Margin="0,2,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
         </StackPanel>
-        <StackPanel Orientation="Horizontal" Margin="30,20,30,0" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <TextBlock Text="Open source at:" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-            <TextBlock Margin="10,0,0,0"><Hyperlink>https://github.com/tmxkn1/D-OS-Save-Editor</Hyperlink></TextBlock>
+        <StackPanel Orientation="Horizontal" Margin="30,20,30,0" HorizontalAlignment="Left" VerticalAlignment="Center">
+            <TextBlock Text="Open source at" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <TextBlock Margin="5,0,0,0"><Hyperlink NavigateUri="https://github.com/tmxkn1/D-OS-Save-Editor" RequestNavigate="Hyperlink_RequestNavigate">Github</Hyperlink></TextBlock>
         </StackPanel>
-        <Button Content="OK" Width="70" Margin="0,20,20,20" HorizontalAlignment="Right" VerticalAlignment="Bottom" IsCancel="True"/>
+        <StackPanel Orientation="Horizontal" Margin="30,0,30,0" HorizontalAlignment="Left" VerticalAlignment="Center">
+            <TextBlock Text="Use and discussions:" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <TextBlock Margin="5,0,0,0"><Hyperlink NavigateUri="http://larian.com/forums/ubbthreads.php?ubb=showflat&amp;Number=644516#Post644516r" RequestNavigate="Hyperlink_RequestNavigate">Larian forum</Hyperlink></TextBlock></StackPanel>
+    <Button Content="OK" Width="70" Margin="0,20,20,20" HorizontalAlignment="Right" VerticalAlignment="Bottom" IsCancel="True"/>
     </StackPanel>
 </Window>
