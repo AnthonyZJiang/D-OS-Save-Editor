@@ -1,3 +1,4 @@
 HandShake={ABCQWEZXCrtyfghvbnUIOJKLNM}
-LatestVersion={v1.3}
-Link=linkStart{https://github.com/tmxkn1/D-OS-Save-Editor/releases/tag/v1.3}linkEnd
+LatestVersion={v1.3.1}
+Link=linkStart{https://github.com/tmxkn1/D-OS-Save-Editor/releases/tag/v1.3.1}linkEnd
+Msg=MsgStart{v1.3.1 is now available}MsgEnd
