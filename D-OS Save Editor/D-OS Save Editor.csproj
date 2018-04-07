@@ -107,7 +107,7 @@
     <Compile Include="AddBoostDialog.xaml.cs">
       <DependentUpon>AddBoostDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ConversionTable.cs" />
+    <Compile Include="DataTable.cs" />
     <Compile Include="InventoryTab.xaml.cs">
       <DependentUpon>InventoryTab.xaml</DependentUpon>
     </Compile>

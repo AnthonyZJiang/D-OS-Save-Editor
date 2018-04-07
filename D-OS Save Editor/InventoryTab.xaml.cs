@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -11,9 +12,10 @@ namespace D_OS_Save_Editor
     /// <summary>
     /// Interaction logic for Inventory.xaml
     /// </summary>
-    public partial class InventoryTab : UserControl
+    public partial class InventoryTab
     {
         private Player _player;
+
         private Brush DefaultTextBoxBorderBrush { get; }
         private Brush[] _itemRarityColor =
             {Brushes.Black, Brushes.ForestGreen, Brushes.DodgerBlue, Brushes.BlueViolet, Brushes.DeepPink, Brushes.Gold, Brushes.DimGray};
@@ -66,6 +68,7 @@ namespace D_OS_Save_Editor
         private void TextBoxEventSetter_OnLostFocus(object sender, RoutedEventArgs e)
         {
             if (!(sender is TextBox s)) return;
+            if (s.Uid == "SearchText") return;
 
             var text = s.Text;
             var valid = int.TryParse(text, out int _);
@@ -75,6 +78,7 @@ namespace D_OS_Save_Editor
         private void TextBoxEventSetter_OnPreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             if (!(sender is TextBox s)) return;
+            if (s.Uid == "SearchText") return;
 
             var text = s.Text.Insert(s.SelectionStart, e.Text);
             e.Handled = !int.TryParse(text, out int _);
@@ -139,11 +143,11 @@ namespace D_OS_Save_Editor
             LockLevelTextBox.Text = item.LockLevel;
             VitalityTextBox.Text = item.Vitality;
             MaxVitalityPatchCheckTextBox.Text = item.MaxVitalityPatchCheck;
-            DurabilityTextBox.Text = item.Stats?.Durability;
-            DurabilityCounterTextBox.Text = item.Stats?.DurabilityCounter;
+            DurabilityTextBox.Text = item.Stats?.Durability ?? "";
+            DurabilityCounterTextBox.Text = item.Stats?.DurabilityCounter ?? "";
             MaxDurabilityPatchCheckTextBox.Text = item.MaxDurabilityPatchCheck;
-            RepairDurabilityPenaltyTextBox.Text = item.Stats?.RepairDurabilityPenalty;
-            LevelTextBox.Text = item.Stats?.Level;
+            RepairDurabilityPenaltyTextBox.Text = item.Stats?.RepairDurabilityPenalty ?? "";
+            LevelTextBox.Text = item.Stats?.Level ?? "";
 
             // combobox
             RarityComboBox.SelectedIndex = (int) item.ItemRarity;
@@ -179,7 +183,7 @@ namespace D_OS_Save_Editor
                 {
                     if ((ItemSortType) i.Tag == ItemSortType.Item || (ItemSortType) i.Tag == ItemSortType.Unique ||
                         (ItemSortType) i.Tag == ItemSortType.Other)
-                        i.Visibility = (bool)ckb.IsChecked ? Visibility.Visible:Visibility.Collapsed;
+                        i.Visibility = ckb.IsChecked == true && !IsFilteredOutByText(i.Content as string) ? Visibility.Visible:Visibility.Collapsed;
                 }
             }
             else
@@ -187,9 +191,25 @@ namespace D_OS_Save_Editor
                 foreach (ListBoxItem i in ItemsListBox.Items)
                 {
                     if ((ItemSortType)i.Tag == (ItemSortType)ckb.Tag)
-                        i.Visibility = (bool)ckb.IsChecked ? Visibility.Visible : Visibility.Collapsed;
+                        i.Visibility = ckb.IsChecked == true && !IsFilteredOutByText(i.Content as string) ? Visibility.Visible : Visibility.Collapsed;
                 }
             }
+        }
+
+        private bool IsFilteredOutByText(string itemName)
+        {
+            var isFilteredOut = false;
+            itemName = itemName.ToLower();
+            var searchTerms = SearchTextBox.Text.ToLower().Split(' ');
+            foreach (var s in searchTerms)
+            {
+                if (itemName.Contains(s)) continue;
+
+                isFilteredOut = true;
+                break;
+            }
+
+            return isFilteredOut;
         }
 
         private void CheckAllButton_OnClick(object sender, RoutedEventArgs e)
@@ -314,7 +334,26 @@ namespace D_OS_Save_Editor
             switch (((MenuItem)sender).Header)
             {
                 case "Add":
-                    var dlg = new AddBoostDialog();
+                    // try pre-determine equipment type
+                    var preDeterminedType = "";
+                    var type = new Dictionary<string, int>();
+                    foreach (string s in BoostsListBox.Items)
+                    {
+                        var vals = Regex.Split(s, @"_+");
+                        if (vals.Length < 2) continue;
+                        if (!type.ContainsKey(vals[1]))
+                            type.Add(vals[1],0);
+                        else
+                            type[vals[1]]++;
+                    }
+
+                    if (type.Count > 0)
+                    {
+                        var maxVal = type.Values.Max();
+                        preDeterminedType = type.FirstOrDefault(x => x.Value == maxVal).Key;
+                    }
+
+                    var dlg=new AddBoostDialog(preDeterminedType);
                     dlg.ShowDialog();
                     if (dlg.DialogResult == true)
                         BoostsListBox.Items.Add(dlg.BoostText);
@@ -325,6 +364,24 @@ namespace D_OS_Save_Editor
                 case "Delete":
                     BoostsListBox.Items.RemoveAt(BoostsListBox.SelectedIndex);
                     break;
+            }
+        }
+
+        private void SearchTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            foreach (ListBoxItem i in ItemsListBox.Items)
+            {
+                var listBoxText = ((string)i.Content).ToLower();
+                var searchTerms = SearchTextBox.Text.ToLower().Split(' ');
+                var visiblily = Visibility.Visible;
+                foreach (var s in searchTerms)
+                {
+                    if (listBoxText.Contains(s)) continue;
+
+                    visiblily = Visibility.Collapsed;
+                    break;
+                }
+                i.Visibility = visiblily;
             }
         }
     }

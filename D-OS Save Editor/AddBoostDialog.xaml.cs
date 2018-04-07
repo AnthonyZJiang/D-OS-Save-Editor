@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace D_OS_Save_Editor
@@ -6,21 +7,53 @@ namespace D_OS_Save_Editor
     /// <summary>
     /// Interaction logic for AddBoostDialog.xaml
     /// </summary>
-    public partial class AddBoostDialog : Window
+    public partial class AddBoostDialog
     {
         public string BoostText { get; set; }
 
-        public AddBoostDialog()
+        public AddBoostDialog(string predeterminedBoostText)
         {
             InitializeComponent();
 
-            foreach (var s in ConversionTable.BoostTexts)
+            foreach (var s in DataTable.GenerationBoosts)
             {
                 BoostListBox.Items.Add(new ListBoxItem
                 {
                     Content = s
                 });
             }
+
+            if (DataTable.IsOnlineBoostsGenerated)
+            {
+                foreach (var s in DataTable.GenerationBoostsAddOnline)
+                {
+                    BoostListBox.Items.Add(new ListBoxItem
+                    {
+                        Content = s
+                    });
+                }
+
+                foreach (var s in DataTable.UnlistedStatsBoosts)
+                {
+                    BoostListBox.Items.Add(new ListBoxItem
+                    {
+                        Content = s
+                    });
+                }
+            }
+            else
+            {
+                foreach (var s in DataTable.UserGenerationBoosts)
+                {
+                    if (DataTable.GenerationBoosts.Contains(s)) continue;
+                    BoostListBox.Items.Add(new ListBoxItem
+                    {
+                        Content = s
+                    });
+                }
+            }
+
+            BoostTextBox.Text = predeterminedBoostText;
         }
 
         private void BoostTextBox_OnTextChanged(object sender, TextChangedEventArgs e)

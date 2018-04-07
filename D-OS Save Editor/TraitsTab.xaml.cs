@@ -1,11 +1,9 @@
-﻿using System.Windows.Controls;
-
-namespace D_OS_Save_Editor
+﻿namespace D_OS_Save_Editor
 {
     /// <summary>
     /// Interaction logic for TraitsTab.xaml
     /// </summary>
-    public partial class TraitsTab : UserControl
+    public partial class TraitsTab
     {
         private Player _player;
         public Player Player
@@ -28,16 +26,16 @@ namespace D_OS_Save_Editor
 
         public void UpdateForm()
         {
-            _traitCouples = new TraitCouple[ConversionTable.TraitNames.Length / 2];
+            _traitCouples = new TraitCouple[DataTable.TraitNames.Length / 2];
             StackPanel.Children.Clear();
 
-            for (var i = 0; i < ConversionTable.TraitNames.Length / 2; i++)
+            for (var i = 0; i < DataTable.TraitNames.Length / 2; i++)
             {
                 _traitCouples[i] = new TraitCouple(
-                    new Trait(ConversionTable.TraitNames[2 * i], Player.Traits[2 * i].ToString(),
-                        ConversionTable.TraitEffects[2 * i]),
-                    new Trait(ConversionTable.TraitNames[2 * i + 1], Player.Traits[2 * i + 1].ToString(),
-                        ConversionTable.TraitEffects[2 * i + 1]));
+                    new Trait(DataTable.TraitNames[2 * i], Player.Traits[2 * i].ToString(),
+                        DataTable.TraitEffects[2 * i]),
+                    new Trait(DataTable.TraitNames[2 * i + 1], Player.Traits[2 * i + 1].ToString(),
+                        DataTable.TraitEffects[2 * i + 1]));
 
                 StackPanel.Children.Add(_traitCouples[i]);
             }
@@ -45,7 +43,7 @@ namespace D_OS_Save_Editor
 
         public void SaveEdits()
         {
-            for (var i = 0; i < ConversionTable.TraitNames.Length / 2; i++)
+            for (var i = 0; i < DataTable.TraitNames.Length / 2; i++)
             {
                 var tc = _traitCouples[i].DataContext as TraitCoupleViewModel;
                 Player.Traits[2 * i] = int.Parse(tc.LeftTrait.Value);

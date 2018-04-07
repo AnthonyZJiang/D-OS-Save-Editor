@@ -1,8 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace D_OS_Save_Editor
 {
-    public class ConversionTable
+    public class DataTable
     {
         public enum Attributes
         {
@@ -103,7 +107,7 @@ namespace D_OS_Save_Editor
             "+20% chance to hit when backstabbing"
         };
 
-        public static string[] BoostTexts =
+        public static string[] GenerationBoosts =
         {
             "Armor_Boost_STR_Mod_Ring",
             "Armor__Ring_Boost_Telekinesis_Mod",
@@ -209,5 +213,89 @@ namespace D_OS_Save_Editor
             "Armor_Path_Firefly_Garment",
             "Weapon_Small_Speed_Mod"
         };
+
+        public static string[] StatsBoosts =
+        {
+            "Has_Reflection\tFalse"
+        };
+
+        /// <summary>
+        /// Generation boosts that is new to GenerationBoosts but exists in Online resource
+        /// </summary>
+        public static string[] GenerationBoostsAddOnline;
+
+        public static string[] StatsBoostsAddedOnline;
+
+        /// <summary>
+        /// All generation boosts found in user's savegame
+        /// </summary>
+        public static string[] UserGenerationBoosts = { };
+
+        public static string[] UserStatsBoosts = { };
+
+        /// <summary>
+        /// Generation boosts found in user's savegame but missing from bost GenerationBoosts and online resource
+        /// </summary>
+        public static string[] UnlistedGenerationBoosts = {};
+
+        public static string[] UnlistedStatsBoosts = { };
+        
+        public static bool IsOnlineBoostsGenerated { get; private set; }
+
+        public static async void GetTableFromOnline()
+        {
+            const string urlAddress = @"https://onedrive.live.com/download?cid=9DD4AA09923B4AB7&resid=9DD4AA09923B4AB7%2126529&authkey=AAVymh3zCy68ums";
+            var request = WebRequest.Create(urlAddress);
+            IsOnlineBoostsGenerated = false;
+
+            using (var response = await request.GetResponseAsync())
+            {
+                using (var stream = response.GetResponseStream())
+                {
+                    if (stream == null) return;
+                    var boosts = new List<string>();
+
+                    using (var sr = new StreamReader(stream))
+                    {
+                        string line;
+                        while ((line = await sr.ReadLineAsync()) != null)
+                        {
+                            if (GenerationBoosts.Contains(line.Trim())) continue;
+                            boosts.Add(line.Trim());
+                        }
+
+                        GenerationBoostsAddOnline = boosts.ToArray();
+
+                        IsOnlineBoostsGenerated = true;
+
+                        GetUnlistedStrings();
+                    }
+                }
+            }
+        }
+
+        public static async Task GetUnlistedStrings()
+        {
+            // if no save game has been loaded, return
+            // this would be the case when GetTableFromOnline finishes before user loads any save game
+            if (UserGenerationBoosts.Length < 1) return;
+
+            // if no online boosts, submit nothing.
+            // this would be the case if the online list is no longer available when development stops or user has no internet, or slow internet
+            var tick = 0;
+            while (!IsOnlineBoostsGenerated)
+            {
+                await Task.Delay(500);
+                tick++;
+                // time out at 120 seconds
+                if (tick > 240)
+                    return;
+            }
+
+            // get genBoost
+            var genBoost = UserGenerationBoosts.Where(boost => !GenerationBoosts.Contains(boost))
+                .Where(boost => !GenerationBoostsAddOnline.Contains(boost)).ToList();
+            UnlistedGenerationBoosts = genBoost.ToArray();
+        }
     }
 }

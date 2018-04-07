@@ -251,7 +251,7 @@ namespace D_OS_Save_Editor
         /// <returns></returns>
         public Player DeepClone()
         {
-            var player = this.MemberwiseClone() as Player;
+            var player = MemberwiseClone() as Player;
             player.Skills = new Dictionary<string, bool>(player.Skills);
             player.Attributes = new Dictionary<int, int>(player.Attributes);
             player.Abilities = new Dictionary<int, int>(player.Abilities);

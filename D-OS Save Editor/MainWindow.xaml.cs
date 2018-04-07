@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -12,6 +13,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using LSLib.LS;
@@ -29,9 +31,8 @@ namespace D_OS_Save_Editor
         private readonly string _defaultProfileDir = $"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}{DirectorySeparatorChar}Larian Studios{DirectorySeparatorChar}Divinity Original Sin Enhanced Edition{DirectorySeparatorChar}PlayerProfiles";
         private enum BackupStatus { None, Current, Old, NoChecksum, NoImage }
 
-        public static string Version { get; } = "v1.3.1";
+        public static string Version { get; } = "v1.4";
         private string _updateLink;
-
 
         public MainWindow()
         {
@@ -51,56 +52,59 @@ namespace D_OS_Save_Editor
                 DirectoryTextBox.Text = dir;
 
             // update
+            UpdatePanel.Visibility = Visibility.Collapsed;
             CheckUpdate();
+            DataTable.GetTableFromOnline();
         }
 
         #region private methods
         /// <summary>
         /// Checks for update on github
         /// </summary>
-        private void CheckUpdate()
+        private async void CheckUpdate()
         {
             const string urlAddress = "https://github.com/tmxkn1/D-OS-Save-Editor/blob/master/UpdateCheck";
             _updateLink = null;
             UpdatePanel.Visibility = Visibility.Collapsed;
 
-            var request = (HttpWebRequest)WebRequest.Create(urlAddress);
-            using (var response = (HttpWebResponse)request.GetResponse())
+            var request = WebRequest.Create(urlAddress);
+
+            using (var response = await request.GetResponseAsync())
             {
-                if (response.StatusCode != HttpStatusCode.OK) return;
-
-                var stream = response.GetResponseStream();
-                if (stream == null) return;
-
-                using (var reader = new StreamReader(stream))
+                using (var stream = response.GetResponseStream())
                 {
-                    var data = reader.ReadToEnd();
-                    // handshake fail
-                    if (!data.Contains("HandShake={ABCQWEZXCrtyfghvbnUIOJKLNM}"))
-                        return;
-                    // app is latest
-                    if (data.Contains($"LatestVersion={{{Version}}}"))
-                        return;
+                    if (stream == null) return;
+                    using (var reader = new StreamReader(stream))
+                    {
+                        var data = await reader.ReadToEndAsync();
+                        
+                        // handshake fail
+                        if (!data.Contains("HandShake={ABCQWEZXCrtyfghvbnUIOJKLNM}"))
+                            return;
+                        // app is latest
+                        if (data.Contains($"LatestVersion={{{Version}}}"))
+                            return;
 
-                    // app is outdated
-                    var reg = new Regex(@"Link=linkStart\{(.*)\}linkEnd");
-                    var matches = reg.Matches(data);
-                    if (matches.Count <= 0) return;
-                    if (matches[0].Groups.Count <= 1) return;
-                    // link found
-                    _updateLink = matches[0].Groups[1].Value;
+                        // app is outdated
+                        var reg = new Regex(@"Link=linkStart\{(.*)\}linkEnd");
+                        var matches = reg.Matches(data);
+                        if (matches.Count <= 0) return;
+                        if (matches[0].Groups.Count <= 1) return;
+                        // link found
+                        _updateLink = matches[0].Groups[1].Value;
 
-                    // message
-                    reg = new Regex(@"Msg=msgStart\{(.*)\}msgEnd");
-                    matches = reg.Matches(data);
-                    var msg = "A new version is avaiable!";
+                        // message
+                        reg = new Regex(@"Msg=msgStart\{(.*)\}msgEnd");
+                        matches = reg.Matches(data);
+                        var msg = "A new version is avaiable!";
 
-                    if (matches.Count > 0)
-                        if (matches[0].Groups.Count <= 1)
-                            msg = matches[0].Groups[1].Value;
+                        if (matches.Count > 0)
+                            if (matches[0].Groups.Count <= 1)
+                                msg = matches[0].Groups[1].Value;
 
-                    UpdateTextBox.Text = msg;
-                    UpdatePanel.Visibility = Visibility.Visible;
+                        UpdateTextBox.Text = msg;
+                        UpdatePanel.Visibility = Visibility.Visible;
+                    }
                 }
             }
         }
@@ -424,7 +428,7 @@ namespace D_OS_Save_Editor
             DirectoryTextBox.Text + DirectorySeparatorChar + saveGameName + DirectorySeparatorChar + saveGameName + ".lsv", 
             unpackDir,
             (Game)GameEditionTextBlock.Tag);
-
+            
             // unpack
             if (!UnpackSave(savegame)) return;
 
@@ -483,12 +487,6 @@ namespace D_OS_Save_Editor
         }
         #endregion ui events
 
-        private void UpdateButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            System.Diagnostics.Process.Start(_updateLink);
-
-        }
-
         private void AboutButton_OnClick(object sender, RoutedEventArgs e)
         {
             var about = new About();
@@ -509,6 +507,23 @@ namespace D_OS_Save_Editor
                 s.Content = "Refresh savegame list";
             };
             tooltip.IsOpen = true;
+        }
+
+        private void Hyperlink_OnRequestNavigate(object sender, RoutedEventArgs e)
+        {
+            if (((Hyperlink) sender).Tag as string == "update")
+            {
+
+            }
+            else if (((Hyperlink) sender).Tag as string == "site")
+            {
+                Process.Start(_updateLink);
+            }
+        }
+
+        private void DismissButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            UpdatePanel.Visibility = Visibility.Collapsed;
         }
     }
 }

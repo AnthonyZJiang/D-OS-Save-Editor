@@ -1,7 +1,11 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
 
 namespace D_OS_Save_Editor
@@ -9,7 +13,7 @@ namespace D_OS_Save_Editor
     /// <summary>
     /// Interaction logic for SaveEditor.xaml
     /// </summary>
-    public partial class SaveEditor : Window
+    public partial class SaveEditor
     {
         private Savegame Savegame { get; set; }
         private Player[] EditingPlayers { get; set; }
@@ -44,6 +48,8 @@ namespace D_OS_Save_Editor
             }
 
             PlayerSelectionComboBox.SelectedIndex = 0;
+
+            CheckUnlisted();
         }
 
         private void ShowContent(int id)
@@ -57,6 +63,15 @@ namespace D_OS_Save_Editor
             {
                 //TraitsTab.IsEnabled = false;
             }
+        }
+
+        private async void CheckUnlisted()
+        {
+            await DataTable.GetUnlistedStrings();
+            if (DataTable.UnlistedGenerationBoosts.Length <= 0) return;
+
+            UnlistedCountHyperlink.Text = DataTable.UnlistedGenerationBoosts.Length.ToString();
+            SubmitPanel.Visibility = Visibility.Visible;
         }
 
         private void PlayerSelectionComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -129,11 +144,15 @@ namespace D_OS_Save_Editor
                 case "AllSkills":
                     Savegame.DumpAllSkills();
                     break;
+                case "AllTalents":
+                    Savegame.DumpAllTalents();
+                    break;
             }
 
             MessageBox.Show("A dump file has been created. Thank you!");
         }
 
+        
         private void SavePlayer_OnClick(object sender, RoutedEventArgs e)
         {
             SavePlayer.IsEnabled = false;
@@ -155,6 +174,42 @@ namespace D_OS_Save_Editor
             {
                 SavePlayer.IsEnabled = true;
             }
+        }
+
+        private void DismissButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            SubmitPanel.Visibility = Visibility.Collapsed;
+        }
+
+        private void Hyperlink_OnRequestNavigate(object sender, RoutedEventArgs e)
+        {
+            var s = sender as Hyperlink;
+            if (s.Tag as string != "submit") return;
+            // copy text in clipboard
+            var builder = new StringBuilder();
+
+            foreach (var m in DataTable.UnlistedGenerationBoosts)
+            {
+                builder.Append(m).Append(Environment.NewLine);
+            }
+            Clipboard.SetText(builder.ToString());
+
+            MessageBox.Show(this, 
+                "I truly appreciate your willingness to help :). The text you will need to submit has been copied.\n\nClick \"OK\" to go to the website and paste them in the description.");
+
+            Process.Start(
+                @"https://docs.google.com/forms/d/e/1FAIpQLSeUeKYdV8InQslbvCvA1rmffJ5t1ieond4W6hpUHkHTH7I7dg/viewform?usp=pp_url&entry.1687355392=Unlisted+Modifiers&entry.43915833&entry.404388531");
+
+            SubmitPanel.Visibility = Visibility.Collapsed;
+        }
+
+        private void SaveEditor_OnClosing(object sender, CancelEventArgs e)
+        {
+            //if ()
+            //{
+            //    var result = MessageBox.Show(this, "You have unsaved changes. Do you want to close the window now?",
+            //        "Unsaved changes", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            //}
         }
     }
 }

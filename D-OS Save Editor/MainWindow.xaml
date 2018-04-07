@@ -3,34 +3,25 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:D_OS_Save_Editor"
         mc:Ignorable="d"
-        Title="D-OS Save Editor: Select a save" Height="450" Width="624.947">
+        Title="D-OS Save Editor: Select a save" Height="428.713" Width="624.947" WindowStartupLocation="CenterScreen" SizeToContent="Height" MinWidth="625" MinHeight="500" MaxHeight="700" ResizeMode="CanMinimize">
     <Window.Resources>
         <Style TargetType="Button">
             <Setter Property="Padding" Value="5,0"></Setter>
         </Style>
-        <Image x:Key="GetUpdateImage" Source="Resources/ic_download2_black.png"/>
         <Image x:Key="RefreshImage" Source="Resources/ic_refresh2_black.png"/>
         <Image x:Key="OpenBrowserImage" Source="Resources/ic_openbrowser_black.png"/>
-        <Image x:Key="GetUpdateImageMO" Source="Resources/ic_download2_blue.png"/>
         <Image x:Key="RefreshImageMO" Source="Resources/ic_refresh3_blue.png"/>
         <Image x:Key="OpenBrowserImageMO" Source="Resources/ic_openbrowser_blue.png"/>
         <Style x:Key="UpdateImageButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="BorderBrush" Value="Transparent"/>
-            <Setter Property="Content" Value="{StaticResource GetUpdateImage}"></Setter>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Grid>
                             <ContentPresenter/>
                         </Grid>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Content" Value="{StaticResource GetUpdateImageMO}"></Setter>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -74,79 +65,97 @@
             </Setter>
         </Style>
     </Window.Resources>
-    <Grid Margin="20,10">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <StackPanel x:Name="UpdatePanel" Orientation="Horizontal" HorizontalAlignment="Right">
-            <TextBlock x:Name="UpdateTextBox" Text="A new version is avaiable!" Foreground="#FFD62E2E" HorizontalAlignment="Right" Margin="0,5,10,10" VerticalAlignment="Center"/>
-            <Button x:Name="UpdateButton" Style="{StaticResource UpdateImageButtonStyle}" Margin="0,5,0,10" Click="UpdateButton_OnClick" Width="20" Height="20" Padding="0" ToolTip="Go to download site"/>
-        </StackPanel>
-        <Grid Grid.Row="1">
+    <StackPanel>
+        <Border Background="#FBFBB5" x:Name="UpdatePanel" >
+            <Grid>
+                <Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,0">
+                        <TextBlock x:Name="UpdateTextBox" Text="" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        <TextBlock VerticalAlignment="Center" Visibility="Collapsed"><Hyperlink Tag="update" Click="Hyperlink_OnRequestNavigate">Update Now</Hyperlink></TextBlock>
+                        <TextBlock VerticalAlignment="Center" Text=" or " Visibility="Collapsed"/>
+                        <TextBlock VerticalAlignment="Center"><Hyperlink Tag="site" Click="Hyperlink_OnRequestNavigate">Go to the download site</Hyperlink></TextBlock>
+                        <TextBlock VerticalAlignment="Center" Text="."/>
+                </StackPanel>
+                <Button Grid.Column="1" x:Name="DismissButton" Style="{StaticResource UpdateImageButtonStyle}" Width="15" Height="15" Margin="10,5,10,5" HorizontalAlignment="Right" Click="DismissButton_OnClick">
+                    <Button.Content>
+                        <Path
+                            Data="F1 M24,24z M0,0z M19,6.41L17.59,5 12,10.59 6.41,5 5,6.41 10.59,12 5,17.59 6.41,19 12,13.41 17.59,19 19,17.59 13.41,12z"
+                            Fill="{DynamicResource {x:Static SystemColors.AppWorkspaceBrushKey}}" Stretch="UniformToFill"/>
+                    </Button.Content>
+                </Button>
+            </Grid>
+        </Border>
+        <Grid Margin="20,10,20,20">
             <Grid.RowDefinitions>
-                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Savegames Patch " Margin="0,0,0,5" VerticalAlignment="Center"/>
-                <TextBlock Text ="(Larian Studios\" FontSize="10" VerticalAlignment="Center"/>
-                <TextBlock Text ="game_version " FontSize="10" VerticalAlignment="Center" FontStyle="Italic"/>
-                <TextBlock Text ="\PlayerProfiles\" FontSize="10" VerticalAlignment="Center"/>
-                <TextBlock Text ="your_profile " FontSize="10" VerticalAlignment="Center" FontStyle="Italic"/>
-                <TextBlock Text ="\Savegames_patch)" FontSize="10" VerticalAlignment="Center"/>
-            </StackPanel>
-            <TextBox x:Name="DirectoryTextBox"  Grid.Row="1" Grid.Column="0" Margin="0,0,10,0" TextChanged="DirectoryTextBox_OnTextChanged"/>
-            <Button x:Name="BrowseButton" Grid.Row="1" Grid.Column="1" Style="{StaticResource BrowseImageButtonStyle}" Width="20" Padding="0" Click="BrowseButton_OnClick"/>
-        </Grid>
-        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,20,0,0">
-            <TextBlock Text="Game edition:" Margin="0,0,10,0"/>
-            <TextBlock x:Name="GameEditionTextBlock" Foreground="#FFC70202"/>
-        </StackPanel>
-        <Grid Grid.Row="3">
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="250"/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <ListBox Grid.Row="0" x:Name="SavegameListBox" Margin="0,10,10,0" SelectionChanged="SavegameListBox_OnSelectionChanged"/>
-            <Button x:Name="RefreshButton" Style="{StaticResource RefreshImageButtonStyle}" Grid.Row="1" Width="20" Height="20" HorizontalAlignment="Right" Margin="0, 5,10,0" Padding="0" VerticalAlignment="Top" Click="RefreshButton_OnClick"/>
-            <Button Content="About" Grid.Row="1" HorizontalAlignment="Left" Margin="0,30,0,0" Click="AboutButton_OnClick"/>
-            <Grid Grid.Column="1" Grid.RowSpan="3"  Margin="20,20,0,0" >
+            <Grid Grid.Row="1">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <Image Grid.ColumnSpan="4"  x:Name="SavegameImage" Margin="0,0,0,20"/>
-                <Rectangle Grid.Row="1" Grid.Column="1" Margin="0,3" Stroke="Black" StrokeThickness="0.5"/>
-                <Rectangle Grid.Row="2" Grid.Column="1" Margin="0,3" Stroke="Black" StrokeThickness="0.5"/>
-                <TextBlock Grid.Row="1" Text="Date:" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                <TextBlock Grid.Row="1" Grid.Column="1"  x:Name="SavegameDateTextBox" Width="100" Margin="5"/>
-                <TextBlock Grid.Row="2" Text="Time:" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                <TextBlock Grid.Row="2" Grid.Column="1"  x:Name="SavegameTimeTextBox" Margin="5"/>
-                <StackPanel Grid.Row="3" Grid.ColumnSpan="4" HorizontalAlignment="Right" Orientation="Horizontal">
-                    <Button x:Name="BackupButton" Content="Backup" Width="60" Margin="0,30,10,0" Click="BackupButton_OnClick" IsEnabled="False"/>
-                    <Button x:Name="RestoreButton" Content="Restore" Width="60" Margin="0,30,80,0" Click="RestoreButton_OnClick" IsEnabled="False"/>
-                    <Button x:Name="LoadButton" Content="Load" HorizontalAlignment="Right" IsEnabled="False" Width="60" Margin="0,30,0,0" Click="LoadButton_OnClick"/>
+                <StackPanel Orientation="Horizontal" >
+                    <TextBlock Text="Savegames Patch " Margin="0,0,0,5" VerticalAlignment="Center"/>
+                    <TextBlock Text ="(Larian Studios\" FontSize="10" VerticalAlignment="Center"/>
+                    <TextBlock Text ="game_version " FontSize="10" VerticalAlignment="Center" FontStyle="Italic"/>
+                    <TextBlock Text ="\PlayerProfiles\" FontSize="10" VerticalAlignment="Center"/>
+                    <TextBlock Text ="your_profile " FontSize="10" VerticalAlignment="Center" FontStyle="Italic"/>
+                    <TextBlock Text ="\Savegames_patch)" FontSize="10" VerticalAlignment="Center"/>
                 </StackPanel>
+                <TextBox x:Name="DirectoryTextBox"  Grid.Row="1" Grid.Column="0" Margin="0,0,10,0" TextChanged="DirectoryTextBox_OnTextChanged"/>
+                <Button x:Name="BrowseButton" Grid.Row="1" Grid.Column="1" Style="{StaticResource BrowseImageButtonStyle}" Width="20" Padding="0" Click="BrowseButton_OnClick"/>
+            </Grid>
+            <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,20,0,0">
+                <TextBlock Text="Game edition:" Margin="0,0,10,0"/>
+                <TextBlock x:Name="GameEditionTextBlock" Foreground="#FFC70202"/>
+            </StackPanel>
+            <Grid Grid.Row="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="250"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <ListBox Grid.Row="0" x:Name="SavegameListBox" Margin="0,10,10,0" SelectionChanged="SavegameListBox_OnSelectionChanged" MaxHeight="400" MaxWidth="240" Width="240"/>
+                <Button x:Name="RefreshButton" Style="{StaticResource RefreshImageButtonStyle}" Grid.Row="1" Width="20" Height="20" HorizontalAlignment="Right" Margin="0, 5,10,0" Padding="0" VerticalAlignment="Top" Click="RefreshButton_OnClick"/>
+                <Button Content="About" Grid.Row="1" HorizontalAlignment="Left" Margin="0,30,0,0" Click="AboutButton_OnClick"/>
+                <Grid Grid.Column="1" Grid.RowSpan="3"  Margin="20,20,0,0" >
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Image Grid.ColumnSpan="4"  x:Name="SavegameImage" Margin="0,0,0,20"/>
+                    <Rectangle Grid.Row="1" Grid.Column="1" Margin="0,3" Stroke="Black" StrokeThickness="0.5"/>
+                    <Rectangle Grid.Row="2" Grid.Column="1" Margin="0,3" Stroke="Black" StrokeThickness="0.5"/>
+                    <TextBlock Grid.Row="1" Text="Date:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                    <TextBlock Grid.Row="1" Grid.Column="1"  x:Name="SavegameDateTextBox" Width="100" Margin="5"/>
+                    <TextBlock Grid.Row="2" Text="Time:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                    <TextBlock Grid.Row="2" Grid.Column="1"  x:Name="SavegameTimeTextBox" Margin="5"/>
+                    <StackPanel Grid.Row="3" Grid.ColumnSpan="4" HorizontalAlignment="Right" Orientation="Horizontal">
+                        <Button x:Name="BackupButton" Content="Backup" Width="60" Margin="0,30,10,0" Click="BackupButton_OnClick" IsEnabled="False"/>
+                        <Button x:Name="RestoreButton" Content="Restore" Width="60" Margin="0,30,80,0" Click="RestoreButton_OnClick" IsEnabled="False"/>
+                        <Button x:Name="LoadButton" Content="Load" HorizontalAlignment="Right" IsEnabled="False" Width="60" Margin="0,30,0,0" Click="LoadButton_OnClick"/>
+                    </StackPanel>
+                </Grid>
             </Grid>
         </Grid>
-    </Grid>
+
+    </StackPanel>
 </Window>

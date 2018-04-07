@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlTypes;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.IO.Compression;
-using System.IO.Packaging;
 using System.Linq;
 using System.Reflection;
 using System.Xml;
@@ -21,6 +18,7 @@ namespace D_OS_Save_Editor
         public string SavegameFullFile { get; set; }
         public string UnpackDirectory { get; }
         public Player[] Players { get; set; }
+        public string[] AllSkills { get; set; }
         public Game GameVersion { get; }
 
         public Savegame(string savegameFullFile, string unpackDirectory, Game gameVersion)
@@ -38,8 +36,10 @@ namespace D_OS_Save_Editor
             // load xml
             var doc = new XmlDocument();
             doc.Load(UnpackDirectory + Path.DirectorySeparatorChar + "globals.lsx");
-
+            
             Players = LsxParser.ParsePlayer(doc);
+            DataTable.UserGenerationBoosts = LsxParser.GenerationBoostCollector.ToArray();
+            DataTable.UserStatsBoosts = LsxParser.StatsBoostsCollector.ToArray();
         }
 
         public void WriteEditsToLsx()
@@ -177,21 +177,11 @@ namespace D_OS_Save_Editor
         public void DumpAllModifiers()
         {
             var fileName = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}{Path.DirectorySeparatorChar}AllModifiers_{DateTime.Now:yyMMdd_HHmmss}";
-            var modList = new List<string>();
             using (var file = new StreamWriter(fileName + ".txt"))
             {
-                foreach (var player in Players)
+                foreach (var boost in DataTable.UserGenerationBoosts)
                 {
-                    foreach (var item in player.Items)
-                    {
-                        if (item.Generation == null) continue;
-                        foreach (var boost in item.Generation.Boosts)
-                        {
-                            if (modList.Contains(item.ItemSort+boost)) continue;
-                            file.WriteLine(boost);
-                            modList.Add(item.ItemSort+boost);
-                        }
-                    }
+                    file.WriteLine(boost);
                 }
             }
 
@@ -205,26 +195,16 @@ namespace D_OS_Save_Editor
         }
 
         /// <summary>
-        /// Writes all unique modifiers found in current savegame to a txt file.
+        /// Writes all unique permanent boosts found in current savegame to a txt file.
         /// </summary>
         public void DumpAllPermanentBoosts()
         {
             var fileName = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}{Path.DirectorySeparatorChar}AlllPermanentBoosts_{DateTime.Now:yyMMdd_HHmmss}";
-            var modList = new List<string>();
             using (var file = new StreamWriter(fileName + ".txt"))
             {
-                foreach (var player in Players)
+                foreach (var boost in DataTable.UserStatsBoosts)
                 {
-                    foreach (var item in player.Items)
-                    {
-                        if (item.Stats == null) continue;
-                        foreach (var boost in item.Stats.PermanentBoost)
-                        {
-                            if (modList.Contains(item.ItemSort + boost.Key + boost.Value)) continue;
-                            file.WriteLine(item.StatsName + " " + boost.Key + " " + boost.Value);
-                            modList.Add(item.ItemSort + boost.Key + boost.Value);
-                        }
-                    }
+                    file.WriteLine(boost);
                 }
             }
 
@@ -260,6 +240,32 @@ namespace D_OS_Save_Editor
             using (var zip = ZipFile.Open(fileName + ".zip", ZipArchiveMode.Create))
             {
                 zip.CreateEntryFromFile(fileName + ".txt", "AllSkills.txt");
+            }
+#if !DEBUG
+            File.Delete(fileName + ".txt");
+#endif
+        }
+
+        /// <summary>
+        /// Writes all unique talents found in current savegame to a txt file.
+        /// </summary>
+        public void DumpAllTalents()
+        {
+            var fileName = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}{Path.DirectorySeparatorChar}AllTalents_{DateTime.Now:yyMMdd_HHmmss}";
+            using (var file = new StreamWriter(fileName + ".txt"))
+            {
+                foreach (var player in Players)
+                {
+                    foreach (var talent in player.Talents.Keys)
+                    {
+                        file.WriteLine($"{player.Name}\t{talent}");
+                    }
+                }
+            }
+
+            using (var zip = ZipFile.Open(fileName + ".zip", ZipArchiveMode.Create))
+            {
+                zip.CreateEntryFromFile(fileName + ".txt", "AllTalents.txt");
             }
 #if !DEBUG
             File.Delete(fileName + ".txt");

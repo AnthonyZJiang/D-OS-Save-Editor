@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Xml;
@@ -10,12 +9,15 @@ namespace D_OS_Save_Editor
     [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
     public class LsxParser
     {
-        private static List<string> _boostCollector;
+        public static List<string> GenerationBoostCollector;
+        public static List<string> StatsBoostsCollector;
         public const string StatsGold = "Small_Gold";
 
         public static Player[] ParsePlayer(XmlDocument doc)
         {
-            _boostCollector = new List<string>();
+            GenerationBoostCollector = new List<string>();
+            StatsBoostsCollector = new List<string>();
+            
             // find player data
             var playerData = doc.DocumentElement.SelectNodes("//*[@id='PlayerData']");
 
@@ -60,7 +62,7 @@ namespace D_OS_Save_Editor
                     players[i].Skills.Add(nodes[j].FirstChild.Attributes[1].Value,
                         nodes[j].ChildNodes[1].Attributes[1].Value == "True");
                 }
-
+                
                 nodes = playerData[i].SelectNodes("children//node [@id='Attributes']");
                 for (var j = 0; j < nodes?.Count; j++)
                 {
@@ -104,13 +106,6 @@ namespace D_OS_Save_Editor
                         players[i].Gold = item.Amount;
                 }
             }
-
-#if DEBUG
-            foreach (var b in _boostCollector)
-            {
-                Console.WriteLine(b);
-            }
-#endif
             return players;
         }
 
@@ -216,8 +211,8 @@ namespace D_OS_Save_Editor
                 foreach (XmlNode n in genBoostNodes)
                 {
                     item.Generation.Boosts.Add(n.Attributes[1].Value);
-                    if (!_boostCollector.Contains(n.Attributes[1].Value))
-                        _boostCollector.Add(n.Attributes[1].Value);
+                    if (!GenerationBoostCollector.Contains(n.Attributes[1].Value))
+                        GenerationBoostCollector.Add(n.Attributes[1].Value);
                 }
             }
 
@@ -241,6 +236,8 @@ namespace D_OS_Save_Editor
             foreach (XmlNode n in statsBoostNodes)
             {
                 item.Stats.PermanentBoost.Add(n.Attributes[0].Value, n.Attributes[1].Value);
+                if (!StatsBoostsCollector.Contains($"{n.Attributes[0].Value}\t{n.Attributes[1].Value}"))
+                    StatsBoostsCollector.Add($"{n.Attributes[0].Value}\t{n.Attributes[1].Value}");
             }
 
             return item;

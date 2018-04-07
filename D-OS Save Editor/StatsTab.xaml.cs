@@ -8,7 +8,7 @@ namespace D_OS_Save_Editor
     /// <summary>
     /// Interaction logic for UserControl1.xaml
     /// </summary>
-    public partial class StatsTab : UserControl
+    public partial class StatsTab
     {
         private Player _player;
         private Brush DefaultTextBoxBorderBrush { get; }
@@ -39,12 +39,12 @@ namespace D_OS_Save_Editor
             AttributePointsTextBox.Text = Player.AttributePoints;
             AbilityPointsTextBox.Text = Player.AbilityPoints;
             TalentPointsTextBox.Text = Player.TalentPoints;
-            StrengthTextBox.Text = Player.Attributes[(int)ConversionTable.Attributes.Strength].ToString();
-            DexterityTextBox.Text = Player.Attributes[(int)ConversionTable.Attributes.Dexerity].ToString();
-            IntelligenceTextBox.Text = Player.Attributes[(int)ConversionTable.Attributes.Intelligence].ToString();
-            ConstitutionTextBox.Text = Player.Attributes[(int)ConversionTable.Attributes.Consitution].ToString();
-            SpeedTextBox.Text = Player.Attributes[(int)ConversionTable.Attributes.Speed].ToString();
-            PerceptionTextBox.Text = Player.Attributes[(int)ConversionTable.Attributes.Perception].ToString();
+            StrengthTextBox.Text = Player.Attributes[(int)DataTable.Attributes.Strength].ToString();
+            DexterityTextBox.Text = Player.Attributes[(int)DataTable.Attributes.Dexerity].ToString();
+            IntelligenceTextBox.Text = Player.Attributes[(int)DataTable.Attributes.Intelligence].ToString();
+            ConstitutionTextBox.Text = Player.Attributes[(int)DataTable.Attributes.Consitution].ToString();
+            SpeedTextBox.Text = Player.Attributes[(int)DataTable.Attributes.Speed].ToString();
+            PerceptionTextBox.Text = Player.Attributes[(int)DataTable.Attributes.Perception].ToString();
         }
 
         public void SaveEdits()
@@ -56,12 +56,12 @@ namespace D_OS_Save_Editor
             Player.AttributePoints = AttributePointsTextBox.Text;
             Player.AbilityPoints = AbilityPointsTextBox.Text;
             Player.TalentPoints = TalentPointsTextBox.Text;
-            Player.Attributes[(int) ConversionTable.Attributes.Strength] = int.Parse(StrengthTextBox.Text);
-            Player.Attributes[(int)ConversionTable.Attributes.Dexerity] = int.Parse(DexterityTextBox.Text);
-            Player.Attributes[(int)ConversionTable.Attributes.Intelligence] = int.Parse(IntelligenceTextBox.Text);
-            Player.Attributes[(int)ConversionTable.Attributes.Consitution] = int.Parse(ConstitutionTextBox.Text);
-            Player.Attributes[(int)ConversionTable.Attributes.Speed] = int.Parse(SpeedTextBox.Text);
-            Player.Attributes[(int)ConversionTable.Attributes.Perception] = int.Parse(PerceptionTextBox.Text);
+            Player.Attributes[(int) DataTable.Attributes.Strength] = int.Parse(StrengthTextBox.Text);
+            Player.Attributes[(int)DataTable.Attributes.Dexerity] = int.Parse(DexterityTextBox.Text);
+            Player.Attributes[(int)DataTable.Attributes.Intelligence] = int.Parse(IntelligenceTextBox.Text);
+            Player.Attributes[(int)DataTable.Attributes.Consitution] = int.Parse(ConstitutionTextBox.Text);
+            Player.Attributes[(int)DataTable.Attributes.Speed] = int.Parse(SpeedTextBox.Text);
+            Player.Attributes[(int)DataTable.Attributes.Perception] = int.Parse(PerceptionTextBox.Text);
         }
 
         private void TextBoxEventSetter_OnLostFocus(object sender, RoutedEventArgs e)

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:D_OS_Save_Editor"
         mc:Ignorable="d"
-        Title="D-OS Save Editor: Save editor" SizeToContent="WidthAndHeight" MaxWidth="850" Width="655.916" Closed="SaveEditor_OnClosed">
+        Title="D-OS Save Editor: Save editor" SizeToContent="WidthAndHeight" MaxWidth="850" Width="655.916" Closed="SaveEditor_OnClosed" Closing="SaveEditor_OnClosing">
     <Window.Resources>
         <Style TargetType="TextBox">
             <Setter Property="Height" Value="23"/>
@@ -18,14 +18,37 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
-        <StackPanel Orientation="Horizontal">
+        <Border Background="#FBFBB5" x:Name="SubmitPanel" Grid.ColumnSpan="2" Visibility="Collapsed">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,0">
+                    <TextBlock VerticalAlignment="Center"><Hyperlink Tag="unlistedcount" Click="Hyperlink_OnRequestNavigate"><TextBlock x:Name="UnlistedCountHyperlink" Text="0"/></Hyperlink></TextBlock>
+                    <TextBlock x:Name="UpdateTextBox" Text=" unlisted weapon modifiers found. Would you like to help by " HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    <TextBlock VerticalAlignment="Center"><Hyperlink Tag="submit" Click="Hyperlink_OnRequestNavigate">reporting</Hyperlink></TextBlock>
+                    <TextBlock VerticalAlignment="Center" Text=" them?"/>
+                </StackPanel>
+                <Button Grid.Column="1" x:Name="DismissButton" Width="15" Height="15" Margin="10,5,10,5" HorizontalAlignment="Right" Background="{x:Null}" BorderBrush="{x:Null}" Click="DismissButton_OnClick">
+                    <Button.Content>
+                        <Path
+                            Data="F1 M24,24z M0,0z M19,6.41L17.59,5 12,10.59 6.41,5 5,6.41 10.59,12 5,17.59 6.41,19 12,13.41 17.59,19 19,17.59 13.41,12z"
+                            Fill="{DynamicResource {x:Static SystemColors.AppWorkspaceBrushKey}}" Stretch="UniformToFill"/>
+                    </Button.Content>
+                </Button>
+            </Grid>
+        </Border>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
             <ComboBox x:Name="PlayerSelectionComboBox" HorizontalAlignment="Left" Margin="20,20,0,0" VerticalAlignment="Top" Width="120" Height="21.24" SelectionChanged="PlayerSelectionComboBox_OnSelectionChanged"/>
             <Button x:Name="SavePlayer" Content="Apply" Width="60" Margin="20,20,0,0" Click="SavePlayer_OnClick"/>
         </StackPanel>
-        <StackPanel Orientation="Horizontal" Grid.Column="1">
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Grid.Column="1">
             <Button x:Name="ResetButton" Content="Reset" VerticalAlignment="Center" Padding="10,2" Margin ="10,20,40,0" Width="60" Click="ResetButton_OnClick"/>
             <Button x:Name="SaveButton" Content="Save" VerticalAlignment="Center" Padding="10,2" Margin="0,20,0,0" Width="60" Click="SaveButton_OnClick"/>
             <Button x:Name="CancelButton" Content="Cancel" VerticalAlignment="Center" Padding="10,2" Margin ="10,20,20,0" Width="60" IsCancel="True"/>
@@ -63,6 +86,7 @@
                     <Button x:Name="DumpAllPlayersButton" Content="Dump All Player" Tag="AllPlayer"/>
                     <Button x:Name="DumpAllPlayerInventoryButton" Content="Dump All Player Inventory" Tag="AllInv"/>
                     <Button Content="Dump All Player Skills" Tag="AllSkills"/>
+                    <Button Content="Dump All Player Talents" Tag="AllTalents"/>
                     <Button x:Name="DumpAllItemModifier" Content="Dump All Item Modifiers" Tag="AllMod"/>
                     <Button Content="Dump All Item Stats Boosts" Tag="AllPerBoost"/>
                 </StackPanel>

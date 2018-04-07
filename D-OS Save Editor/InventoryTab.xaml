@@ -35,10 +35,20 @@
             <RowDefinition Height="*"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <ListBox x:Name="ItemsListBox" Grid.RowSpan="4" HorizontalAlignment="Left" MinHeight="430" Height="Auto" Margin="10,0,20,10" VerticalAlignment="Top" Width="239" SelectionChanged="ItemsListBox_OnSelectionChanged"/>
+        <Grid Margin="10,0,0,2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition/></Grid.RowDefinitions>
+            <TextBlock Text="Filter:"/>
+            <TextBox Grid.Column="1" x:Name="SearchTextBox" Uid="SearchText" Margin="10,0,20,0" VerticalAlignment="Top" HorizontalAlignment="Stretch" Width="Auto" TextChanged="SearchTextBox_OnTextChanged"/>
+            <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Text="Use space to separate" FontSize="10" FontStyle="Italic"/>
+        </Grid>
+        <ListBox x:Name="ItemsListBox" Grid.Row="1" Grid.RowSpan="3" HorizontalAlignment="Left" MinHeight="430" Height="Auto" Margin="10,0,20,10" VerticalAlignment="Top" Width="239" SelectionChanged="ItemsListBox_OnSelectionChanged"/>
         <StackPanel Orientation="Horizontal" Grid.Column="1" Margin="0,0,0,10">
-            <Button Content="Check all" Margin="0,0,20,0" Padding="5,2" Width="80" Click="CheckAllButton_OnClick"/>
-            <Button Content="Uncheck all" Padding="5,2" Width="80" Click="UncheckAllButtonBase_OnClick"/>
+            <Button Content="Check all" Margin="0,0,20,0" Padding="5,2" Width="80" Click="CheckAllButton_OnClick" VerticalAlignment="Top"/>
+            <Button Content="Uncheck all" Padding="5,2" Width="80" Click="UncheckAllButtonBase_OnClick" VerticalAlignment="Top"/>
         </StackPanel>
         <WrapPanel x:Name="ShowWrapPanel" Grid.Row="1" Grid.Column="1" Margin="0,0,0,20">
             <WrapPanel.Resources>
