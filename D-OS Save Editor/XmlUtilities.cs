@@ -56,14 +56,6 @@ namespace D_OS_Save_Editor
         {
         }
 
-        public XmlValidationException(string message) : base(message)
-        {
-        }
-
-        public XmlValidationException(string message, Exception inner) : base(message, inner)
-        {
-        }
-
         public XmlValidationException(string name, string value) : base($"Invalid value '{value}' for variable '{name}'.")
         {
             Name = name;

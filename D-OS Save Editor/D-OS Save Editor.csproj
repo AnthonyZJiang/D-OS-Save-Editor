@@ -98,38 +98,38 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="AbilitiesTab.xaml.cs">
+    <Compile Include="SE\AbilitiesTab.xaml.cs">
       <DependentUpon>AbilitiesTab.xaml</DependentUpon>
     </Compile>
     <Compile Include="About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>
-    <Compile Include="AddBoostDialog.xaml.cs">
+    <Compile Include="SE\AddBoostDialog.xaml.cs">
       <DependentUpon>AddBoostDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DataTable.cs" />
-    <Compile Include="InventoryTab.xaml.cs">
+    <Compile Include="savegame\DataTable.cs" />
+    <Compile Include="SE\InventoryTab.xaml.cs">
       <DependentUpon>InventoryTab.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Item.cs" />
-    <Compile Include="LsxParser.cs" />
-    <Compile Include="Player.cs" />
+    <Compile Include="savegame\Item.cs" />
+    <Compile Include="savegame\LsxParser.cs" />
+    <Compile Include="savegame\Player.cs" />
     <Compile Include="Properties\Annotations.cs" />
-    <Compile Include="SaveEditor.xaml.cs">
+    <Compile Include="SE\SaveEditor.xaml.cs">
       <DependentUpon>SaveEditor.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Savegame.cs" />
-    <Compile Include="StatsTab.xaml.cs">
+    <Compile Include="savegame\Savegame.cs" />
+    <Compile Include="SE\StatsTab.xaml.cs">
       <DependentUpon>StatsTab.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TraitCouple.xaml.cs">
+    <Compile Include="SE\TraitCouple.xaml.cs">
       <DependentUpon>TraitCouple.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TraitsTab.xaml.cs">
+    <Compile Include="SE\TraitsTab.xaml.cs">
       <DependentUpon>TraitsTab.xaml</DependentUpon>
     </Compile>
     <Compile Include="XmlUtilities.cs" />
-    <Page Include="AbilitiesTab.xaml">
+    <Page Include="SE\AbilitiesTab.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -137,11 +137,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="AddBoostDialog.xaml">
+    <Page Include="SE\AddBoostDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="InventoryTab.xaml">
+    <Page Include="SE\InventoryTab.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -157,19 +157,19 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="SaveEditor.xaml">
+    <Page Include="SE\SaveEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="StatsTab.xaml">
+    <Page Include="SE\StatsTab.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="TraitCouple.xaml">
+    <Page Include="SE\TraitCouple.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="TraitsTab.xaml">
+    <Page Include="SE\TraitsTab.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
