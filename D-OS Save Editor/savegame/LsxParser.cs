@@ -11,7 +11,6 @@ namespace D_OS_Save_Editor
     {
         public static List<string> GenerationBoostCollector;
         public static List<string> StatsBoostsCollector;
-        public const string StatsGold = "Small_Gold";
 
         public static Player[] ParsePlayer(XmlDocument doc)
         {
@@ -102,8 +101,6 @@ namespace D_OS_Save_Editor
                     var item = ParseItem(inventoryData[j].ParentNode);
                     players[i].Items[j] = item;
                     players[i].SlotsOccupation[int.Parse(item.Slot)] = true;
-                    if (item.StatsName == StatsGold)
-                        players[i].Gold = item.Amount;
                 }
             }
             return players;
@@ -135,14 +132,14 @@ namespace D_OS_Save_Editor
             // sort item
             if (item.IsKey == "True")
                 item.ItemSort = ItemSortType.Key;
-            else if (Item.GoldNames.Contains(item.StatsName.ToLower()))
+            else if (DataTable.GoldNames.Contains(item.StatsName.ToLower()))
                 item.ItemSort = ItemSortType.Gold;
             else
             {
                 var nameParts = item.StatsName.ToLower().Split('_');
 
                 if (nameParts[0] == "wpn" &&
-                    Item.ArrowNames.Contains(nameParts[1]))
+                    DataTable.ArrowTypeNames.Contains(nameParts[1]))
                     item.ItemSort = ItemSortType.Arrow;
                 else
                     switch (nameParts[0])

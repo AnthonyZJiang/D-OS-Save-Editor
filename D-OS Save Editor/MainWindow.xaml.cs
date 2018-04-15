@@ -31,12 +31,11 @@ namespace D_OS_Save_Editor
         private readonly string _defaultProfileDir = $"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}{DirectorySeparatorChar}Larian Studios{DirectorySeparatorChar}Divinity Original Sin Enhanced Edition{DirectorySeparatorChar}PlayerProfiles";
         private enum BackupStatus { None, Current, Old, NoChecksum, NoImage }
 
-        public static string Version { get; } = "v1.4";
+        public static string Version { get; } = "v1.4.1";
         private string _updateLink;
 
         public MainWindow()
         {
-
             InitializeComponent();
 
 #if LOAD_FROM_JSON
@@ -53,8 +52,15 @@ namespace D_OS_Save_Editor
 
             // update
             UpdatePanel.Visibility = Visibility.Collapsed;
-            CheckUpdate();
-            DataTable.GetTableFromOnline();
+            try
+            {
+                CheckUpdate();
+                DataTable.GetTableFromOnline();
+            }
+            catch
+            {
+                // do nothing
+            }
         }
 
         #region private methods

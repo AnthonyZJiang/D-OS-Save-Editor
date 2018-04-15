@@ -19,16 +19,7 @@ namespace D_OS_Save_Editor
         /// Rarity of the item
         /// </summary>
         public enum ItemRarityType { Common = 0, Uncommon, Rare, Epic, Legendary, Divine, Unique}
-
-        /// <summary>
-        /// Names used for Gold category items
-        /// </summary>
-        public static readonly string[] GoldNames = {"small_gold", "inbetween_gold", "trader_large_gold"};
-        /// <summary>
-        /// Names used for Arrow category items. Arrow items have prefix WPN which is shared with the Weapon category. Therefore, we need these strings to identify the Arrow category.
-        /// </summary>
-        public static readonly string[] ArrowNames = {"arrow", "arrowhead", "arrowshaft"};
-
+        
         private string _flags;
         private string _isKey;
         private string _parent;

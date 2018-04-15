@@ -63,6 +63,15 @@ namespace D_OS_Save_Editor
 
         };
 
+        /// <summary>
+        /// Names used for Gold category items
+        /// </summary>
+        public static readonly string[] GoldNames = { "small_gold", "inbetween_gold", "trader_large_gold", "trader_insane_gold" };
+        /// <summary>
+        /// Names used for Arrow category items. Arrow items have prefix WPN which is shared with the Weapon category. Therefore, we need these strings to identify the Arrow category.
+        /// </summary>
+        public static readonly string[] ArrowTypeNames = { "arrow", "arrowhead", "arrowshaft" };
+
         public static string[] TraitNames =
         {
             "Forgiving",
@@ -244,7 +253,7 @@ namespace D_OS_Save_Editor
 
         public static async void GetTableFromOnline()
         {
-            const string urlAddress = @"https://onedrive.live.com/download?cid=9DD4AA09923B4AB7&resid=9DD4AA09923B4AB7%2126529&authkey=AAVymh3zCy68ums";
+            const string urlAddress = @"https://raw.githubusercontent.com/tmxkn1/D-OS-Save-Editor/master/GenerationBoosts.txt";
             var request = WebRequest.Create(urlAddress);
             IsOnlineBoostsGenerated = false;
 
