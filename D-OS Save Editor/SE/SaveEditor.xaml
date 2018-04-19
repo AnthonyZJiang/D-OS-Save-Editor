@@ -78,13 +78,13 @@
             <TabItem Header="Stats">
                 <local:StatsTab x:Name="StatsTab" Margin="10"/>
             </TabItem>
-            <TabItem Header="Skills">
+            <TabItem Header="Skills" Visibility="Collapsed">
                 <Grid/>
             </TabItem>
             <TabItem Header="Abilities">
                 <local:AbilitiesTab x:Name="AbilitiesTab" Margin="10"/>
             </TabItem>
-            <TabItem Header="Talents">
+            <TabItem Header="Talents" Visibility="Collapsed">
                 <Grid/>
             </TabItem>
             <TabItem Header="Traits">
@@ -93,7 +93,7 @@
             <TabItem Header="Inventory">
                 <local:InventoryTab x:Name="InventoryTab" Margin="10"/>
             </TabItem>
-            <TabItem Header="Debug">
+            <TabItem Header="Debug" Visibility="Collapsed">
                 <TabItem.Resources>
                     <Style TargetType="Button">
                         <Setter Property="Width" Value="200"/>

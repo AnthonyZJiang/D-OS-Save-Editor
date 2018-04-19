@@ -12,7 +12,7 @@
             <TextBlock Text="{Binding Path=(local:MainWindow.Version)}" Margin="10,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </StackPanel>
         <StackPanel Orientation="Vertical" Margin="30,20,30,0" HorizontalAlignment="Left" VerticalAlignment="Center">
-            <TextBlock Text="Copyright tmxkn1, 2018." HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <TextBlock Text="Copyright Anthony Jiang, 2018." HorizontalAlignment="Left" VerticalAlignment="Center"/>
             <TextBlock Text="MIT License" Margin="0,5,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
             <TextBlock Text="For license information, check LICENSE file at the open source website." FontSize="10" Margin="0,2,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
         </StackPanel>
