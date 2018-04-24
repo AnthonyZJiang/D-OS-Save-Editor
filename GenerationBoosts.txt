@@ -1,3 +1,6 @@
+Weapon_Cripple_WeaponBoost_Staff
+Weapon_Large_AirDamage_ModBow
+Shield_Small_AirResistance_Mod
 Armor__Ring_Boost_Telekinesis_Mod
 Weapon_Small_WaterDamage_ModSword
 Weapon_Small_Crit_Mod
