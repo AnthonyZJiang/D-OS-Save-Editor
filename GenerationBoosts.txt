@@ -1,3 +1,6 @@
+Armor__Helmet_Boost_CON_Mod
+Armor_ReflectMelee_Large
+Weapon_Crit_Giant_WeaponBoost
 Weapon_Cripple_WeaponBoost_Staff
 Weapon_Large_AirDamage_ModBow
 Shield_Small_AirResistance_Mod
