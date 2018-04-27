@@ -4,3 +4,4 @@ packages/
 D-OS Save Editor/bin/
 *.DotSettings
 D-OS Save Editor/test/
+*.asv
