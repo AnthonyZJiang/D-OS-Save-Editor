@@ -31,7 +31,7 @@ namespace D_OS_Save_Editor
         private readonly string _defaultProfileDir = $"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}{DirectorySeparatorChar}Larian Studios{DirectorySeparatorChar}Divinity Original Sin Enhanced Edition{DirectorySeparatorChar}PlayerProfiles";
         private enum BackupStatus { None, Current, Old, NoChecksum, NoImage }
 
-        public static string Version { get; } = "v1.4.3";
+        public static string Version { get; } = "v1.4.4";
         private string _updateLink;
 
         public MainWindow()
@@ -52,24 +52,18 @@ namespace D_OS_Save_Editor
 
             // update
             UpdatePanel.Visibility = Visibility.Collapsed;
-            try
-            {
-                CheckUpdate();
-                DataTable.GetTableFromOnline();
-            }
-            catch
-            {
-                // do nothing
-            }
+            CheckUpdate();
+            DataTable.GetTableFromOnline();
         }
 
         #region private methods
         /// <summary>
         /// Checks for update on github
         /// </summary>
-        private async void CheckUpdate()
+        private async Task CheckUpdate()
         {
-            const string urlAddress = "https://github.com/tmxkn1/D-OS-Save-Editor/blob/master/UpdateCheck";
+            Debug.WriteLine("start");
+            const string urlAddress = "https://github.com/tmxkn1/D-OS-Save-Editor/blob/master/UpdateCheck1";
             _updateLink = null;
             UpdatePanel.Visibility = Visibility.Collapsed;
 
@@ -113,6 +107,7 @@ namespace D_OS_Save_Editor
                     }
                 }
             }
+            Debug.WriteLine("done");
         }
 
         /// <summary>

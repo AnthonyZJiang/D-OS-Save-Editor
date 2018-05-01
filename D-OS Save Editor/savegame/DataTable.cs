@@ -768,7 +768,7 @@ namespace D_OS_Save_Editor
 
         public static bool IsOnlineBoostsGenerated { get; private set; }
 
-        public static async void GetTableFromOnline()
+        public static async Task GetTableFromOnline()
         {
             const string urlAddress =
                 @"https://raw.githubusercontent.com/tmxkn1/D-OS-Save-Editor/master/GenerationBoosts.txt";

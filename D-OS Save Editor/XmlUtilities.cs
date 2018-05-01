@@ -12,14 +12,29 @@ namespace D_OS_Save_Editor
             return val == "True" | val == "False";
         }
 
+        public static bool IsNumeric(string val)
+        {
+            return double.TryParse(val, out _);
+        }
+
         public static bool IsInt(string val)
         {
             return int.TryParse(val, out _);
         }
 
-        public static bool IsUnint(string val)
+        public static bool IsLong(string val)
         {
-            return int.TryParse(val, out var intVal) && intVal >= 0;
+            return long.TryParse(val, out _);
+        }
+
+        public static bool IsUlong(string val)
+        {
+            return ulong.TryParse(val, out _);
+        }
+
+        public static bool IsUint(string val)
+        {
+            return uint.TryParse(val, out _);
         }
 
         public static bool IsDouble(string val)

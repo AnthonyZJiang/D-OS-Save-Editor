@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
-using LSLib.Granny;
 
 namespace D_OS_Save_Editor
 {
@@ -11,8 +10,6 @@ namespace D_OS_Save_Editor
         private string _maxVitalityPatchCheck;
 
         private string _vitality;
-
-        private string _inventoryId;
 
         private string _experience;
 
@@ -37,7 +34,7 @@ namespace D_OS_Save_Editor
             get => _maxVitalityPatchCheck;
             set
             {
-                if (!XmlUtilities.IsUnint(value))
+                if (!XmlUtilities.IsUint(value))
                     throw new XmlValidationException("MaxVitalityPatchCheck", value);
                 _maxVitalityPatchCheck = value;
             }
@@ -52,7 +49,7 @@ namespace D_OS_Save_Editor
             get => _vitality;
             set
             {
-                if (!XmlUtilities.IsUnint(value))
+                if (!XmlUtilities.IsUint(value))
                     throw new XmlValidationException("Vitality", value);
                 _vitality = value; }
         }
@@ -61,15 +58,7 @@ namespace D_OS_Save_Editor
         /// <summary>
         /// The id of the inventory associated with the player. All items in the player's inventory will have a "Parent" attribute with this property as its value.
         /// </summary>
-        public string InventoryId
-        {
-            get => _inventoryId;
-            set
-            {
-                //if (!XmlUtilities.IsUnint(value))
-                //    throw new XmlValidationException("InventoryId", value);
-                _inventoryId = value; }
-        }
+        public string InventoryId { get; set; }
 
         #endregion
 
@@ -84,7 +73,7 @@ namespace D_OS_Save_Editor
             get => _experience;
             set
             {
-                if (!XmlUtilities.IsUnint(value))
+                if (!XmlUtilities.IsUint(value))
                     throw new XmlValidationException("Experience", value);
                 _experience = value; }
         }
@@ -128,7 +117,7 @@ namespace D_OS_Save_Editor
             get => _attributePoints;
             set
             {
-                if (!XmlUtilities.IsUnint(value))
+                if (!XmlUtilities.IsUint(value))
                     throw new XmlValidationException("AttributePoints", value);
                 _attributePoints = value; }
         }
@@ -142,7 +131,7 @@ namespace D_OS_Save_Editor
             get => _abilityPoints;
             set
             {
-                if (!XmlUtilities.IsUnint(value))
+                if (!XmlUtilities.IsUint(value))
                     throw new XmlValidationException("AbilityPoints", value);
                 _abilityPoints = value; }
         }
@@ -156,7 +145,7 @@ namespace D_OS_Save_Editor
             get => _talentPoints;
             set
             {
-                if (!XmlUtilities.IsUnint(value))
+                if (!XmlUtilities.IsUint(value))
                     throw new XmlValidationException("TalentPoints", value);
                 _talentPoints = value; }
         }
@@ -184,7 +173,7 @@ namespace D_OS_Save_Editor
         /// <summary>
         /// Acquired talents of the player. Keys are talent ids which can be found in ConversionTable class, and Values are points that have been assigned to the corresponding talents, which should be either 1 (acquired) or 0 (not acquired) .
         /// </summary>
-        public Dictionary<int, int> Talents { get; set; } = new Dictionary<int, int>();
+        public Dictionary<int, long> Talents { get; set; } = new Dictionary<int, long>();
         //<node id = "Traits" >
         //    < attribute id="Object" value="0" type="2" />
         //</node>
@@ -258,7 +247,7 @@ namespace D_OS_Save_Editor
             player.Skills = new Dictionary<string, bool>(player.Skills);
             player.Attributes = new Dictionary<int, int>(player.Attributes);
             player.Abilities = new Dictionary<int, int>(player.Abilities);
-            player.Talents = new Dictionary<int, int>(player.Attributes);
+            player.Talents = new Dictionary<int, long>(player.Talents);
             player.Traits = new Dictionary<int, int>(player.Traits);
             player.Items = Items.Select(a => a.DeepClone()).ToArray();
             return player;

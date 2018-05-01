@@ -55,7 +55,7 @@ namespace D_OS_Save_Editor
             get => _flags;
             set
             {
-                if (!XmlUtilities.IsInt(value))
+                if (!XmlUtilities.IsLong(value))
                     throw new XmlValidationException("Flag", value);
                 _flags = value;
             }
@@ -88,7 +88,7 @@ namespace D_OS_Save_Editor
             get => _parent;
             set
             {
-                if (!XmlUtilities.IsUnint(value))
+                if (!XmlUtilities.IsLong(value))
                     throw new XmlValidationException("Parenet", value);
                 _parent = value;
             }
@@ -102,7 +102,7 @@ namespace D_OS_Save_Editor
             get => _slot;
             set
             {
-                if (!XmlUtilities.IsUnint(value))
+                if (!XmlUtilities.IsUint(value))
                     throw new XmlValidationException("Slot", value);
                 _slot = value;
             }
@@ -116,7 +116,7 @@ namespace D_OS_Save_Editor
             get => _amount;
             set
             {
-                if (!XmlUtilities.IsUnint(value))
+                if (!XmlUtilities.IsUint(value))
                     throw new XmlValidationException("Amount", value);
                 _amount = value;
             }
@@ -237,7 +237,7 @@ namespace D_OS_Save_Editor
                 get => _random;
                 set
                 {
-                    if (!XmlUtilities.IsUnint(value))
+                    if (!XmlUtilities.IsLong(value))
                         throw new XmlValidationException("Random", value);
                     _random = value;
                 }
@@ -262,9 +262,11 @@ namespace D_OS_Save_Editor
             /// <returns></returns>
             public GenerationNode DeepClone()
             {
-                var stats = this.MemberwiseClone() as GenerationNode;
+                if (!(MemberwiseClone() is GenerationNode stats)) return null;
+
                 stats.Boosts = Boosts.ToList();
                 return stats;
+
             }
         }
 
@@ -312,7 +314,7 @@ namespace D_OS_Save_Editor
                 get => _repairDurabilityPenalty;
                 set
                 {
-                    if (!XmlUtilities.IsInt(value))
+                    if (!XmlUtilities.IsLong(value))
                         throw new XmlValidationException("RepairDurabilityPenalty", value);
                     _repairDurabilityPenalty = value;
                 }
@@ -326,7 +328,7 @@ namespace D_OS_Save_Editor
                 get => _level;
                 set
                 {
-                    if (!XmlUtilities.IsUnint(value))
+                    if (!XmlUtilities.IsUint(value))
                         throw new XmlValidationException("Level", value);
                     _level = value;
                 }
@@ -340,7 +342,7 @@ namespace D_OS_Save_Editor
                 get => _charges;
                 set
                 {
-                    if (!XmlUtilities.IsInt(value))
+                    if (!XmlUtilities.IsLong(value))
                         throw new XmlValidationException("Charges", value);
                     _charges = value;
                 }
@@ -357,9 +359,11 @@ namespace D_OS_Save_Editor
             /// <returns></returns>
             public StatsNode DeepClone()
             {
-                var stats = this.MemberwiseClone() as StatsNode;
-                stats.PermanentBoost = new Dictionary<string,string>(PermanentBoost);
+                if (!(MemberwiseClone() is StatsNode stats)) return null;
+
+                stats.PermanentBoost = new Dictionary<string, string>(PermanentBoost);
                 return stats;
+
             }
         }
 
@@ -369,10 +373,12 @@ namespace D_OS_Save_Editor
         /// <returns></returns>
         public Item DeepClone()
         {
-            var item = this.MemberwiseClone() as Item;
+            if (!(MemberwiseClone() is Item item)) return null;
+
             item.Generation = Generation?.DeepClone();
             item.Stats = Stats?.DeepClone();
             return item;
+
         }
 
         /// <summary>
