@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:D_OS_Save_Editor"
         mc:Ignorable="d"
-        Title="Error" SizeToContent="WidthAndHeight" UseLayoutRounding="True">
+        WindowStyle="ToolWindow" UseLayoutRounding="True" 
+        Title="Error" SizeToContent="WidthAndHeight" Height="367.639" Width="514.335" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <Window.Resources>
         <local:SystemIconConverter x:Key="iconConverter"/>
         <Style TargetType="Button">
@@ -14,12 +15,25 @@
         </Style>
     </Window.Resources>
     <Grid>
-        <Grid.RowDefinitions><RowDefinition/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
-        <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition/></Grid.ColumnDefinitions>
-        <Image Margin="20" Stretch="Uniform" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Source="{Binding Converter={StaticResource iconConverter}, ConverterParameter=Error}"/>
-        <TextBox Grid.Column="1" Focusable="False" Margin="0,20,20,0" MaxWidth="300" MaxHeight="500" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" Text="{Binding ErrorMessage}" Background="#FFE2E2E2"/>
-        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right">
-            <Button Content="Report"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Image Margin="20,20,20,0" Stretch="Uniform" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Source="{Binding Converter={StaticResource iconConverter}, ConverterParameter=Error}" RenderTransformOrigin="0.549,4.213"/>
+        <StackPanel Grid.Column="1">
+            <TextBlock Text="An error has occurred. If you would like to help, please click the &quot;Report&quot; button." Margin="20,20,20,0" TextWrapping="Wrap" MaxWidth="401"></TextBlock>
+            <TextBlock Text="By clicking the &quot;Report&quot; button, a website will be open. The texts you will need to submit will be copied automatically. You only need to paste them in the Description box." Margin="20,5,20,10" TextWrapping="Wrap" MaxWidth="401" FontStyle="Italic"></TextBlock>
+        </StackPanel>
+
+        <TextBox Grid.Column="1" Grid.Row="1" Focusable="False" Margin="20,0,20,0" MaxWidth="400" MaxHeight="156" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" Text="{Binding ErrorMessage}" Background="#FFE2E2E2"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Right">
+            <Button Content="Report" Click="ReportButtonClicked"/>
             <Button Content="Close" IsCancel="True"/>
         </StackPanel>
     </Grid>

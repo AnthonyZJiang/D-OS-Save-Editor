@@ -242,6 +242,8 @@
     <Content Include="lslib\zlib.net.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Resources\ic_bug_black.png" />
+    <Resource Include="Resources\ic_bug_red.png" />
     <Resource Include="Resources\ic_refresh3_blue.png" />
     <Resource Include="Resources\ic_refresh2_blue.png" />
     <Resource Include="Resources\ic_refresh2_black.png" />

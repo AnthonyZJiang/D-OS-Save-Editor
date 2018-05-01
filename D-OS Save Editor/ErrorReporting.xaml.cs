@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Reflection;
@@ -14,16 +15,27 @@ namespace D_OS_Save_Editor
     /// </summary>
     public partial class ErrorReporting
     {
+        public ErrorModel ErrorModel;
         public ErrorReporting()
         {
             InitializeComponent();
-            DataContext = new ErrorModel();
+            ErrorModel = new ErrorModel();
+            DataContext = ErrorModel;
         }
 
         public ErrorReporting(string message, object data)
         {
             InitializeComponent();
-            DataContext = new ErrorModel(message, data);
+            ErrorModel = new ErrorModel(message, data);
+            DataContext = ErrorModel;
+        }
+
+        private void ReportButtonClicked(object sender, RoutedEventArgs e)
+        {
+            Clipboard.SetText(ErrorModel.ErrorMessage);
+            Process.Start(
+                @"https://docs.google.com/forms/d/e/1FAIpQLSeUeKYdV8InQslbvCvA1rmffJ5t1ieond4W6hpUHkHTH7I7dg/viewform?usp=pp_url&entry.1687355392=Error+report");
+            this.Close();
         }
     }
 

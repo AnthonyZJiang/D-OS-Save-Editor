@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Xml;
+using LSLib.Granny;
 
 namespace D_OS_Save_Editor
 {
@@ -260,5 +263,14 @@ namespace D_OS_Save_Editor
             player.Items = Items.Select(a => a.DeepClone()).ToArray();
             return player;
         }
+    }
+
+    public class PlayerParserException: Exception
+    {
+        public PlayerParserException() { }
+
+        public PlayerParserException(Exception inner, XmlNode playerNode) : 
+            base($"Player XML:\n\n{XmlUtilities.BeautifyXml(playerNode)}\n\n", inner)
+        { }
     }
 }

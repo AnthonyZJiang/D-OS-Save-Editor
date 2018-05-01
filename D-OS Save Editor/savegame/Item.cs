@@ -489,4 +489,13 @@ namespace D_OS_Save_Editor
             ItemIndex = itemIndex;
         }
     }
+
+    public class ItemParserException : Exception
+    {
+        public ItemParserException() { }
+
+        public ItemParserException(Exception inner, XmlNode node) : 
+            base($"Item XML:\n\n{XmlUtilities.BeautifyXml(node)}\n\n", inner)
+        { }
+    }
 }

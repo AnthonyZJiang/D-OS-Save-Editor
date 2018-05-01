@@ -101,8 +101,8 @@ namespace D_OS_Save_Editor
             catch (Exception ex)
             {
                 SaveButton.IsEnabled = true;
-                MessageBox.Show(this, $"Failed to save changes.\n\n{ex}", "Failed", MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                var er = new ErrorReporting($"Failed to save changes.\n\n{ex}", null);
+                er.ShowDialog();
             }
             finally
             {
@@ -167,8 +167,8 @@ namespace D_OS_Save_Editor
             catch (Exception ex)
             {
                 SavePlayer.IsEnabled = true;
-                MessageBox.Show(this, $"Failed to save changes.\n\n{ex}", "Failed", MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                var er = new ErrorReporting($"Failed to save changes.\n\n{ex}", null);
+                er.ShowDialog();
             }
             finally
             {
@@ -210,6 +210,12 @@ namespace D_OS_Save_Editor
             //    var result = MessageBox.Show(this, "You have unsaved changes. Do you want to close the window now?",
             //        "Unsaved changes", MessageBoxButton.YesNo, MessageBoxImage.Warning);
             //}
+        }
+
+        private void BugReportButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            Process.Start(
+                "https://docs.google.com/forms/d/e/1FAIpQLSeUeKYdV8InQslbvCvA1rmffJ5t1ieond4W6hpUHkHTH7I7dg/viewform");
         }
     }
 }

@@ -40,6 +40,27 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Image x:Key="BugIconImage" Source="pack://siteoforigin:,,,/Resources/ic_bug_black.png"/>
+        <Image x:Key="BugIconImageMO" Source="pack://siteoforigin:,,,/Resources/ic_bug_red.png"/>
+        <Style x:Key="BugReportButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Content" Value="{StaticResource BugIconImage}"></Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <ContentPresenter/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Content" Value="{StaticResource BugIconImageMO}"></Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -69,10 +90,11 @@
             <ComboBox x:Name="PlayerSelectionComboBox" HorizontalAlignment="Left" Margin="20,20,0,0" VerticalAlignment="Top" Width="120" Height="21.24" SelectionChanged="PlayerSelectionComboBox_OnSelectionChanged"/>
             <Button x:Name="SavePlayer" Content="Apply" Width="60" Margin="20,20,0,0" Click="SavePlayer_OnClick"/>
         </StackPanel>
-        <StackPanel Grid.Row="1" Orientation="Horizontal" Grid.Column="1">
+        <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal">
             <Button x:Name="ResetButton" Content="Reset" VerticalAlignment="Center" Padding="10,2" Margin ="10,20,40,0" Width="60" Click="ResetButton_OnClick"/>
             <Button x:Name="SaveButton" Content="Save" VerticalAlignment="Center" Padding="10,2" Margin="0,20,0,0" Width="60" Click="SaveButton_OnClick"/>
             <Button x:Name="CancelButton" Content="Cancel" VerticalAlignment="Center" Padding="10,2" Margin ="10,20,20,0" Width="60" IsCancel="True"/>
+            <Button Style="{StaticResource BugReportButtonStyle}" Width="20" Visibility="Collapsed" HorizontalAlignment="Right" Margin="0,20,20,0" Padding="0" VerticalAlignment="Top" Click="BugReportButton_OnClick" ToolTip="Bug report"/>
         </StackPanel>
         <TabControl Grid.Row="2" Margin="20" Grid.ColumnSpan="2">
             <TabItem Header="Stats">

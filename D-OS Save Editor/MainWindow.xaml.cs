@@ -31,7 +31,7 @@ namespace D_OS_Save_Editor
         private readonly string _defaultProfileDir = $"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}{DirectorySeparatorChar}Larian Studios{DirectorySeparatorChar}Divinity Original Sin Enhanced Edition{DirectorySeparatorChar}PlayerProfiles";
         private enum BackupStatus { None, Current, Old, NoChecksum, NoImage }
 
-        public static string Version { get; } = "v1.4.2";
+        public static string Version { get; } = "v1.4.3";
         private string _updateLink;
 
         public MainWindow()
@@ -236,7 +236,8 @@ namespace D_OS_Save_Editor
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, $"Internal error!\n\n{ex}", "Failed", MessageBoxButton.OK, MessageBoxImage.Error);
+                var er = new ErrorReporting($"Internal error!\n\n{ex}", null);
+                er.ShowDialog();
                 return false;
             }
             finally
@@ -530,6 +531,12 @@ namespace D_OS_Save_Editor
         private void DismissButton_OnClick(object sender, RoutedEventArgs e)
         {
             UpdatePanel.Visibility = Visibility.Collapsed;
+        }
+
+        private void BugReportButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            Process.Start(
+                "https://docs.google.com/forms/d/e/1FAIpQLSeUeKYdV8InQslbvCvA1rmffJ5t1ieond4W6hpUHkHTH7I7dg/viewform");
         }
     }
 }

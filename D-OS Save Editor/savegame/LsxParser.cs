@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Xml;
@@ -26,68 +27,14 @@ namespace D_OS_Save_Editor
             var players = new Player[playerData.Count];
             for (var i = 0; i < playerData.Count; i++)
             {
-                players[i] = new Player
+                try
                 {
-                    MaxVitalityPatchCheck = playerData[i].ParentNode.ParentNode
-                        .SelectSingleNode("attribute [@id='MaxVitalityPatchCheck']")?.Attributes[1].Value,
-                    Vitality = playerData[i].ParentNode.ParentNode
-                        .SelectSingleNode("attribute [@id='Vitality']")?.Attributes[1].Value,
-                    InventoryId = playerData[i].ParentNode.ParentNode.SelectSingleNode("attribute [@id='Inventory']")
-                        ?.Attributes[1].Value,
-
-                    Experience = playerData[i].ParentNode
-                        .SelectSingleNode("node//attribute [@id='Experience']")?.Attributes[1].Value,
-                    Reputation = playerData[i].ParentNode
-                        .SelectSingleNode("node//attribute [@id='Reputation']")?.Attributes[1].Value,
-
-                    AttributePoints =
-                        playerData[i].SelectSingleNode("children//attribute [@id='AttributePoints']")
-                            ?.Attributes[1].Value,
-                    AbilityPoints =
-                        playerData[i].SelectSingleNode("children//attribute [@id='AbilityPoints']")
-                            ?.Attributes[1].Value,
-                    TalentPoints = playerData[i].SelectSingleNode("children//attribute [@id='TalentPoints']")
-                        ?.Attributes[1].Value,
-
-                    Name = playerData[i].SelectSingleNode("children//attribute [@id='Name']")?.Attributes[1].Value,
-                    Icon = playerData[i].SelectSingleNode("children//attribute [@id='Icon']")?.Attributes[1].Value,
-                    ClassType = playerData[i].SelectSingleNode("children//attribute [@id='ClassType']")?.Attributes[1]
-                        .Value
-                };
-
-                var nodes = playerData[i].ParentNode.SelectNodes("node//node [@id='Skills']");
-                for (var j = 0; j < nodes?.Count; j++)
-                {
-                    players[i].Skills.Add(nodes[j].FirstChild.Attributes[1].Value,
-                        nodes[j].ChildNodes[1].Attributes[1].Value == "True");
+                    players[i] = ParsePlayer(playerData[i]);
                 }
-                
-                nodes = playerData[i].SelectNodes("children//node [@id='Attributes']");
-                for (var j = 0; j < nodes?.Count; j++)
+                catch (Exception e)
                 {
-                    players[i].Attributes.Add(j, int.Parse(nodes[j].FirstChild.Attributes[1].Value));
+                    throw new PlayerParserException(e, playerData[i]);
                 }
-
-                nodes = playerData[i].SelectNodes("children//node [@id='Abilities']");
-                for (var j = 0; j < nodes?.Count; j++)
-                {
-                    players[i].Abilities.Add(j, int.Parse(nodes[j].FirstChild.Attributes[1].Value));
-                }
-
-                nodes = playerData[i].SelectNodes("children//node [@id='Talents']");
-                for (var j = 0; j < nodes?.Count; j++)
-                {
-                    players[i].Talents.Add(j, int.Parse(nodes[j].FirstChild.Attributes[1].Value));
-                }
-
-                nodes = playerData[i].SelectNodes("children//node [@id='Traits']");
-                for (var j = 0; j < nodes?.Count; j++)
-                {
-                    players[i].Traits.Add(j, int.Parse(nodes[j].FirstChild.Attributes[1].Value));
-                }
-
-                if (players[i].Name == "")
-                    players[i].Name = "Henchman";
 
                 // now we have the inventory id, we can get items
                 var inventoryData =
@@ -98,12 +45,88 @@ namespace D_OS_Save_Editor
                 players[i].Items = new Item[inventoryData.Count];
                 for (var j = 0; j < inventoryData.Count; j++)
                 {
-                    var item = ParseItem(inventoryData[j].ParentNode);
+                    Item item;
+                    try
+                    {
+                        item = ParseItem(inventoryData[j].ParentNode);
+                    }
+                    catch (Exception e)
+                    {
+                        throw new ItemParserException(e, inventoryData[j].ParentNode);
+                    }
                     players[i].Items[j] = item;
                     players[i].SlotsOccupation[int.Parse(item.Slot)] = true;
                 }
             }
             return players;
+        }
+
+        public static Player ParsePlayer(XmlNode node)
+        {
+            var player = new Player
+            {
+                MaxVitalityPatchCheck = node.ParentNode.ParentNode
+                        .SelectSingleNode("attribute [@id='MaxVitalityPatchCheck']")?.Attributes[1].Value,
+                Vitality = node.ParentNode.ParentNode
+                        .SelectSingleNode("attribute [@id='Vitality']")?.Attributes[1].Value,
+                InventoryId = node.ParentNode.ParentNode.SelectSingleNode("attribute [@id='Inventory']")
+                        ?.Attributes[1].Value,
+
+                Experience = node.ParentNode
+                        .SelectSingleNode("node//attribute [@id='Experience']")?.Attributes[1].Value,
+                Reputation = node.ParentNode
+                        .SelectSingleNode("node//attribute [@id='Reputation']")?.Attributes[1].Value,
+
+                AttributePoints =
+                        node.SelectSingleNode("children//attribute [@id='AttributePoints']")
+                            ?.Attributes[1].Value,
+                AbilityPoints =
+                        node.SelectSingleNode("children//attribute [@id='AbilityPoints']")
+                            ?.Attributes[1].Value,
+                TalentPoints = node.SelectSingleNode("children//attribute [@id='TalentPoints']")
+                        ?.Attributes[1].Value,
+
+                Name = node.SelectSingleNode("children//attribute [@id='Name']")?.Attributes[1].Value,
+                Icon = node.SelectSingleNode("children//attribute [@id='Icon']")?.Attributes[1].Value,
+                ClassType = node.SelectSingleNode("children//attribute [@id='ClassType']")?.Attributes[1]
+                        .Value
+            };
+
+            var nodes = node.ParentNode.SelectNodes("node//node [@id='Skills']");
+            for (var j = 0; j < nodes?.Count; j++)
+            {
+                player.Skills.Add(nodes[j].FirstChild.Attributes[1].Value,
+                    nodes[j].ChildNodes[1].Attributes[1].Value == "True");
+            }
+
+            nodes = node.SelectNodes("children//node [@id='Attributes']");
+            for (var j = 0; j < nodes?.Count; j++)
+            {
+                player.Attributes.Add(j, int.Parse(nodes[j].FirstChild.Attributes[1].Value));
+            }
+
+            nodes = node.SelectNodes("children//node [@id='Abilities']");
+            for (var j = 0; j < nodes?.Count; j++)
+            {
+                player.Abilities.Add(j, int.Parse(nodes[j].FirstChild.Attributes[1].Value));
+            }
+
+            nodes = node.SelectNodes("children//node [@id='Talents']");
+            for (var j = 0; j < nodes?.Count; j++)
+            {
+                player.Talents.Add(j, int.Parse(nodes[j].FirstChild.Attributes[1].Value));
+            }
+
+            nodes = node.SelectNodes("children//node [@id='Traits']");
+            for (var j = 0; j < nodes?.Count; j++)
+            {
+                player.Traits.Add(j, int.Parse(nodes[j].FirstChild.Attributes[1].Value));
+            }
+
+            if (player.Name == "")
+                player.Name = "Henchman";
+
+            return player;
         }
 
         public static Item ParseItem(XmlNode node)

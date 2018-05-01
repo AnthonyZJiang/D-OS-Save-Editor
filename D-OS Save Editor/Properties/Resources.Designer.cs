@@ -63,6 +63,26 @@ namespace D_OS_Save_Editor.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap ic_bug_black {
+            get {
+                object obj = ResourceManager.GetObject("ic_bug_black", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ic_bug_red {
+            get {
+                object obj = ResourceManager.GetObject("ic_bug_red", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ic_download2_black {
             get {
                 object obj = ResourceManager.GetObject("ic_download2_black", resourceCulture);
