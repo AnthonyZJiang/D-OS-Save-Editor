@@ -98,6 +98,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ErrorReporting.xaml.cs">
+      <DependentUpon>ErrorReporting.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SE\AbilitiesTab.xaml.cs">
       <DependentUpon>AbilitiesTab.xaml</DependentUpon>
     </Compile>
@@ -129,6 +132,10 @@
       <DependentUpon>TraitsTab.xaml</DependentUpon>
     </Compile>
     <Compile Include="XmlUtilities.cs" />
+    <Page Include="ErrorReporting.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SE\AbilitiesTab.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

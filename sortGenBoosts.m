@@ -6,7 +6,7 @@ fclose(fileID);
 % remove the last empty column
 data = data{1};
 
-data_unique = unique(data);
+data_unique = sort(unique(data));
 
 if numel(data_unique)~=numel(data)
     msgbox('None unique data found');
@@ -17,4 +17,9 @@ if numel(data_unique)~=numel(data)
     clipboard('copy', cbdata);
 else
     msgbox('Data is ok')
+    cbdata = [];
+    for i = 1:numel(data_unique)
+        cbdata = sprintf('%s%s\r\n', cbdata, data_unique{i});
+    end
+    clipboard('copy', cbdata);
 end

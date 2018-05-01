@@ -63,8 +63,8 @@ namespace D_OS_Save_Editor
             get => _inventoryId;
             set
             {
-                if (!XmlUtilities.IsUnint(value))
-                    throw new XmlValidationException("InventoryId", value);
+                //if (!XmlUtilities.IsUnint(value))
+                //    throw new XmlValidationException("InventoryId", value);
                 _inventoryId = value; }
         }
 
