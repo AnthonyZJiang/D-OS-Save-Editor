@@ -63,7 +63,7 @@ namespace D_OS_Save_Editor
         private async Task CheckUpdate()
         {
             Debug.WriteLine("start");
-            const string urlAddress = "https://github.com/tmxkn1/D-OS-Save-Editor/blob/master/UpdateCheck1";
+            const string urlAddress = "https://github.com/tmxkn1/D-OS-Save-Editor/blob/master/UpdateCheck";
             _updateLink = null;
             UpdatePanel.Visibility = Visibility.Collapsed;
 
