@@ -32,10 +32,10 @@ namespace D_OS_Save_Editor
 
         private void ReportButtonClicked(object sender, RoutedEventArgs e)
         {
-            Clipboard.SetText(ErrorModel.ErrorMessage);
+            Clipboard.SetText($"{ErrorModel.ErrorMessage}\n\n{MainWindow.Version}");
             Process.Start(
                 @"https://docs.google.com/forms/d/e/1FAIpQLSeUeKYdV8InQslbvCvA1rmffJ5t1ieond4W6hpUHkHTH7I7dg/viewform?usp=pp_url&entry.1687355392=Error+report");
-            this.Close();
+            Close();
         }
     }
 
