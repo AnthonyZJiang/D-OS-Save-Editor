@@ -7,3 +7,4 @@ D-OS Save Editor/test/
 *.asv
 SortGenerationList/bin/
 SortGenerationList/obj/
+*.bak
