@@ -81,7 +81,7 @@ namespace D_OS_Save_Editor
                         // handshake fail
                         if (!data.Contains("HandShake={ABCQWEZXCrtyfghvbnUIOJKLNM}"))
                             return;
-                        // app is latest
+                        // app is the latest
                         if (data.Contains($"LatestVersion={{{Version}}}"))
                             return;
 
@@ -99,7 +99,7 @@ namespace D_OS_Save_Editor
                         var msg = "A new version is avaiable!";
 
                         if (matches.Count > 0)
-                            if (matches[0].Groups.Count <= 1)
+                            if (matches[0].Groups.Count <= 2)
                                 msg = matches[0].Groups[1].Value;
 
                         UpdateTextBox.Text = msg;
