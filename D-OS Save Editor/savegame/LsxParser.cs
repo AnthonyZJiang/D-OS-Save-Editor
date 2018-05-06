@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Xml;
 
 namespace D_OS_Save_Editor
@@ -25,7 +26,7 @@ namespace D_OS_Save_Editor
                 throw new XmlException("Unable to find any player data in the savegame.");
 
             var players = new Player[playerData.Count];
-            for (var i = 0; i < playerData.Count; i++)
+            Parallel.For(0, playerData.Count, i =>
             {
                 try
                 {
@@ -40,10 +41,10 @@ namespace D_OS_Save_Editor
                 var inventoryData =
                     doc.DocumentElement.SelectNodes($"//attribute [@id='Parent'] [@value='{players[i].InventoryId}']");
                 if (inventoryData == null)
-                    continue;
+                    return;
 
                 players[i].Items = new Item[inventoryData.Count];
-                for (var j = 0; j < inventoryData.Count; j++)
+                Parallel.For(0, inventoryData.Count, j =>
                 {
                     Item item;
                     try
@@ -54,10 +55,11 @@ namespace D_OS_Save_Editor
                     {
                         throw new ItemParserException(e, inventoryData[j].ParentNode);
                     }
+
                     players[i].Items[j] = item;
                     players[i].SlotsOccupation[int.Parse(item.Slot)] = true;
-                }
-            }
+                });
+            });
             return players;
         }
 
@@ -271,7 +273,7 @@ namespace D_OS_Save_Editor
             if (playerData == null)
                 throw new XmlException("Unable to find any player data in the savegame.");
 
-            for (var i = 0; i < playerData.Count; i++)
+            Parallel.For(0, playerData.Count, i =>
             {
                 playerData[i].ParentNode.ParentNode.SelectSingleNode("attribute [@id='MaxVitalityPatchCheck']")
                     .Attributes[1].Value = players[i].MaxVitalityPatchCheck;
@@ -324,7 +326,7 @@ namespace D_OS_Save_Editor
 
                 // write item changes
                 doc = WriteItemChanges(doc, players[i]);
-            }
+            });
 
             return doc;
         }
@@ -334,8 +336,8 @@ namespace D_OS_Save_Editor
             // get all items belong to this player
             // find item data
             var inventoryData = doc.DocumentElement.SelectNodes($"//attribute [@id='Parent'] [@value='{player.InventoryId}']");
-            
-            foreach (var ic in player.ItemChanges)
+
+            Parallel.ForEach(player.ItemChanges, ic =>
             {
                 if (ic.Value.ChangeType == ChangeType.Add)
                 {
@@ -351,19 +353,24 @@ namespace D_OS_Save_Editor
 
                     var allowedChanges = ic.Value.Item.GetAllowedChangeType();
                     if (allowedChanges.Contains(nameof(ic.Value.Item.Amount)))
-                        itemNode.SelectSingleNode("attribute [@id='Amount']").Attributes[1].Value = ic.Value.Item.Amount;
+                        itemNode.SelectSingleNode("attribute [@id='Amount']").Attributes[1].Value =
+                            ic.Value.Item.Amount;
 
                     if (allowedChanges.Contains(nameof(ic.Value.Item.LockLevel)))
-                        itemNode.SelectSingleNode("attribute [@id='LockLevel']").Attributes[1].Value = ic.Value.Item.LockLevel;
+                        itemNode.SelectSingleNode("attribute [@id='LockLevel']").Attributes[1].Value =
+                            ic.Value.Item.LockLevel;
 
                     if (allowedChanges.Contains(nameof(ic.Value.Item.Vitality)))
                     {
-                        itemNode.SelectSingleNode("attribute [@id='Vitality']").Attributes[1].Value = ic.Value.Item.Vitality;
-                        itemNode.SelectSingleNode("attribute [@id='MaxVitalityPatchCheck']").Attributes[1].Value = ic.Value.Item.MaxVitalityPatchCheck;
+                        itemNode.SelectSingleNode("attribute [@id='Vitality']").Attributes[1].Value =
+                            ic.Value.Item.Vitality;
+                        itemNode.SelectSingleNode("attribute [@id='MaxVitalityPatchCheck']").Attributes[1].Value =
+                            ic.Value.Item.MaxVitalityPatchCheck;
                     }
 
                     if (allowedChanges.Contains(nameof(ic.Value.Item.ItemRarity)))
-                        itemNode.SelectSingleNode("attribute [@id='ItemType']").Attributes[1].Value = ic.Value.Item.ItemRarity.ToString();
+                        itemNode.SelectSingleNode("attribute [@id='ItemType']").Attributes[1].Value =
+                            ic.Value.Item.ItemRarity.ToString();
 
                     // max durability cannot be changed
                     //var node = itemNode.SelectSingleNode("attribute [@id='MaxDurabilityPatchCheck']");
@@ -382,7 +389,8 @@ namespace D_OS_Save_Editor
                             genNode = doc.CreateDocumentFragment();
                             // TODO Level is taken from stats.level
                             // ItemType is taken from item.ItemType
-                            genNode.InnerXml = $"<node id=\"Generation\"><attribute id=\"Base\" value=\"{ic.Value.Item.Generation.Base}\" type=\"22\" /><attribute id=\"ItemType\" value=\"{ic.Value.Item.ItemType}\" type=\"22\" /><attribute id=\"Level\" value=\"{ic.Value.Item.Stats.Level}\" type=\"2\" /><attribute id=\"Random\" value=\"{ic.Value.Item.Generation.Random}\" type=\"4\" /><children /></node>";
+                            genNode.InnerXml =
+                                $"<node id=\"Generation\"><attribute id=\"Base\" value=\"{ic.Value.Item.Generation.Base}\" type=\"22\" /><attribute id=\"ItemType\" value=\"{ic.Value.Item.ItemType}\" type=\"22\" /><attribute id=\"Level\" value=\"{ic.Value.Item.Stats.Level}\" type=\"2\" /><attribute id=\"Random\" value=\"{ic.Value.Item.Generation.Random}\" type=\"4\" /><children /></node>";
                             // insert after max durability node
                             itemNode.SelectSingleNode("children").AppendChild(genNode);
                             genNode = itemNode.SelectSingleNode("children/node [@id='Generation']");
@@ -395,13 +403,15 @@ namespace D_OS_Save_Editor
                             genNode.AppendChild(childrenNode);
                             childrenNode = genNode.SelectSingleNode("children");
                         }
+
                         // wipe all existing boost
                         childrenNode.RemoveAll();
                         // then add each defined boosts
                         foreach (var boostName in ic.Value.Item.Generation.Boosts)
                         {
                             var boost = doc.CreateDocumentFragment();
-                            boost.InnerXml = $"<node id=\"Boost\"><attribute id=\"Object\" value=\"{boostName}\" type=\"22\" /></node>";
+                            boost.InnerXml =
+                                $"<node id=\"Boost\"><attribute id=\"Object\" value=\"{boostName}\" type=\"22\" /></node>";
                             childrenNode.AppendChild(boost);
                         }
 
@@ -410,17 +420,23 @@ namespace D_OS_Save_Editor
 
                     // check if has stats
                     var statsNode = itemNode.SelectSingleNode("children/node [@id='Stats']");
-                    if (!allowedChanges.Contains(nameof(ic.Value.Item.Stats)) || statsNode == null || ic.Value.Item.Stats == null)
-                        continue;
+                    if (!allowedChanges.Contains(nameof(ic.Value.Item.Stats)) || statsNode == null ||
+                        ic.Value.Item.Stats == null)
+                        return;
 
-                    statsNode.SelectSingleNode("attribute [@id='Durability']").Attributes[1].Value = ic.Value.Item.Stats.Durability;
-                    statsNode.SelectSingleNode("attribute [@id='DurabilityCounter']").Attributes[1].Value = ic.Value.Item.Stats.DurabilityCounter;
-                    statsNode.SelectSingleNode("attribute [@id='RepairDurabilityPenalty']").Attributes[1].Value = ic.Value.Item.Stats.RepairDurabilityPenalty;
-                    statsNode.SelectSingleNode("attribute [@id='Level']").Attributes[1].Value = ic.Value.Item.Stats.Level;
-                    statsNode.SelectSingleNode("attribute [@id='ItemType']").Attributes[1].Value = ic.Value.Item.ItemType; // ItemType is taken from item.ItemType
+                    statsNode.SelectSingleNode("attribute [@id='Durability']").Attributes[1].Value =
+                        ic.Value.Item.Stats.Durability;
+                    statsNode.SelectSingleNode("attribute [@id='DurabilityCounter']").Attributes[1].Value =
+                        ic.Value.Item.Stats.DurabilityCounter;
+                    statsNode.SelectSingleNode("attribute [@id='RepairDurabilityPenalty']").Attributes[1].Value =
+                        ic.Value.Item.Stats.RepairDurabilityPenalty;
+                    statsNode.SelectSingleNode("attribute [@id='Level']").Attributes[1].Value =
+                        ic.Value.Item.Stats.Level;
+                    statsNode.SelectSingleNode("attribute [@id='ItemType']").Attributes[1].Value =
+                        ic.Value.Item.ItemType; // ItemType is taken from item.ItemType
                     statsNode.SelectSingleNode("attribute [@id='IsIdentified']").Attributes[1].Value = "1";
                 }
-            }
+            });
 
             return doc;
         }

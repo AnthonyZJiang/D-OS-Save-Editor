@@ -80,7 +80,7 @@ namespace D_OS_Save_Editor
             ShowContent(PlayerSelectionComboBox.SelectedIndex);
         }
 
-        private void SaveButton_OnClick(object sender, RoutedEventArgs e)
+        private async void SaveButton_OnClick(object sender, RoutedEventArgs e)
         {
             SaveButton.IsEnabled = false;
             try
@@ -91,13 +91,25 @@ namespace D_OS_Save_Editor
                 TraitsTab.SaveEdits();
                 TalentTab.SaveEdits();
 
+                // progress indicator
+                var progressIndicator = new ProgressIndicator("Saving", false) { Owner = Application.Current.MainWindow };
+                var progress = new Progress<string>();
+                progress.ProgressChanged += (o, s) =>
+                {
+                    progressIndicator.ProgressText = s;
+                };
+                progressIndicator.Show();
+
                 // apply changes
                 Savegame.Players = EditingPlayers;
-                Savegame.WriteEditsToLsx();
+                await Savegame.WriteEditsToLsxAsync(progress);
                 // pack up files
-                Savegame.PackSavegame();
+                await Savegame.PackSavegameAsync(progress);
+                
+                progressIndicator.ProgressText = "Successful.";
+                progressIndicator.CanCancel = true;
+                progressIndicator.CancelButtonText = "Close";
 
-                MessageBox.Show(this, "Successfuly saved Savegame file.");
                 DialogResult = true;
             }
             catch (Exception ex)

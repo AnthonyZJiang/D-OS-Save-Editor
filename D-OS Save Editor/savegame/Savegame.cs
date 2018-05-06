@@ -4,6 +4,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Xml;
 using LSLib.LS;
 using LSLib.LS.Enums;
@@ -31,41 +32,66 @@ namespace D_OS_Save_Editor
             SavegamePath = savegameFullFile.Substring(0, savegameFullFile.Length - SavegameName.Length - 1);
         }
 
-        public void ParseLsx()
+        public async Task ParseLsxAsync(IProgress<string> progress)
         {
+            // update progress
+            progress.Report("Loading unpacked savegame.");
+            await Task.Delay(1);
             // load xml
             var doc = new XmlDocument();
             doc.Load(UnpackDirectory + Path.DirectorySeparatorChar + "globals.lsx");
-            
+            // update progress
+            progress.Report("Analysing savegame.");
+            await Task.Delay(1);
+            // parse xlml
             Players = LsxParser.ParsePlayer(doc);
+            // update progress
+            progress.Report("Loading data.");
+            await Task.Delay(1);
             DataTable.UserGenerationBoosts = LsxParser.GenerationBoostCollector.ToArray();
             DataTable.UserStatsBoosts = LsxParser.StatsBoostsCollector.ToArray();
         }
 
-        public void WriteEditsToLsx()
+        public async Task WriteEditsToLsxAsync(IProgress<string> progress)
         {
+            // update progress
+            progress.Report("Loading package.");
+            await Task.Delay(1);
             // load xml
             var doc = new XmlDocument();
             doc.Load(UnpackDirectory + Path.DirectorySeparatorChar + "globals.lsx");
 
+            // update progress
+            progress.Report("Applying changes.");
+            await Task.Delay(1);
             doc = LsxParser.WritePlayer(doc, Players);
 
+            // update progress
+            progress.Report("Saving package.");
+            await Task.Delay(1);
             doc.Save(UnpackDirectory + Path.DirectorySeparatorChar + "globals.lsx");
         }
 
         /// <summary>
         /// unpack savegame to UnpackDirectory (lsv->lsx)
         /// </summary>
-        public void UnpackSavegame()
+        public async Task UnpackSavegameAsync(IProgress<string> progress)
         {
+            // update progress
+            progress.Report("Unpacking savegame.");
+            await Task.Delay(1);
             // unpackage
             var packager = new Packager();
             packager.UncompressPackage(SavegameFullFile, UnpackDirectory);
+            // update progress
+            progress.Report("Uncompressing package.");
+            await Task.Delay(1);
             // uncompress global.lsf
             var global = ResourceUtils.LoadResource(UnpackDirectory + Path.DirectorySeparatorChar + "globals.lsf");
             var outputVersion = GameVersion == Game.DivinityOriginalSin2
                 ? FileVersion.VerExtendedNodes
                 : FileVersion.VerChunkedCompress;
+            // save package
             ResourceUtils.SaveResource(global, UnpackDirectory + Path.DirectorySeparatorChar + "globals.lsx",
                 ResourceFormat.LSX, outputVersion);
         }
@@ -73,19 +99,27 @@ namespace D_OS_Save_Editor
         /// <summary>
         /// Pack up unpacked savegame (lsx->lsv)
         /// </summary>
-        public void PackSavegame()
+        public async Task PackSavegameAsync(IProgress<string> progress)
         {
+            // update progress
+            progress.Report("Compressing package.");
+            await Task.Delay(1);
+
             // compress .lsx
             var global = ResourceUtils.LoadResource(UnpackDirectory + Path.DirectorySeparatorChar + "globals.lsx");
             var outputVersion = GameVersion == Game.DivinityOriginalSin2
                 ? FileVersion.VerExtendedNodes
                 : FileVersion.VerChunkedCompress;
+            
             ResourceUtils.SaveResource(global, UnpackDirectory + Path.DirectorySeparatorChar + "globals.lsf",
                 ResourceFormat.LSF, outputVersion);
 
             // delete .lsx
             File.Delete(UnpackDirectory + Path.DirectorySeparatorChar + "globals.lsx");
 
+            // update progress
+            progress.Report("Packing savegame.");
+            await Task.Delay(1);
             // packup to .lsv
             var packager = new Packager();
             packager.CreatePackage(SavegameFullFile, UnpackDirectory, PackageVersion.V13, CompressionMethod.LZ4, false);

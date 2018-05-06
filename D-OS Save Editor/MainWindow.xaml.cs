@@ -31,7 +31,7 @@ namespace D_OS_Save_Editor
         private readonly string _defaultProfileDir = $"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}{DirectorySeparatorChar}Larian Studios{DirectorySeparatorChar}Divinity Original Sin Enhanced Edition{DirectorySeparatorChar}PlayerProfiles";
         private enum BackupStatus { None, Current, Old, NoChecksum, NoImage }
 
-        public static string Version { get; } = "v1.4.5";
+        public static string Version { get; } = "v1.5.0";
         private string _updateLink;
 
         public MainWindow()
@@ -213,15 +213,15 @@ namespace D_OS_Save_Editor
         /// </summary>
         /// <param name="savegame">Savegame object</param>
         /// <returns>true for successful, otherwise fail</returns>
-        private bool UnpackSave(Savegame savegame)
+        private async Task<bool> UnpackSaveAsync(Savegame savegame, IProgress<string> progress)
         {
             try
             {
                 Cursor = Cursors.Wait;
 #if (!DEBUG || !AVOIDUNPACK)
-                savegame.UnpackSavegame();
+                await savegame.UnpackSavegameAsync(progress);
 #endif
-                savegame.ParseLsx();
+                await savegame.ParseLsxAsync(progress);
             }
             catch (NotAPackageException)
             {
@@ -385,7 +385,7 @@ namespace D_OS_Save_Editor
             }
         }
 
-        private void LoadButton_OnClick(object sender, RoutedEventArgs e)
+        private async void LoadButton_OnClick(object sender, RoutedEventArgs e)
         {
             LoadButton.IsEnabled = false;
             
@@ -432,9 +432,18 @@ namespace D_OS_Save_Editor
             (Game)GameEditionTextBlock.Tag);
             
             // unpack
-            if (!UnpackSave(savegame)) return;
+            var progressIndicator = new ProgressIndicator($"Loading {saveGameName}", false) {Owner = Application.Current.MainWindow};
+            var progress = new Progress<string>();
+            progress.ProgressChanged += (o, s) =>
+            {
+                progressIndicator.ProgressText = s;
+            };
+            progressIndicator.Show();
+            var unpackTask = await UnpackSaveAsync(savegame, progress);
+            progressIndicator.Close();
+            if (!unpackTask) return;
 
-            var se = new SaveEditor(savegame);
+            var se = new SaveEditor(savegame) { Owner = Application.Current.MainWindow };
             se.ShowDialog();
         }
 
@@ -491,7 +500,7 @@ namespace D_OS_Save_Editor
 
         private void AboutButton_OnClick(object sender, RoutedEventArgs e)
         {
-            var about = new About();
+            var about = new About { Owner = Application.Current.MainWindow};
             about.ShowDialog();
         }
 

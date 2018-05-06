@@ -22,7 +22,14 @@
         </StackPanel>
         <StackPanel Orientation="Horizontal" Margin="30,0,30,0" HorizontalAlignment="Left" VerticalAlignment="Center">
             <TextBlock Text="Use and discussions:" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-            <TextBlock Margin="5,0,0,0"><Hyperlink NavigateUri="http://larian.com/forums/ubbthreads.php?ubb=showflat&amp;Number=644516#Post644516r" RequestNavigate="Hyperlink_RequestNavigate">Larian forum</Hyperlink></TextBlock></StackPanel>
+            <TextBlock Margin="5,0,0,0"><Hyperlink NavigateUri="http://larian.com/forums/ubbthreads.php?ubb=showflat&amp;Number=644516#Post644516r" RequestNavigate="Hyperlink_RequestNavigate">Larian forum</Hyperlink></TextBlock>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="30,20,30,0" HorizontalAlignment="Left" VerticalAlignment="Center">
+            <TextBlock Text="Credit:"/>
+            <TextBlock Margin="5,0,0,0"><Hyperlink NavigateUri="https://github.com/FlukiestEmperor" RequestNavigate="Hyperlink_RequestNavigate">FlukiestEmperor</Hyperlink></TextBlock>
+            <TextBlock Text=","></TextBlock>
+            <TextBlock Margin="5,0,0,0"><Hyperlink NavigateUri="https://github.com/Norbyte/lslib" RequestNavigate="Hyperlink_RequestNavigate">Norbyte</Hyperlink></TextBlock>
+        </StackPanel>
     <Button Content="OK" Width="70" Margin="0,20,20,20" HorizontalAlignment="Right" VerticalAlignment="Bottom" IsCancel="True"/>
     </StackPanel>
 </Window>

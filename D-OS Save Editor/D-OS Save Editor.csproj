@@ -101,6 +101,9 @@
     <Compile Include="ErrorReporting.xaml.cs">
       <DependentUpon>ErrorReporting.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ProgressIndicator.xaml.cs">
+      <DependentUpon>ProgressIndicator.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SE\AbilitiesTab.xaml.cs">
       <DependentUpon>AbilitiesTab.xaml</DependentUpon>
     </Compile>
@@ -125,6 +128,9 @@
     <Compile Include="SE\StatsTab.xaml.cs">
       <DependentUpon>StatsTab.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SE\TalentTab.xaml.cs">
+      <DependentUpon>TalentTab.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SE\TraitCouple.xaml.cs">
       <DependentUpon>TraitCouple.xaml</DependentUpon>
     </Compile>
@@ -133,6 +139,10 @@
     </Compile>
     <Compile Include="XmlUtilities.cs" />
     <Page Include="ErrorReporting.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ProgressIndicator.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -171,6 +181,10 @@
     <Page Include="SE\StatsTab.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SE\TalentTab.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="SE\TraitCouple.xaml">
       <SubType>Designer</SubType>
