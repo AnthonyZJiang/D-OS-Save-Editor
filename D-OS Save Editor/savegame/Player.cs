@@ -247,7 +247,7 @@ namespace D_OS_Save_Editor
             player.Skills = new Dictionary<string, bool>(player.Skills);
             player.Attributes = new Dictionary<int, int>(player.Attributes);
             player.Abilities = new Dictionary<int, int>(player.Abilities);
-            player.Talents = new Dictionary<int, long>(player.Talents);
+            player.Talents = new Dictionary<int, uint>(player.Talents);
             player.Traits = new Dictionary<int, int>(player.Traits);
             player.Items = Items.Select(a => a.DeepClone()).ToArray();
             return player;
