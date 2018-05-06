@@ -4,7 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="D-OS Save Editor: Select a save" Height="428.713" Width="624.947" WindowStartupLocation="CenterScreen" SizeToContent="Height" MinWidth="625" MinHeight="500" MaxHeight="700" ResizeMode="CanMinimize">
+        Title="D-OS Save Editor: Select a save" Height="428.713" Width="624.947" SizeToContent="Height" MinWidth="625" MinHeight="500" MaxHeight="700" ResizeMode="CanMinimize"
+        WindowStartupLocation="CenterScreen" UseLayoutRounding="True">
     <Window.Resources>
         <Style TargetType="Button">
             <Setter Property="Padding" Value="5,0"></Setter>

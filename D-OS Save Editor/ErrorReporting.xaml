@@ -27,7 +27,8 @@
         </Grid.ColumnDefinitions>
         <Image Margin="20,20,20,0" Stretch="Uniform" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Source="{Binding Converter={StaticResource iconConverter}, ConverterParameter=Error}" RenderTransformOrigin="0.549,4.213"/>
         <StackPanel Grid.Column="1">
-            <TextBlock Text="An error has occurred. If you would like to help, please click the &quot;Report&quot; button." Margin="20,20,20,0" TextWrapping="Wrap" MaxWidth="401"></TextBlock>
+            <TextBlock Text="{Binding Message}" Margin="20,20,20,0" TextWrapping="Wrap" MaxWidth="401"/>
+            <TextBlock Text="If you would like to help, please click the &quot;Report&quot; button." Margin="20,0,20,0" TextWrapping="Wrap" MaxWidth="401"/>
             <TextBlock Text="By clicking the &quot;Report&quot; button, a website will be open. The texts you will need to submit will be copied automatically. You only need to paste them in the Description box." Margin="20,5,20,10" TextWrapping="Wrap" MaxWidth="401" FontStyle="Italic"></TextBlock>
         </StackPanel>
 

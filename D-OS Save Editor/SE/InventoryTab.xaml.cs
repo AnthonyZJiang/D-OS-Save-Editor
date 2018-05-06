@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Xml.Serialization;
 
 namespace D_OS_Save_Editor
 {
@@ -273,17 +275,14 @@ namespace D_OS_Save_Editor
                         //Since Item.Stats == null is not likely to be possible, let's handle it later on if we have an report of this case.
                         if (item.Stats == null)
                         {
-                            var dlgResult = MessageBox.Show(
-                                "Sorry, it is not possible to add modifier to this item yet. No changes have been applied. If you would like to help, please click \"Yes\".", "Error", MessageBoxButton.YesNo, MessageBoxImage.Error);
-                            if (dlgResult == MessageBoxResult.No) return;
+                            var xmlSerializer = new XmlSerializer(item.GetType());
 
-                            var fn = Savegame.DumpItem(item, "Item.Stats null");
-                            dlgResult = MessageBox.Show(
-                                $"Thank you for your help. Now please click \"OK\" to go to Github and file an issue. \n\nYou only need to go through the following steps:\n\n1. navigate to the application root folder;\n2. locate the {fn} file;\n3. drag {fn} to the issue reporting window;\n4. submit.",
-                                "Thank you",MessageBoxButton.OKCancel,MessageBoxImage.Information);
-                            if (dlgResult == MessageBoxResult.Cancel) return;
-
-                            System.Diagnostics.Process.Start("https://github.com/tmxkn1/D-OS-Save-Editor/issues/new");
+                            using (var sw = new StringWriter())
+                            {
+                                xmlSerializer.Serialize(sw, item);
+                                var er = new ErrorReporting("It is not possible to add modifier to this item yet. No changes have been applied.", $"Item.Stats Null. Cannot add item modifiers.\n\nItem XML:\n{sw}", null);
+                                er.ShowDialog();
+                            }
                             return;
                         }
                         item.Generation = new Item.GenerationNode(item.StatsName, "0");

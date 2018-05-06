@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:D_OS_Save_Editor"
         mc:Ignorable="d"
-        Title="About" ResizeMode="NoResize" SizeToContent="WidthAndHeight" WindowStyle="ToolWindow" WindowStartupLocation="CenterOwner">
+        Title="About" ResizeMode="NoResize" SizeToContent="WidthAndHeight" WindowStyle="ToolWindow" WindowStartupLocation="CenterOwner"
+        UseLayoutRounding="True">
     <StackPanel Orientation="Vertical">
         <StackPanel Orientation="Vertical" Margin="30,20,30,0" HorizontalAlignment="Center" VerticalAlignment="Center">
             <TextBlock Text="D-OS Save Editor" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18"/>

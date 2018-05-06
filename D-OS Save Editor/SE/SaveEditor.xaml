@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:D_OS_Save_Editor"
         mc:Ignorable="d"
-        Title="D-OS Save Editor: Save editor" SizeToContent="WidthAndHeight" MaxWidth="850" Width="655.916" Closed="SaveEditor_OnClosed" Closing="SaveEditor_OnClosing"
-        WindowStartupLocation="CenterOwner">
+        Title="D-OS Save Editor: Save editor" SizeToContent="WidthAndHeight" MaxWidth="850" Width="655.916" WindowStartupLocation="CenterOwner"
+        Closed="SaveEditor_OnClosed" Closing="SaveEditor_OnClosing"
+        UseLayoutRounding="True">
     <Window.Resources>
         <Style TargetType="TextBox">
             <Setter Property="Height" Value="23"/>
