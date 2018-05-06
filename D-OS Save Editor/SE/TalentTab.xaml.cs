@@ -70,8 +70,8 @@ namespace D_OS_Save_Editor
         {
             for (var i = 0; i < group.Children.Count; i++)
             {
-                var hasTrait = (talentValue & (uint) Math.Pow(2, i)) != 0;
-                ((CheckBox) group.Children[i]).IsChecked = hasTrait;
+                var hasTalent = (talentValue & (uint) Math.Pow(2, i)) != 0;
+                ((CheckBox) group.Children[i]).IsChecked = hasTalent;
             }
         }
     }
