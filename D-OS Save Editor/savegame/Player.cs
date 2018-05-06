@@ -173,7 +173,7 @@ namespace D_OS_Save_Editor
         /// <summary>
         /// Acquired talents of the player. Keys are talent ids which can be found in ConversionTable class, and Values are points that have been assigned to the corresponding talents, which should be either 1 (acquired) or 0 (not acquired) .
         /// </summary>
-        public Dictionary<int, long> Talents { get; set; } = new Dictionary<int, long>();
+        public Dictionary<int, uint> Talents { get; set; } = new Dictionary<int, uint>();
         //<node id = "Traits" >
         //    < attribute id="Object" value="0" type="2" />
         //</node>

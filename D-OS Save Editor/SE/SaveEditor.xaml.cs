@@ -175,6 +175,7 @@ namespace D_OS_Save_Editor
                 StatsTab.SaveEdits();
                 AbilitiesTab.SaveEdits();
                 TraitsTab.SaveEdits();
+                TalentTab.SaveEdits();
 
                 MessageBox.Show(this, "Changes have been applied to the selected character.", "Successful");
             }

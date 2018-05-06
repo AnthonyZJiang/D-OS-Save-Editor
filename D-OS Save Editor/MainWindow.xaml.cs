@@ -211,6 +211,7 @@ namespace D_OS_Save_Editor
         /// Unpacks lsv files
         /// </summary>
         /// <param name="savegame">Savegame object</param>
+        /// <param name="progress">Progress text to be updated in Progress Indicator UI</param>
         /// <returns>true for successful, otherwise fail</returns>
         private async Task<bool> UnpackSaveAsync(Savegame savegame, IProgress<string> progress)
         {

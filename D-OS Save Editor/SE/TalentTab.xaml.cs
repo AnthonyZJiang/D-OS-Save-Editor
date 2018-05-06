@@ -49,9 +49,9 @@ namespace D_OS_Save_Editor
 
         public void UpdateForm()
         {
-            UpdateTalents((uint)Player.Talents[0], TalentGroup0);
-            UpdateTalents((uint)Player.Talents[1], TalentGroup1);
-            UpdateTalents((uint)Player.Talents[2], TalentGroup2);
+            UpdateTalents(Player.Talents[0], TalentGroup0);
+            UpdateTalents(Player.Talents[1], TalentGroup1);
+            UpdateTalents(Player.Talents[2], TalentGroup2);
         }
 
         private void UpdateTalents(uint talentValue, Panel group)
