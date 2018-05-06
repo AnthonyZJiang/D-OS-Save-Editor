@@ -1,0 +1,126 @@
+﻿<UserControl x:Class="D_OS_Save_Editor.TalentTab"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d">
+    <ScrollViewer Height="400">
+        <WrapPanel>
+            <GroupBox>
+                <StackPanel x:Name="TalentGroup0">
+                    <StackPanel.Resources>
+                        <Style TargetType="{x:Type CheckBox}">
+                            <Setter Property="Margin" Value="0,15,0,0"/>
+                        </Style>
+                    </StackPanel.Resources>
+                    <CheckBox Content="Spook"/>
+                    <CheckBox Content="Tinkerer"/>
+                    <CheckBox Content="Sidewinder"/>
+                    <CheckBox Content="Opportunist"/>
+                    <CheckBox Content="Assassin"/>
+                    <CheckBox Content="Trader's Tongue"/>
+                    <CheckBox Content="Cat Burglar"/>
+                    <CheckBox Content="Marksman"/>
+                    <CheckBox Content="Gladiator"/>
+                    <CheckBox Content="Warlord"/>
+                    <CheckBox Content="Fleetfooted"/>
+                    <CheckBox Content="Rosy-Cheeked"/>
+                    <CheckBox Content="Killer Instinct"/>
+                    <CheckBox Content="Indestructible"/>
+                    <CheckBox Content="Hyperopia"/>
+                    <CheckBox Content="Braveheart"/>
+                    <CheckBox Content="Stand Your Ground"/>
+                    <CheckBox Content="Lightning Rod"/>
+                    <CheckBox Content="Mithridates"/>
+                    <CheckBox Content="Silver-tongued"/>
+                    <CheckBox Content="Comeback Kid"/>
+                    <CheckBox Content="Packmule"/>
+                    <CheckBox Content="Catapult"/>
+                    <CheckBox Content="Grease Monkey"/>
+                    <CheckBox Content="Quick-Witted"/>
+                    <CheckBox Content="Bigger and Better"/>
+                    <CheckBox Content="All Skilled Up"/>
+                    <CheckBox Content="My Precious"/>
+                    <CheckBox Content="Sixth Sense"/>
+                    <CheckBox Content="Picture of Health"/>
+                    <CheckBox Content="Pyromaniac"/>
+                    <CheckBox Content="Rainman"/>
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox>
+                <StackPanel x:Name="TalentGroup1">
+                    <StackPanel.Resources>
+                        <Style TargetType="{x:Type CheckBox}">
+                            <Setter Property="Margin" Value="0,15,0,0"/>
+                        </Style>
+                    </StackPanel.Resources>
+                    <CheckBox Content="Tempest"/>
+                    <CheckBox Content="Geomancer"/>
+                    <CheckBox Content="Prince Charming"/>
+                    <CheckBox Content="Intimidator"/>
+                    <CheckBox Content="Rhetorician"/>
+                    <CheckBox Content="Fortune's Favourite"/>
+                    <CheckBox Content="Leader of the Pack"/>
+                    <CheckBox Content="Dress Rehearsal"/>
+                    <CheckBox Content="Pussyfooter"/>
+                    <CheckBox Content="Pet Pal"/>
+                    <CheckBox Content="Escapist"/>
+                    <CheckBox Content="Stand Your Ground"/>
+                    <CheckBox Content="Guerrilla"/>
+                    <CheckBox Content="Light Stepper"/>
+                    <CheckBox Content="Morning Person"/>
+                    <CheckBox Content="Scientist"/>
+                    <CheckBox Content="Glass Cannon"/>
+                    <CheckBox Content="Know-it-All"/>
+                    <CheckBox Content="What a Rush"/>
+                    <CheckBox Content="Far Out Man"/>
+                    <CheckBox Content="Leech"/>
+                    <CheckBox Content="Elemental Affinity"/>
+                    <CheckBox Content="Five-Star Diner"/>
+                    <CheckBox Content="Bully"/>
+                    <CheckBox Content="Elemental Ranger"/>
+                    <CheckBox Content="Lightning Rod"/>
+                    <CheckBox Content="Politician"/>
+                    <CheckBox Content="Weatherproof"/>
+                    <CheckBox Content="Lone Wolf"/>
+                    <CheckBox Content="Zombie"/>
+                    <CheckBox Content="Demon"/>
+                    <CheckBox Content="Ice King"/>
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox>
+                <StackPanel x:Name="TalentGroup2">
+                    <StackPanel.Resources>
+                        <Style TargetType="{x:Type CheckBox}">
+                            <Setter Property="Margin" Value="0,15,0,0"/>
+                        </Style>
+                    </StackPanel.Resources>
+                    <CheckBox Content="Courageous"/>
+                    <CheckBox Content="Voluble Mage"/>
+                    <CheckBox Content="Walk if Off"/>
+                    <CheckBox Content="Speedcreeper"/>
+                    <CheckBox Content="Anaconda"/>
+                    <CheckBox Content="Stench"/>
+                    <CheckBox Content="Kickstarter"/>
+                    <CheckBox Content="Thick Skin"/>
+                    <CheckBox Content="Picture of Health"/>
+                    <CheckBox Content="Iron Hide"/>
+                    <CheckBox Content="Arrow Recovery"/>
+                    <CheckBox Content="Sidestep"/>
+                    <CheckBox Content="Quickdraw"/>
+                    <CheckBox Content="Mack the Knife"/>
+                    <CheckBox Content="Back-Stabber"/>
+                    <CheckBox Content="Swift Footed"/>
+                    <CheckBox Content="Headstrong"/>
+                    <CheckBox Content="Avoid Opportunists"/>
+                    <CheckBox Content="Slongshot"/>
+                    <CheckBox Content="Pinpoint"/>
+                    <CheckBox Content="Magician"/>
+                    <CheckBox Content="Parry Master"/>
+                </StackPanel>
+            </GroupBox>
+        </WrapPanel>
+    </ScrollViewer>
+</UserControl>

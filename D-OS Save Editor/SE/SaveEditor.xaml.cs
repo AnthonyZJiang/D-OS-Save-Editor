@@ -58,6 +58,7 @@ namespace D_OS_Save_Editor
             AbilitiesTab.Player = EditingPlayers[id];
             InventoryTab.Player = EditingPlayers[id];
             TraitsTab.Player = EditingPlayers[id];
+            TalentTab.Player = EditingPlayers[id];
 
             if (EditingPlayers[id].Name == "Henchman")
             {
@@ -88,6 +89,7 @@ namespace D_OS_Save_Editor
                 StatsTab.SaveEdits();
                 AbilitiesTab.SaveEdits();
                 TraitsTab.SaveEdits();
+                TalentTab.SaveEdits();
 
                 // apply changes
                 Savegame.Players = EditingPlayers;

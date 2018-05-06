@@ -310,11 +310,11 @@ namespace D_OS_Save_Editor
                     nodes[j].FirstChild.Attributes[1].Value = players[i].Abilities[j].ToString();
                 }
 
-                //nodes = playerData[i].SelectNodes("children//node [@id='Talents']");
-                //for (var j = 0; j < nodes?.Count; j++)
-                //{
-                //    nodes[j].FirstChild.Attributes[1].Value = Players[i].Talents[j].ToString();
-                //}
+                nodes = playerData[i].SelectNodes("children//node [@id='Talents']");
+                for (var j = 0; j < nodes?.Count; j++)
+                {
+                    nodes[j].FirstChild.Attributes[1].Value = players[i].Talents[j].ToString();
+                }
 
                 nodes = playerData[i].SelectNodes("children//node [@id='Traits']");
                 for (var j = 0; j < nodes?.Count; j++)

@@ -112,6 +112,9 @@
             <TabItem Header="Traits">
                 <local:TraitsTab x:Name="TraitsTab" Margin="10"/>
             </TabItem>
+            <TabItem Header="Talents">
+                <local:TalentTab x:Name="TalentTab" Margin="10"/>
+            </TabItem>
             <TabItem Header="Inventory">
                 <local:InventoryTab x:Name="InventoryTab" Margin="10"/>
             </TabItem>
