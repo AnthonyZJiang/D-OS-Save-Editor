@@ -171,9 +171,9 @@ namespace D_OS_Save_Editor
         //    < attribute id="Object" value="1048584" type="5" />
         //</node>
         /// <summary>
-        /// Acquired talents of the player. Keys are talent ids which can be found in ConversionTable class, and Values are points that have been assigned to the corresponding talents, which should be either 1 (acquired) or 0 (not acquired) .
+        /// Acquired talents of the player.
         /// </summary>
-        public Dictionary<int, uint> Talents { get; set; } = new Dictionary<int, uint>();
+        public List<uint> Talents { get; set; } = new List<uint>();
         //<node id = "Traits" >
         //    < attribute id="Object" value="0" type="2" />
         //</node>
@@ -247,7 +247,7 @@ namespace D_OS_Save_Editor
             player.Skills = new Dictionary<string, bool>(player.Skills);
             player.Attributes = new Dictionary<int, int>(player.Attributes);
             player.Abilities = new Dictionary<int, int>(player.Abilities);
-            player.Talents = new Dictionary<int, uint>(player.Talents);
+            player.Talents = new List<uint>(player.Talents);
             player.Traits = new Dictionary<int, int>(player.Traits);
             player.Items = Items.Select(a => a.DeepClone()).ToArray();
             return player;

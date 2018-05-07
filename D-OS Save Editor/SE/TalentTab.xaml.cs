@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace D_OS_Save_Editor
 {
@@ -27,40 +31,104 @@ namespace D_OS_Save_Editor
 
         public void SaveEdits()
         {
-            Player.Talents[0] = CalculateTalentValue(TalentGroup0);
-            Player.Talents[1] = CalculateTalentValue(TalentGroup1);
-            Player.Talents[2] = CalculateTalentValue(TalentGroup2);
+            var checkedTalents = new bool[DataTable.TalentIsHidden.Length];
+            foreach (CheckBox ckb in TalentGroup0.Children)
+            {
+                checkedTalents[(int)ckb.Tag] = ckb.IsChecked == true;
+            }
+            foreach (CheckBox ckb in TalentGroup1.Children)
+            {
+                checkedTalents[(int)ckb.Tag] = ckb.IsChecked == true;
+            }
+            foreach (CheckBox ckb in TalentGroup2.Children)
+            {
+                checkedTalents[(int)ckb.Tag] = ckb.IsChecked == true;
+            }
+
+            var bytes = new byte[12];
+            new BitArray(checkedTalents).CopyTo(bytes, 0);
+
+            Player.Talents[0] = BitConverter.ToUInt32(bytes, 0);
+            Player.Talents[1] = BitConverter.ToUInt32(bytes, 4);
+            Player.Talents[2] = BitConverter.ToUInt32(bytes, 8);
         }
 
-        private uint CalculateTalentValue(Panel group)
+        private void UpdateForm()
         {
-            uint value = 0;
-            for (var i = 0; i < group.Children.Count; i++)
+            TalentGroup0.Children.Clear();
+            TalentGroup1.Children.Clear();
+            TalentGroup2.Children.Clear();
+
+            var playerTalentIds = GetPlayerTalentIds();
+            var talentArray = DataTable.GetTalentArray();
+            // order by IsHidden property
+            talentArray = talentArray.OrderBy(talent => talent.IsHidden).ThenBy(talent => talent.Name).ToArray();
+
+            void AddToPanel(Panel panel, Talent talent)
             {
-                var element = (CheckBox)group.Children[i];
-                if (element.IsChecked != null && (bool)element.IsChecked)
+                object toolTipContent;
+                if (talent.IsHidden)
                 {
-                    value += (uint)Math.Pow(2, i);
+                    toolTipContent = new StackPanel();
+                    ((StackPanel)toolTipContent).Children.Add(new Image());
+                    ((StackPanel)toolTipContent).Children.Add(new TextBlock { Text = talent.Effect });
                 }
+                else
+                {
+                    toolTipContent = talent.Effect;
+                }
+
+                panel.Children.Add(
+                    new CheckBox
+                    {
+                        Content = talent.Name,
+                        Tag = talent.Index,
+                        ToolTip = toolTipContent,
+                        IsChecked = playerTalentIds.Contains(talent.Index),
+                        Foreground = talent.IsHidden
+                                    ? (SolidColorBrush) new BrushConverter().ConvertFrom("#FF9B0000")
+                                    : new SolidColorBrush(Colors.Black)
+                    });
             }
 
-            return value;
-        }
-
-        public void UpdateForm()
-        {
-            UpdateTalents(Player.Talents[0], TalentGroup0);
-            UpdateTalents(Player.Talents[1], TalentGroup1);
-            UpdateTalents(Player.Talents[2], TalentGroup2);
-        }
-
-        private void UpdateTalents(uint talentValue, Panel group)
-        {
-            for (var i = 0; i < group.Children.Count; i++)
+            var itemCount = talentArray.Length / 3;
+            for (var i = 0; i < itemCount; i++)
             {
-                var hasTalent = (talentValue & (uint) Math.Pow(2, i)) != 0;
-                ((CheckBox) group.Children[i]).IsChecked = hasTalent;
+                AddToPanel(TalentGroup0, talentArray[i]);
             }
+            for (var i = itemCount; i < itemCount * 2; i++)
+            {
+                AddToPanel(TalentGroup1, talentArray[i]);
+            }
+            for (var i = itemCount * 2; i < talentArray.Length; i++)
+            {
+                AddToPanel(TalentGroup2, talentArray[i]);
+            }
+        }
+
+        private int[] GetPlayerTalentIds()
+        {
+            var talentIds = new List<int>();
+            var bits = new BitArray(BitConverter.GetBytes(Player.Talents[0]));
+            for (var i = 0; i < bits.Count; i++)
+            {
+                if (bits[i])
+                    talentIds.Add(i);
+            }
+            bits = new BitArray(BitConverter.GetBytes(Player.Talents[1]));
+            for (var i = 0; i < bits.Count; i++)
+            {
+                if (bits[i])
+                    talentIds.Add(i+32);
+            }
+            bits = new BitArray(BitConverter.GetBytes(Player.Talents[2]));
+            for (var i = 0; i < bits.Count; i++)
+            {
+                if (bits[i])
+                    talentIds.Add(i + 64);
+            }
+           
+            return talentIds.ToArray();
         }
     }
 }

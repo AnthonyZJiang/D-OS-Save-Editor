@@ -290,7 +290,7 @@ namespace D_OS_Save_Editor
             {
                 foreach (var player in Players)
                 {
-                    foreach (var talent in player.Talents.Keys)
+                    foreach (var talent in player.Talents)
                     {
                         file.WriteLine($"{player.Name}\t{talent}");
                     }

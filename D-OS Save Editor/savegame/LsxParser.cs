@@ -116,7 +116,7 @@ namespace D_OS_Save_Editor
             nodes = node.SelectNodes("children//node [@id='Talents']");
             for (var j = 0; j < nodes?.Count; j++)
             {
-                player.Talents.Add(j, uint.Parse(nodes[j].FirstChild.Attributes[1].Value));
+                player.Talents.Add(uint.Parse(nodes[j].FirstChild.Attributes[1].Value));
             }
 
             nodes = node.SelectNodes("children//node [@id='Traits']");

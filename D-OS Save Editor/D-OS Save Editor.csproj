@@ -104,6 +104,7 @@
     <Compile Include="ProgressIndicator.xaml.cs">
       <DependentUpon>ProgressIndicator.xaml</DependentUpon>
     </Compile>
+    <Compile Include="savegame\Talent.cs" />
     <Compile Include="SE\AbilitiesTab.xaml.cs">
       <DependentUpon>AbilitiesTab.xaml</DependentUpon>
     </Compile>
