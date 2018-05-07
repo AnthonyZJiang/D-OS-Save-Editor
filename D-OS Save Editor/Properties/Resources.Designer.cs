@@ -103,6 +103,16 @@ namespace D_OS_Save_Editor.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap ic_hidden {
+            get {
+                object obj = ResourceManager.GetObject("ic_hidden", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ic_openbrowser_black {
             get {
                 object obj = ResourceManager.GetObject("ic_openbrowser_black", resourceCulture);
