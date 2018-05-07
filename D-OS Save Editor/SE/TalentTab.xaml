@@ -18,9 +18,8 @@
                         <Setter Property="Margin" Value="5,5" />
                         <Setter Property="Source" Value="pack://application:,,,/Resources/ic_hidden.png" />
                     </Style>
-                    
                 </WrapPanel.Resources>
-                <CheckBox>
+                <CheckBox Foreground="#FF9B0000">
                     <CheckBox.Content>Spook</CheckBox.Content>
                     <CheckBox.ToolTip>
                         <ToolTip>
@@ -31,7 +30,7 @@
                         </ToolTip>
                     </CheckBox.ToolTip>
                 </CheckBox>
-                <CheckBox>
+                <CheckBox Foreground="#FF9B0000">
                     <CheckBox.Content>Tinkerer</CheckBox.Content>
                     <CheckBox.ToolTip>
                         <ToolTip>
@@ -44,7 +43,7 @@
                 </CheckBox>
                 <CheckBox Content="Sidewinder" ToolTip="Removes your defense penalty when flanked."/>
                 <CheckBox Content="Opportunist" ToolTip="Gives you the ability to perform attacks of opportunity."/>
-                <CheckBox>
+                <CheckBox Foreground="#FF9B0000">
                     <CheckBox.Content>Assassin</CheckBox.Content>
                     <CheckBox.ToolTip>
                         <ToolTip>
@@ -55,7 +54,7 @@
                         </ToolTip>
                     </CheckBox.ToolTip>
                 </CheckBox>
-                <CheckBox>
+                <CheckBox Foreground="#FF9B0000">
                     <CheckBox.Content>Trader's Tongue</CheckBox.Content>
                     <CheckBox.ToolTip>
                         <ToolTip>
@@ -66,7 +65,7 @@
                         </ToolTip>
                     </CheckBox.ToolTip>
                 </CheckBox>
-                <CheckBox>
+                <CheckBox Foreground="#FF9B0000">
                     <CheckBox.Content>Cat Burglar</CheckBox.Content>
                     <CheckBox.ToolTip>
                         <ToolTip>
@@ -77,7 +76,7 @@
                         </ToolTip>
                     </CheckBox.ToolTip>
                 </CheckBox>
-                <CheckBox>
+                <CheckBox Foreground="#FF9B0000">
                     <CheckBox.Content>Marksman</CheckBox.Content>
                     <CheckBox.ToolTip>
                         <ToolTip>
@@ -88,7 +87,7 @@
                         </ToolTip>
                     </CheckBox.ToolTip>
                 </CheckBox>
-                <CheckBox>
+                <CheckBox Foreground="#FF9B0000">
                     <CheckBox.Content>Gladiator</CheckBox.Content>
                     <CheckBox.ToolTip>
                         <ToolTip>
@@ -99,7 +98,7 @@
                         </ToolTip>
                     </CheckBox.ToolTip>
                 </CheckBox>
-                <CheckBox>
+                <CheckBox Foreground="#FF9B0000">
                     <CheckBox.Content>Warlord</CheckBox.Content>
                     <CheckBox.ToolTip>
                         <ToolTip>
@@ -110,7 +109,7 @@
                         </ToolTip>
                     </CheckBox.ToolTip>
                 </CheckBox>
-                <CheckBox>
+                <CheckBox Foreground="#FF9B0000">
                     <CheckBox.Content>Fleetfooted</CheckBox.Content>
                     <CheckBox.ToolTip>
                         <ToolTip>
@@ -121,7 +120,7 @@
                         </ToolTip>
                     </CheckBox.ToolTip>
                 </CheckBox>
-                <CheckBox>
+                <CheckBox Foreground="#FF9B0000">
                     <CheckBox.Content>Rosy-Cheeked</CheckBox.Content>
                     <CheckBox.ToolTip>
                         <ToolTip>
@@ -132,7 +131,7 @@
                         </ToolTip>
                     </CheckBox.ToolTip>
                 </CheckBox>
-                <CheckBox>
+                <CheckBox Foreground="#FF9B0000">
                     <CheckBox.Content>Killer Instinct</CheckBox.Content>
                     <CheckBox.ToolTip>
                         <ToolTip>
@@ -143,7 +142,7 @@
                         </ToolTip>
                     </CheckBox.ToolTip>
                 </CheckBox>
-                <CheckBox>
+                <CheckBox Foreground="#FF9B0000">
                     <CheckBox.Content>Indestructible</CheckBox.Content>
                     <CheckBox.ToolTip>
                         <ToolTip>
@@ -155,7 +154,7 @@
                     </CheckBox.ToolTip>
                 </CheckBox>
                 <CheckBox Content="Hyperopia" ToolTip="Makes you farsighted, causing your ranged attacks to be precise at long distances, but inaccurate when your target is close by."/>
-                <CheckBox>
+                <CheckBox Foreground="#FF9B0000">
                     <CheckBox.Content>Braveheart</CheckBox.Content>
                     <CheckBox.ToolTip>
                         <ToolTip>
@@ -166,7 +165,7 @@
                         </ToolTip>
                     </CheckBox.ToolTip>
                 </CheckBox>
-                <CheckBox>
+                <CheckBox Foreground="#FF9B0000">
                     <CheckBox.Content>Stand Your Ground</CheckBox.Content>
                     <CheckBox.ToolTip>
                         <ToolTip>
@@ -177,7 +176,7 @@
                         </ToolTip>
                     </CheckBox.ToolTip>
                 </CheckBox>
-                <CheckBox>
+                <CheckBox Foreground="#FF9B0000">
                     <CheckBox.Content>Lightning Rod</CheckBox.Content>
                     <CheckBox.ToolTip>
                         <ToolTip>
@@ -188,7 +187,7 @@
                         </ToolTip>
                     </CheckBox.ToolTip>
                 </CheckBox>
-                <CheckBox>
+                <CheckBox Foreground="#FF9B0000">
                     <CheckBox.Content>Mithridates</CheckBox.Content>
                     <CheckBox.ToolTip>
                         <ToolTip>
@@ -199,7 +198,7 @@
                         </ToolTip>
                     </CheckBox.ToolTip>
                 </CheckBox>
-                <CheckBox>
+                <CheckBox Foreground="#FF9B0000">
                     <CheckBox.Content>Silver-tongued</CheckBox.Content>
                     <CheckBox.ToolTip>
                         <ToolTip>
@@ -212,7 +211,7 @@
                 </CheckBox>
                 <CheckBox Content="Comeback Kid" ToolTip="When an opponent lands the blow that should kill you, Comeback Kid will leave you with 1 health as long as you had more than 1 left."/>
                 <CheckBox Content="Packmule" ToolTip="Doubles the amount of weight you can carry."/>
-                <CheckBox>
+                <CheckBox Foreground="#FF9B0000">
                     <CheckBox.Content>Catapult</CheckBox.Content>
                     <CheckBox.ToolTip>
                         <ToolTip>
@@ -223,7 +222,7 @@
                         </ToolTip>
                     </CheckBox.ToolTip>
                 </CheckBox>
-                <CheckBox>
+                <CheckBox Foreground="#FF9B0000">
                     <CheckBox.Content>Grease Monkey</CheckBox.Content>
                     <CheckBox.ToolTip>
                         <ToolTip>
@@ -234,7 +233,7 @@
                         </ToolTip>
                     </CheckBox.ToolTip>
                 </CheckBox>
-                <CheckBox>
+                <CheckBox Foreground="#FF9B0000">
                     <CheckBox.Content>Quick-Witted</CheckBox.Content>
                     <CheckBox.ToolTip>
                         <ToolTip>
@@ -248,7 +247,7 @@
                 <CheckBox Content="Bigger and Better" ToolTip="Gives you 1 extra Attribute Point(s) to spend."/>
                 <CheckBox Content="All Skilled Up" ToolTip="Gives you 2 extra Ability Points to spend."/>
                 <CheckBox Content="My Precious" ToolTip="Every time you hit or get hit, your gear has a 50% chance of not losing durability."/>
-                <CheckBox>
+                <CheckBox Foreground="#FF9B0000">
                     <CheckBox.Content>Sixth Sense</CheckBox.Content>
                     <CheckBox.ToolTip>
                         <ToolTip>
@@ -259,7 +258,7 @@
                         </ToolTip>
                     </CheckBox.ToolTip>
                 </CheckBox>
-                <CheckBox>
+                <CheckBox Foreground="#FF9B0000">
                     <CheckBox.Content>Picture of Health</CheckBox.Content>
                     <CheckBox.ToolTip>
                         <ToolTip>
@@ -270,7 +269,7 @@
                         </ToolTip>
                     </CheckBox.ToolTip>
                 </CheckBox>
-                <CheckBox>
+                <CheckBox Foreground="#FF9B0000">
                     <CheckBox.Content>Pyromaniac</CheckBox.Content>
                     <CheckBox.ToolTip>
                         <ToolTip>
@@ -281,7 +280,7 @@
                         </ToolTip>
                     </CheckBox.ToolTip>
                 </CheckBox>
-                <CheckBox>
+                <CheckBox Foreground="#FF9B0000">
                     <CheckBox.Content>Rainman</CheckBox.Content>
                     <CheckBox.ToolTip>
                         <ToolTip>
@@ -308,7 +307,7 @@
                     </Style>
 
                 </WrapPanel.Resources>
-                <CheckBox>
+                <CheckBox Foreground="#FF9B0000">
                     <CheckBox.Content>Tempest</CheckBox.Content>
                     <CheckBox.ToolTip>
                         <ToolTip>
@@ -319,7 +318,7 @@
                         </ToolTip>
                     </CheckBox.ToolTip>
                 </CheckBox>
-                <CheckBox>
+                <CheckBox Foreground="#FF9B0000">
                     <CheckBox.Content>Geomancer</CheckBox.Content>
                     <CheckBox.ToolTip>
                         <ToolTip>
@@ -330,7 +329,7 @@
                         </ToolTip>
                     </CheckBox.ToolTip>
                 </CheckBox>
-                <CheckBox>
+                <CheckBox Foreground="#FF9B0000">
                     <CheckBox.Content>Prince Charming</CheckBox.Content>
                     <CheckBox.ToolTip>
                         <ToolTip>
@@ -341,7 +340,7 @@
                         </ToolTip>
                     </CheckBox.ToolTip>
                 </CheckBox>
-                <CheckBox>
+                <CheckBox Foreground="#FF9B0000">
                     <CheckBox.Content>Intimidator</CheckBox.Content>
                     <CheckBox.ToolTip>
                         <ToolTip>
@@ -352,7 +351,7 @@
                         </ToolTip>
                     </CheckBox.ToolTip>
                 </CheckBox>
-                <CheckBox>
+                <CheckBox Foreground="#FF9B0000">
                     <CheckBox.Content>Rhetorician</CheckBox.Content>
                     <CheckBox.ToolTip>
                         <ToolTip>
@@ -363,7 +362,7 @@
                         </ToolTip>
                     </CheckBox.ToolTip>
                 </CheckBox>
-                <CheckBox>
+                <CheckBox Foreground="#FF9B0000">
                     <CheckBox.Content>Fortune's Favourite</CheckBox.Content>
                     <CheckBox.ToolTip>
                         <ToolTip>
@@ -374,7 +373,7 @@
                         </ToolTip>
                     </CheckBox.ToolTip>
                 </CheckBox>
-                <CheckBox>
+                <CheckBox Foreground="#FF9B0000">
                     <CheckBox.Content>Leader of the Pack</CheckBox.Content>
                     <CheckBox.ToolTip>
                         <ToolTip>
@@ -385,7 +384,7 @@
                         </ToolTip>
                     </CheckBox.ToolTip>
                 </CheckBox>
-                <CheckBox>
+                <CheckBox Foreground="#FF9B0000">
                     <CheckBox.Content>Dress Rehearsal</CheckBox.Content>
                     <CheckBox.ToolTip>
                         <ToolTip>
@@ -396,7 +395,7 @@
                         </ToolTip>
                     </CheckBox.ToolTip>
                 </CheckBox>
-                <CheckBox>
+                <CheckBox Foreground="#FF9B0000">
                     <CheckBox.Content>Pussyfooter</CheckBox.Content>
                     <CheckBox.ToolTip>
                         <ToolTip>
@@ -452,7 +451,7 @@
                 <CheckBox Content="Speedcreeper" ToolTip="A character with Speedcreeper moves at normal speed while sneaking."/>
                 <CheckBox Content="Anaconda" ToolTip="Increases your damage with crushing weapons by 10%."/>
                 <CheckBox Content="Stench" ToolTip="Decreases everyone's attitude towards you by 25, but melee opponents will find you less attractive in combat."/>
-                <CheckBox>
+                <CheckBox Foreground="#FF9B0000">
                     <CheckBox.Content>Kickstarter</CheckBox.Content>
                     <CheckBox.ToolTip>
                         <ToolTip>
@@ -468,7 +467,7 @@
                 <CheckBox Content="Iron Hide" ToolTip="Gives you 3% x Man-at-Arms extra Elemental Resistance."/>
                 <CheckBox Content="Arrow Recovery" ToolTip="Gives you 33% chance to recover a special arrow after shooting it."/>
                 <CheckBox Content="Sidestep" ToolTip="Gives you 10% extra chance to evade hits."/>
-                <CheckBox>
+                <CheckBox Foreground="#FF9B0000">
                     <CheckBox.Content>Quickdraw</CheckBox.Content>
                     <CheckBox.ToolTip>
                         <ToolTip>
@@ -479,7 +478,7 @@
                         </ToolTip>
                     </CheckBox.ToolTip>
                 </CheckBox>
-                <CheckBox>
+                <CheckBox Foreground="#FF9B0000">
                     <CheckBox.Content>Mack the Knife</CheckBox.Content>
                     <CheckBox.ToolTip>
                         <ToolTip>
