@@ -40,10 +40,6 @@ namespace D_OS_Save_Editor
             {
                 checkedTalents[(int)ckb.Tag] = ckb.IsChecked == true;
             }
-            foreach (CheckBox ckb in TalentGroup2.Children)
-            {
-                checkedTalents[(int)ckb.Tag] = ckb.IsChecked == true;
-            }
 
             var bytes = new byte[12];
             new BitArray(checkedTalents).CopyTo(bytes, 0);
@@ -57,52 +53,39 @@ namespace D_OS_Save_Editor
         {
             TalentGroup0.Children.Clear();
             TalentGroup1.Children.Clear();
-            TalentGroup2.Children.Clear();
 
             var playerTalentIds = GetPlayerTalentIds();
             var talentArray = DataTable.GetTalentArray();
             // order by IsHidden property
-            talentArray = talentArray.OrderBy(talent => talent.IsHidden).ThenBy(talent => talent.Name).ToArray();
+            talentArray = talentArray.OrderBy(talent => talent.Name).ToArray();
 
             void AddToPanel(Panel panel, Talent talent)
             {
-                object toolTipContent;
-                if (talent.IsHidden)
-                {
-                    toolTipContent = new StackPanel();
-                    ((StackPanel)toolTipContent).Children.Add(new Image());
-                    ((StackPanel)toolTipContent).Children.Add(new TextBlock { Text = talent.Effect });
-                }
-                else
-                {
-                    toolTipContent = talent.Effect;
-                }
+                //object toolTipContent;
+                //if (talent.IsHidden)
+                //{
+                //    toolTipContent = new StackPanel();
+                //    ((StackPanel)toolTipContent).Children.Add(new Image());
+                //    ((StackPanel)toolTipContent).Children.Add(new TextBlock { Text = talent.Effect });
+                //}
+                //else
+                //{
+                //    toolTipContent = talent.Effect;
+                //}
 
                 panel.Children.Add(
                     new CheckBox
                     {
                         Content = talent.Name,
                         Tag = talent.Index,
-                        ToolTip = toolTipContent,
-                        IsChecked = playerTalentIds.Contains(talent.Index),
-                        Foreground = talent.IsHidden
-                                    ? (SolidColorBrush) new BrushConverter().ConvertFrom("#FF9B0000")
-                                    : new SolidColorBrush(Colors.Black)
+                        ToolTip = talent.Effect,
+                        IsChecked = playerTalentIds.Contains(talent.Index)
                     });
             }
 
-            var itemCount = talentArray.Length / 3;
-            for (var i = 0; i < itemCount; i++)
+            foreach (var talent in talentArray)
             {
-                AddToPanel(TalentGroup0, talentArray[i]);
-            }
-            for (var i = itemCount; i < itemCount * 2; i++)
-            {
-                AddToPanel(TalentGroup1, talentArray[i]);
-            }
-            for (var i = itemCount * 2; i < talentArray.Length; i++)
-            {
-                AddToPanel(TalentGroup2, talentArray[i]);
+                AddToPanel(talent.IsHidden ? TalentGroup1 : TalentGroup0, talent);
             }
         }
 

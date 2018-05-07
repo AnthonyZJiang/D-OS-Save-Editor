@@ -5,22 +5,27 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d">
     <ScrollViewer Height="400">
-        <WrapPanel Orientation="Horizontal" x:Name="TalentGroup">
-            <WrapPanel.Resources>
-                <Style TargetType="{x:Type CheckBox}">
+        <StackPanel>
+            <StackPanel.Resources>
+                <Style TargetType="{x:Type CheckBox}" x:Key="CkbStyle">
                     <Setter Property="Margin" Value="5,5" />
+                    <Setter Property="Width" Value="145"/>
                 </Style>
-                <Style TargetType="{x:Type TextBlock}">
-                    <Setter Property="Margin" Value="5,5" />
-                </Style>
+                <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource CkbStyle}"/>
                 <Style TargetType="{x:Type Image}">
                     <Setter Property="Margin" Value="5,5" />
                     <Setter Property="Source" Value="pack://application:,,,/Resources/ic_hidden.png" />
                 </Style>
-            </WrapPanel.Resources>
-            <WrapPanel x:Name="TalentGroup0" Orientation="Vertical"/>
-            <WrapPanel x:Name="TalentGroup1" Orientation="Vertical"/>
-            <WrapPanel x:Name="TalentGroup2" Orientation="Vertical"/>
-        </WrapPanel>
+            </StackPanel.Resources>
+            <WrapPanel x:Name="TalentGroup0" Orientation="Horizontal" MinWidth="400" MinHeight="200"/>
+            <Expander Header="Hidden talents" Margin="0,10,0,0" Foreground="#FFC70202" Background="{x:Null}">
+                <Expander.Resources>
+                    <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource CkbStyle}">
+                        <Setter Property="Foreground" Value="#FFC70202"/>
+                    </Style>
+                </Expander.Resources>
+                <WrapPanel x:Name="TalentGroup1" Orientation="Horizontal" MinWidth="400" MinHeight="200"/>
+            </Expander>
+        </StackPanel>
     </ScrollViewer>
 </UserControl>
