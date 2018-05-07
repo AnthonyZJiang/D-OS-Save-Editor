@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -314,7 +315,17 @@ namespace D_OS_Save_Editor
                 ((ListBoxItem) ItemsListBox.Items[ItemsListBox.SelectedIndex]).Foreground =
                     _itemRarityColor[(int) item.ItemRarity];
 
-                MessageBox.Show("Changes have been applied.");
+                var tooltip = new ToolTip { Content = "Changes have been applied!" };
+                ((Button) sender).ToolTip = tooltip;
+                tooltip.Opened += async delegate (object o, RoutedEventArgs args)
+                {
+                    var s = o as ToolTip;
+                    await Task.Delay(1000);
+                    s.IsOpen = false;
+                    await Task.Delay(1000);
+                    ((Button)sender).ClearValue(ToolTipProperty);
+                };
+                tooltip.IsOpen = true;
             }
             catch (XmlValidationException ex)
             {

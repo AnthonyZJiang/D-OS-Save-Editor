@@ -9,6 +9,6 @@
     <Grid Margin="20">
         <Grid.RowDefinitions><RowDefinition/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
         <TextBlock Text="{Binding ProgressText}" HorizontalAlignment="Center"/>
-        <Button Grid.Row="1" IsCancel="True" Width="60" Content="{Binding CancelButtonText}" IsEnabled="{Binding CanCancel}"/>
+        <Button Grid.Row="1" IsCancel="True" Width="60" Content="{Binding CancelButtonText}" IsEnabled="{Binding CanCancel}" Click="CloseButton_OnClick"/>
     </Grid>
 </Window>

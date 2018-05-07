@@ -90,7 +90,7 @@
 
         <StackPanel Grid.Row="1" Orientation="Horizontal">
             <ComboBox x:Name="PlayerSelectionComboBox" HorizontalAlignment="Left" Margin="20,20,0,0" VerticalAlignment="Top" Width="120" Height="21.24" SelectionChanged="PlayerSelectionComboBox_OnSelectionChanged"/>
-            <Button x:Name="SavePlayer" Content="Apply" Width="60" Margin="20,20,0,0" Click="SavePlayer_OnClick"/>
+            <Button x:Name="SavePlayer" Content="Apply" Width="60" Margin="20,20,0,0" Click="SavePlayer_OnClick" ToolTip="Apply changes made to the selected charactor"/>
         </StackPanel>
         <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal">
             <Button x:Name="ResetButton" Content="Reset" VerticalAlignment="Center" Padding="10,2" Margin ="10,20,40,0" Width="60" Click="ResetButton_OnClick"/>

@@ -106,11 +106,9 @@
             <Grid>
                 <Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,0">
-                        <TextBlock x:Name="UpdateTextBox" Text="" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                        <TextBlock VerticalAlignment="Center" Visibility="Collapsed"><Hyperlink Tag="update" Click="Hyperlink_OnRequestNavigate">Update Now</Hyperlink></TextBlock>
-                        <TextBlock VerticalAlignment="Center" Text=" or " Visibility="Collapsed"/>
-                        <TextBlock VerticalAlignment="Center"><Hyperlink Tag="site" Click="Hyperlink_OnRequestNavigate">Go to the download site</Hyperlink></TextBlock>
-                        <TextBlock VerticalAlignment="Center" Text="."/>
+                    <TextBlock x:Name="UpdateTextBox" Text="" MaxWidth="484" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,5,0" TextTrimming="CharacterEllipsis"/>
+                    <TextBlock VerticalAlignment="Center"><Hyperlink Tag="site" Click="Hyperlink_OnRequestNavigate">Update now</Hyperlink></TextBlock>
+                    <TextBlock VerticalAlignment="Center" Text="."/>
                 </StackPanel>
                 <Button Grid.Column="1" x:Name="DismissButton" Style="{StaticResource DismissButtonStyle}" Margin="10,5,10,5" HorizontalAlignment="Right" Click="DismissButton_OnClick">
                 </Button>

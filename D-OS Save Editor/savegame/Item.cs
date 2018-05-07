@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Xml;
+using System.Xml.Serialization;
 
 namespace D_OS_Save_Editor
 {
@@ -488,6 +490,8 @@ namespace D_OS_Save_Editor
         public ChangeType ChangeType { get;}
         public int ItemIndex { get; set; }
 
+        public ItemChange() { }
+
         public ItemChange(Item item, ChangeType changeType, int itemIndex)
         {
             Item = item.DeepClone();
@@ -503,5 +507,28 @@ namespace D_OS_Save_Editor
         public ItemParserException(Exception inner, XmlNode node) : 
             base($"Item XML:\n\n{XmlUtilities.BeautifyXml(node)}\n\n", inner)
         { }
+    }
+
+    public class ItemSaveException : Exception
+    {
+        public ItemSaveException() { }
+
+        public ItemSaveException(Exception inner, ItemChange itemChange) :
+            base (GetItemChangeString(itemChange), inner)
+        {
+        }
+
+        public static string GetItemChangeString(ItemChange itemChange)
+        {
+            var xmlSerializer = new XmlSerializer(itemChange.GetType());
+            string s;
+            using (var sw = new StringWriter())
+            {
+                xmlSerializer.Serialize(sw, itemChange);
+                s = sw.ToString();
+            }
+
+            return s;
+        }
     }
 }
