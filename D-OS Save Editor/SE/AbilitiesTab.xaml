@@ -39,15 +39,15 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <TextBlock Text="Single-handed"/>
-                <TextBlock Text="Two-handed" Grid.Row="1"/>
-                <TextBlock Text="Duel Welding" Grid.Row="2"/>
-                <TextBlock Text="Bow" Grid.Row="3"/>
-                <TextBlock Text="Crossbow" Grid.Row="4"/>
-                <TextBlock Text="Wand" Grid.Row="5"/>
+                <TextBlock x:Name="SingleHandedTextBlock"/>
+                <TextBlock x:Name="TwoHandedTextBlock" Grid.Row="1"/>
+                <TextBlock x:Name="DualWieldingTextBlock" Grid.Row="2"/>
+                <TextBlock x:Name="BowTextBlock" Grid.Row="3"/>
+                <TextBlock x:Name="CrossbowTextBlock" Grid.Row="4"/>
+                <TextBlock x:Name="WandTextBlock" Grid.Row="5"/>
                 <TextBox x:Name="SingleHandedTextBox" Grid.Column="1"/>
                 <TextBox x:Name="TwoHandedTextBox" Grid.Row="1" Grid.Column="1"/>
-                <TextBox x:Name="DuelWeldingTextBox" Grid.Row="2" Grid.Column="1"/>
+                <TextBox x:Name="DualWieldingTextBox" Grid.Row="2" Grid.Column="1"/>
                 <TextBox x:Name="BowTextBox" Grid.Row="3" Grid.Column="1"/>
                 <TextBox x:Name="CrossbowTextBox" Grid.Row="4" Grid.Column="1"/>
                 <TextBox x:Name="WandTextBox" Grid.Row="5" Grid.Column="1"/>
@@ -65,13 +65,13 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <TextBlock Text="Armor Specialist"/>
-                <TextBlock Text="Shield Specialist" Grid.Row="1"/>
-                <TextBlock Text="Bodybuilding" Grid.Row="2"/>
-                <TextBlock Text="Willpower" Grid.Row="32"/>
-                <TextBox x:Name="ArmorSpecialistTextBox" Grid.Column="1"/>
+                <TextBlock x:Name="ArmourSpecialistTextBlock"/>
+                <TextBlock x:Name="ShieldSpecialistTextBlock" Grid.Row="1"/>
+                <TextBlock x:Name="BodyBuildingTextBlock" Grid.Row="2"/>
+                <TextBlock x:Name="WillpowerTextBlock" Grid.Row="32"/>
+                <TextBox x:Name="ArmourSpecialistTextBox" Grid.Column="1"/>
                 <TextBox x:Name="ShieldSpecialistTextBox" Grid.Row="1" Grid.Column="1"/>
-                <TextBox x:Name="BodybuildingTextBox" Grid.Row="2" Grid.Column="1"/>
+                <TextBox x:Name="BodyBuildingTextBox" Grid.Row="2" Grid.Column="1"/>
                 <TextBox x:Name="WillpowerTextBox" Grid.Row="3" Grid.Column="1"/>
             </Grid>
         </GroupBox>
@@ -91,14 +91,14 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <TextBlock Text="Man-At-Arms"/>
-                <TextBlock Text="Expert Marksman" Grid.Row="1"/>
-                <TextBlock Text="Scoundrel" Grid.Row="2"/>
-                <TextBlock Text="Pyrokinetic" Grid.Row="3"/>
-                <TextBlock Text="Hydrosophist" Grid.Row="4"/>
-                <TextBlock Text="Aerotheurge" Grid.Row="5"/>
-                <TextBlock Text="Geomancer" Grid.Row="6"/>
-                <TextBlock Text="Witchcraft" Grid.Row="7"/>
+                <TextBlock x:Name="ManAtArmsTextBlock"/>
+                <TextBlock x:Name="ExpertMarksmanTextBlock" Grid.Row="1"/>
+                <TextBlock x:Name="ScoundrelTextBlock" Grid.Row="2"/>
+                <TextBlock x:Name="PyrokineticTextBlock" Grid.Row="3"/>
+                <TextBlock x:Name="HydrosophistTextBlock" Grid.Row="4"/>
+                <TextBlock x:Name="AerotheurgeTextBlock" Grid.Row="5"/>
+                <TextBlock x:Name="GeomancerTextBlock" Grid.Row="6"/>
+                <TextBlock x:Name="WitchcraftTextBlock" Grid.Row="7"/>
                 <TextBox x:Name="ManAtArmsTextBox" Grid.Column="1"/>
                 <TextBox x:Name="ExpertMarksmanTextBox" Grid.Row="1" Grid.Column="1"/>
                 <TextBox x:Name="ScoundrelTextBox" Grid.Row="2" Grid.Column="1"/>
@@ -121,10 +121,10 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <TextBlock Text="Blacksmithing"/>
-                <TextBlock Text="Crafting" Grid.Row="1"/>
-                <TextBlock Text="Loremaster" Grid.Row="2"/>
-                <TextBlock Text="Telekinesis" Grid.Row="3"/>
+                <TextBlock x:Name="BlacksmithingTextBlock"/>
+                <TextBlock x:Name="CraftingTextBlock" Grid.Row="1"/>
+                <TextBlock x:Name="LoremasterTextBlock" Grid.Row="2"/>
+                <TextBlock x:Name="TelekinesisTextBlock" Grid.Row="3"/>
                 <TextBox x:Name="BlacksmithingTextBox" Grid.Column="1"/>
                 <TextBox x:Name="CraftingTextBox" Grid.Row="1" Grid.Column="1"/>
                 <TextBox x:Name="LoremasterTextBox" Grid.Row="2" Grid.Column="1"/>
@@ -143,17 +143,16 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <TextBlock Text="Bartering"/>
-                <TextBlock Text="Charisma" Grid.Row="1"/>
-                <TextBlock Text="Leadership" Grid.Row="2"/>
-                <TextBlock Text="Lucky Charm" Grid.Row="3"/>
+                <TextBlock x:Name="BarteringTextBlock"/>
+                <TextBlock x:Name="CharismaTextBlock" Grid.Row="1"/>
+                <TextBlock x:Name="LeadershipTextBlock" Grid.Row="2"/>
+                <TextBlock x:Name="LuckyCharmTextBlock" Grid.Row="3"/>
                 <TextBox x:Name="BarteringTextBox" Grid.Column="1"/>
                 <TextBox x:Name="CharismaTextBox" Grid.Row="1" Grid.Column="1"/>
                 <TextBox x:Name="LeadershipTextBox" Grid.Row="2" Grid.Column="1"/>
                 <TextBox x:Name="LuckyCharmTextBox" Grid.Row="3" Grid.Column="1"/>
             </Grid>
         </GroupBox>
-
         <GroupBox Header="Nasty Deeds">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -165,12 +164,27 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <TextBlock Text="Sneaking"/>
-                <TextBlock Text="Pickpocketing" Grid.Row="1"/>
-                <TextBlock Text="Lockpicking" Grid.Row="2"/>
+                <TextBlock x:Name="SneakingTextBlock"/>
+                <TextBlock x:Name="PickpocketingTextBlock" Grid.Row="1"/>
+                <TextBlock x:Name="LockpickingTextBlock" Grid.Row="2"/>
                 <TextBox x:Name="SneakingTextBox" Grid.Column="1"/>
                 <TextBox x:Name="PickpocketingTextBox" Grid.Row="1" Grid.Column="1"/>
                 <TextBox x:Name="LockpickingTextBox" Grid.Row="2" Grid.Column="1"/>
+            </Grid>
+        </GroupBox>
+        <GroupBox Header="Tenebrium" Foreground="#FFA400BD">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="This Ability appears in game when Player get Tenebrium Skill, not before" Grid.ColumnSpan="2" Margin="5,10"/>
+                <TextBlock x:Name="TenebriumTextBlock" Grid.Row="1"/>
+                <TextBox x:Name="TenebriumTextBox" Grid.Row="1" Grid.Column="1" />
             </Grid>
         </GroupBox>
     </WrapPanel>
