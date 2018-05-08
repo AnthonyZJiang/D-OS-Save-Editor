@@ -11,7 +11,7 @@ namespace D_OS_Save_Editor
     {
         public string BoostText { get; set; }
 
-        public AddBoostDialog(string predeterminedBoostText)
+        public AddBoostDialog(string predictedKeyword)
         {
             InitializeComponent();
 
@@ -53,7 +53,7 @@ namespace D_OS_Save_Editor
                 }
             }
 
-            BoostTextBox.Text = predeterminedBoostText;
+            BoostTextBox.Text = predictedKeyword;
         }
 
         private void BoostTextBox_OnTextChanged(object sender, TextChangedEventArgs e)

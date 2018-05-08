@@ -345,7 +345,7 @@ namespace D_OS_Save_Editor
             {
                 case "Add":
                     // try pre-determine equipment type
-                    var preDeterminedType = "";
+                    var predictedKeyword = "";
                     var boostsString= BoostsListBox.Items.Cast<string>().Aggregate("", (current, s) => current + s);
                     boostsString += Player.Items[ItemsListBox.SelectedIndex].StatsName.ToLower();
 
@@ -356,18 +356,18 @@ namespace D_OS_Save_Editor
                         switch (s)
                         {
                             case "arm":
-                                preDeterminedType += "armor ";
+                                predictedKeyword += "armor ";
                                 break;
                             case "wpn":
-                                preDeterminedType += "weapon ";
+                                predictedKeyword += "weapon ";
                                 break;
                             default:
-                                preDeterminedType += s + " ";
+                                predictedKeyword += s + " ";
                                 break;
                         }
                     }
 
-                    var dlg=new AddBoostDialog(preDeterminedType);
+                    var dlg=new AddBoostDialog(predictedKeyword);
                     dlg.ShowDialog();
                     if (dlg.DialogResult == true)
                         BoostsListBox.Items.Add(dlg.BoostText);
