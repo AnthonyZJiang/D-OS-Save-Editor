@@ -63,12 +63,9 @@ namespace D_OS_Save_Editor
                 var listBoxText = ((string)i.Content).ToLower();
                 var searchTerms = BoostTextBox.Text.ToLower().Split(' ');
                 var visiblily = Visibility.Visible;
-                foreach (var s in searchTerms)
+                if (searchTerms.Any(s => !listBoxText.Contains(s)))
                 {
-                    if (listBoxText.Contains(s)) continue;
-
                     visiblily = Visibility.Collapsed;
-                    break;
                 }
                 i.Visibility = visiblily;
             }

@@ -346,21 +346,25 @@ namespace D_OS_Save_Editor
                 case "Add":
                     // try pre-determine equipment type
                     var preDeterminedType = "";
-                    var type = new Dictionary<string, int>();
-                    foreach (string s in BoostsListBox.Items)
-                    {
-                        var vals = Regex.Split(s, @"_+");
-                        if (vals.Length < 2) continue;
-                        if (!type.ContainsKey(vals[1]))
-                            type.Add(vals[1],0);
-                        else
-                            type[vals[1]]++;
-                    }
+                    var boostsString= BoostsListBox.Items.Cast<string>().Aggregate("", (current, s) => current + s);
+                    boostsString += Player.Items[ItemsListBox.SelectedIndex].StatsName.ToLower();
 
-                    if (type.Count > 0)
+                    if (boostsString!="")
+                    foreach (var s in DataTable.GenerationBoostsFilterNames)
                     {
-                        var maxVal = type.Values.Max();
-                        preDeterminedType = type.FirstOrDefault(x => x.Value == maxVal).Key;
+                        if (!boostsString.Contains(s)) continue;
+                        switch (s)
+                        {
+                            case "arm":
+                                preDeterminedType += "armor ";
+                                break;
+                            case "wpn":
+                                preDeterminedType += "weapon ";
+                                break;
+                            default:
+                                preDeterminedType += s + " ";
+                                break;
+                        }
                     }
 
                     var dlg=new AddBoostDialog(preDeterminedType);
