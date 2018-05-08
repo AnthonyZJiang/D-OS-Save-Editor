@@ -29,6 +29,8 @@
             <TextBlock Text="Credit:"/>
             <TextBlock Margin="5,0,0,0"><Hyperlink NavigateUri="https://github.com/FlukiestEmperor" RequestNavigate="Hyperlink_RequestNavigate">FlukiestEmperor</Hyperlink></TextBlock>
             <TextBlock Text=","></TextBlock>
+            <TextBlock Margin="5,0,0,0"><Hyperlink NavigateUri="https://github.com/Greavox" RequestNavigate="Hyperlink_RequestNavigate">Greavox</Hyperlink></TextBlock>
+            <TextBlock Text=","></TextBlock>
             <TextBlock Margin="5,0,0,0"><Hyperlink NavigateUri="https://github.com/Norbyte/lslib" RequestNavigate="Hyperlink_RequestNavigate">Norbyte</Hyperlink></TextBlock>
         </StackPanel>
     <Button Content="OK" Width="70" Margin="0,20,20,20" HorizontalAlignment="Right" VerticalAlignment="Bottom" IsCancel="True"/>
