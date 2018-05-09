@@ -39,12 +39,12 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <TextBlock x:Name="SingleHandedTextBlock"/>
-                <TextBlock x:Name="TwoHandedTextBlock" Grid.Row="1"/>
-                <TextBlock x:Name="DualWieldingTextBlock" Grid.Row="2"/>
-                <TextBlock x:Name="BowTextBlock" Grid.Row="3"/>
-                <TextBlock x:Name="CrossbowTextBlock" Grid.Row="4"/>
-                <TextBlock x:Name="WandTextBlock" Grid.Row="5"/>
+                <TextBlock Text="Single-handed" ToolTip="Single-Handed increases damage when using a single-handed weapon (dagger, sword, axe, or mace). This damage bonus is not applied when dual wielding."/>
+                <TextBlock Text="Two-handed" ToolTip="Two-Handed increases critical chance and critical multiplier when using a two-handed weapon (sword, axe, spear or staff)." Grid.Row="1"/>
+                <TextBlock Text="Dual Wielding" ToolTip="Dual Wielding reduces damage penalty and total Action Point cost when wielding two weapons." Grid.Row="2"/>
+                <TextBlock Text="Bow" ToolTip="Bow increases the damage you do using bows." Grid.Row="3"/>
+                <TextBlock Text="Crossbow" ToolTip="Crossbow increases the critical chance and the critical damage you do using crossbows." Grid.Row="4"/>
+                <TextBlock Text="Wand" ToolTip="" Grid.Row="5"/>
                 <TextBox x:Name="SingleHandedTextBox" Grid.Column="1"/>
                 <TextBox x:Name="TwoHandedTextBox" Grid.Row="1" Grid.Column="1"/>
                 <TextBox x:Name="DualWieldingTextBox" Grid.Row="2" Grid.Column="1"/>
@@ -65,10 +65,10 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <TextBlock x:Name="ArmourSpecialistTextBlock"/>
-                <TextBlock x:Name="ShieldSpecialistTextBlock" Grid.Row="1"/>
-                <TextBlock x:Name="BodyBuildingTextBlock" Grid.Row="2"/>
-                <TextBlock x:Name="WillpowerTextBlock" Grid.Row="32"/>
+                <TextBlock Text="Armour Specialist" ToolTip="Armour Specialist improves your armour rating and decreases your heavy armour movement penalty."/>
+                <TextBlock Text="Shield Specialist" ToolTip="Shield Specialist increases chance of blocking when using shields." Grid.Row="1"/>
+                <TextBlock Text="BodyBuilding" ToolTip="Body Building improves your saving throws against Knocked Down, Burning, Frozen, Bleeding, Crippled, Blinded, Weak, Diseased, Infected, and Drunk." Grid.Row="2"/>
+                <TextBlock Text="Willpower" ToolTip="Willpower improves your saving throws against Feared, Mute, Charmed, Stunned, Cursed, Slowed, Petrified, Decaying Touch, Mark of Death, Remorse, and Shackles of Pain." Grid.Row="32"/>
                 <TextBox x:Name="ArmourSpecialistTextBox" Grid.Column="1"/>
                 <TextBox x:Name="ShieldSpecialistTextBox" Grid.Row="1" Grid.Column="1"/>
                 <TextBox x:Name="BodyBuildingTextBox" Grid.Row="2" Grid.Column="1"/>
@@ -91,14 +91,14 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <TextBlock x:Name="ManAtArmsTextBlock"/>
-                <TextBlock x:Name="ExpertMarksmanTextBlock" Grid.Row="1"/>
-                <TextBlock x:Name="ScoundrelTextBlock" Grid.Row="2"/>
-                <TextBlock x:Name="PyrokineticTextBlock" Grid.Row="3"/>
-                <TextBlock x:Name="HydrosophistTextBlock" Grid.Row="4"/>
-                <TextBlock x:Name="AerotheurgeTextBlock" Grid.Row="5"/>
-                <TextBlock x:Name="GeomancerTextBlock" Grid.Row="6"/>
-                <TextBlock x:Name="WitchcraftTextBlock" Grid.Row="7"/>
+                <TextBlock Text="Man-At-Arms" ToolTip="Determines how many Man-At-Arms skills you can learn and how many Action Points it costs to use higher level Man-At-Arms skills."/>
+                <TextBlock Text="Expert Marksman" ToolTip="Determines how many Expert Marksman skills you can learn and how many Action Points it costs to use higher level Expert Marksman skills." Grid.Row="1"/>
+                <TextBlock Text="Scoundrel" ToolTip="Determines how many Scoundrel skills you can learn and how many Action Points it costs to use higher level Scoundrel skills." Grid.Row="2"/>
+                <TextBlock Text="Pyrokinetic" ToolTip="Determines how many Pyrokinetic spells you can learn and how many Action Points it costs to use higher level Pyrokinetic spells." Grid.Row="3"/>
+                <TextBlock Text="Hydrosophist" ToolTip="Determines how many Hydrosophist spells you can learn and how many Action Points it costs to use higher level Hydrosophist spells." Grid.Row="4"/>
+                <TextBlock Text="Aerotheurge" ToolTip="Determines how many Aerotheurge spells you can learn and how many Action Points it costs to use higher level Aerotheurge spells." Grid.Row="5"/>
+                <TextBlock Text="Geomancer" ToolTip="Determines how many Geomancer spells you can learn and how many Action Points it costs to use higher level Geomancer spells." Grid.Row="6"/>
+                <TextBlock Text="Witchcraft" ToolTip="Determines how many Witchcraft spells you can learn and how many Action Points it costs to use higher level Witchcraft spells." Grid.Row="7"/>
                 <TextBox x:Name="ManAtArmsTextBox" Grid.Column="1"/>
                 <TextBox x:Name="ExpertMarksmanTextBox" Grid.Row="1" Grid.Column="1"/>
                 <TextBox x:Name="ScoundrelTextBox" Grid.Row="2" Grid.Column="1"/>
@@ -121,10 +121,10 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <TextBlock x:Name="BlacksmithingTextBlock"/>
-                <TextBlock x:Name="CraftingTextBlock" Grid.Row="1"/>
-                <TextBlock x:Name="LoremasterTextBlock" Grid.Row="2"/>
-                <TextBlock x:Name="TelekinesisTextBlock" Grid.Row="3"/>
+                <TextBlock Text="Blacksmithing" ToolTip="Blacksmithing allows you to repair your own items; the more you invest, the faster you'll work. Required to create and improve metal-enhanced weapons and armour."/>
+                <TextBlock Text="Crafting" ToolTip="Crafting determines what you can craft and the quality of your crafted items. The more invested it is, the faster you can craft." Grid.Row="1"/>
+                <TextBlock Text="Loremaster" ToolTip="Loremaster allows you to examine enemies and identify items. The more invested it is, the more in-depth your intel." Grid.Row="2"/>
+                <TextBlock Text="Telekinesis" ToolTip="With Telekinesis you can move items from a distance. The higher your [1] score, the heavier the items you can telepathically lift, and the farther you can move them." Grid.Row="3"/>
                 <TextBox x:Name="BlacksmithingTextBox" Grid.Column="1"/>
                 <TextBox x:Name="CraftingTextBox" Grid.Row="1" Grid.Column="1"/>
                 <TextBox x:Name="LoremasterTextBox" Grid.Row="2" Grid.Column="1"/>
@@ -143,10 +143,10 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <TextBlock x:Name="BarteringTextBlock"/>
-                <TextBlock x:Name="CharismaTextBlock" Grid.Row="1"/>
-                <TextBlock x:Name="LeadershipTextBlock" Grid.Row="2"/>
-                <TextBlock x:Name="LuckyCharmTextBlock" Grid.Row="3"/>
+                <TextBlock Text="Bartering" ToolTip="Bartering determines your haggling skills with traders."/>
+                <TextBlock Text="Charisma" ToolTip="Charisma determines the first impression you make on other people and your talent for Charming, Intimidating, and Reasoning." Grid.Row="1"/>
+                <TextBlock Text="Leadership" ToolTip="Leadership will give boosts to party members and friends that can see you." Grid.Row="2"/>
+                <TextBlock Text="Lucky Charm" ToolTip="Lucky Charm determines your luck in finding extra treasure and improves your Offence Rating." Grid.Row="3"/>
                 <TextBox x:Name="BarteringTextBox" Grid.Column="1"/>
                 <TextBox x:Name="CharismaTextBox" Grid.Row="1" Grid.Column="1"/>
                 <TextBox x:Name="LeadershipTextBox" Grid.Row="2" Grid.Column="1"/>
@@ -164,9 +164,9 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <TextBlock x:Name="SneakingTextBlock"/>
-                <TextBlock x:Name="PickpocketingTextBlock" Grid.Row="1"/>
-                <TextBlock x:Name="LockpickingTextBlock" Grid.Row="2"/>
+                <TextBlock Text="Sneaking" ToolTip="Sneaking determines how well you can sneak without getting caught."/>
+                <TextBlock Text="Pickpocketing" ToolTip="Pickpocketing determines what you can steal and who you can successfully pickpocket." Grid.Row="1"/>
+                <TextBlock Text="Lockpicking" ToolTip="Lockpicking determines what complexity of locks you can pick and how fast you can do it." Grid.Row="2"/>
                 <TextBox x:Name="SneakingTextBox" Grid.Column="1"/>
                 <TextBox x:Name="PickpocketingTextBox" Grid.Row="1" Grid.Column="1"/>
                 <TextBox x:Name="LockpickingTextBox" Grid.Row="2" Grid.Column="1"/>
@@ -183,7 +183,7 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <TextBlock Text="This Ability appears in game when Player get Tenebrium Skill, not before" Grid.ColumnSpan="2" Margin="5,10"/>
-                <TextBlock x:Name="TenebriumTextBlock" Grid.Row="1"/>
+                <TextBlock Text="Tenebrium" ToolTip="Tenebrium allows you to equip more powerful Tenebrium weapons." Grid.Row="1"/>
                 <TextBox x:Name="TenebriumTextBox" Grid.Row="1" Grid.Column="1" />
             </Grid>
         </GroupBox>
