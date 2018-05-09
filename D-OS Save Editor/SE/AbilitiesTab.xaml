@@ -44,7 +44,7 @@
                 <TextBlock Text="Dual Wielding" ToolTip="Dual Wielding reduces damage penalty and total Action Point cost when wielding two weapons." Grid.Row="2"/>
                 <TextBlock Text="Bow" ToolTip="Bow increases the damage you do using bows." Grid.Row="3"/>
                 <TextBlock Text="Crossbow" ToolTip="Crossbow increases the critical chance and the critical damage you do using crossbows." Grid.Row="4"/>
-                <TextBlock Text="Wand" ToolTip="" Grid.Row="5"/>
+                <TextBlock Text="Wand" ToolTip="Wand increases damage of main hand wand attacks." Grid.Row="5"/>
                 <TextBox x:Name="SingleHandedTextBox" Grid.Column="1"/>
                 <TextBox x:Name="TwoHandedTextBox" Grid.Row="1" Grid.Column="1"/>
                 <TextBox x:Name="DualWieldingTextBox" Grid.Row="2" Grid.Column="1"/>
