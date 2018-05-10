@@ -40,7 +40,7 @@ namespace D_OS_Save_Editor
             BowTextBox.Text = Player.Abilities[(int)DataTable.Abilities.Bow].ToString();
             CrossbowTextBox.Text = Player.Abilities[(int)DataTable.Abilities.Crossbow].ToString();
             ShieldSpecialistTextBox.Text = Player.Abilities[(int)DataTable.Abilities.ShieldSpecialist].ToString();
-            ArmorSpecialistTextBox.Text = Player.Abilities[(int)DataTable.Abilities.ArmorSpecialist].ToString();
+            ArmourSpecialistTextBox.Text = Player.Abilities[(int)DataTable.Abilities.ArmourSpecialist].ToString();
             WitchcraftTextBox.Text = Player.Abilities[(int)DataTable.Abilities.Witchcraft].ToString();
             TelekinesisTextBox.Text = Player.Abilities[(int)DataTable.Abilities.Telekinesis].ToString();
             WillpowerTextBox.Text = Player.Abilities[(int)DataTable.Abilities.Willpower].ToString();
@@ -58,9 +58,10 @@ namespace D_OS_Save_Editor
             CharismaTextBox.Text = Player.Abilities[(int)DataTable.Abilities.Charisma].ToString();
             LeadershipTextBox.Text = Player.Abilities[(int)DataTable.Abilities.Leadership].ToString();
             LuckyCharmTextBox.Text = Player.Abilities[(int)DataTable.Abilities.LuckyCharm].ToString();
-            BodybuildingTextBox.Text = Player.Abilities[(int)DataTable.Abilities.Bodybuilding].ToString();
-            DuelWeldingTextBox.Text = Player.Abilities[(int)DataTable.Abilities.DuelWelding].ToString();
+            BodyBuildingTextBox.Text = Player.Abilities[(int)DataTable.Abilities.BodyBuilding].ToString();
+            DualWieldingTextBox.Text = Player.Abilities[(int)DataTable.Abilities.DualWielding].ToString();
             WandTextBox.Text = Player.Abilities[(int)DataTable.Abilities.Wand].ToString();
+            TenebriumTextBox.Text = Player.Abilities[(int)DataTable.Abilities.Tenebrium].ToString();
         }
 
         public void SaveEdits()
@@ -73,7 +74,7 @@ namespace D_OS_Save_Editor
             Player.Abilities[(int)DataTable.Abilities.Bow] = int.Parse(BowTextBox.Text);
             Player.Abilities[(int)DataTable.Abilities.Crossbow] = int.Parse(CrossbowTextBox.Text);
             Player.Abilities[(int)DataTable.Abilities.ShieldSpecialist] = int.Parse(ShieldSpecialistTextBox.Text);
-            Player.Abilities[(int)DataTable.Abilities.ArmorSpecialist] = int.Parse(ArmorSpecialistTextBox.Text);
+            Player.Abilities[(int)DataTable.Abilities.ArmourSpecialist] = int.Parse(ArmourSpecialistTextBox.Text);
             Player.Abilities[(int)DataTable.Abilities.Witchcraft] = int.Parse(WitchcraftTextBox.Text);
             Player.Abilities[(int)DataTable.Abilities.Telekinesis] = int.Parse(TelekinesisTextBox.Text);
             Player.Abilities[(int)DataTable.Abilities.Willpower] = int.Parse(WillpowerTextBox.Text);
@@ -91,9 +92,10 @@ namespace D_OS_Save_Editor
             Player.Abilities[(int)DataTable.Abilities.Charisma] = int.Parse(CharismaTextBox.Text);
             Player.Abilities[(int)DataTable.Abilities.Leadership] = int.Parse(LeadershipTextBox.Text);
             Player.Abilities[(int)DataTable.Abilities.LuckyCharm] = int.Parse(LuckyCharmTextBox.Text);
-            Player.Abilities[(int)DataTable.Abilities.Bodybuilding] = int.Parse(BodybuildingTextBox.Text);
-            Player.Abilities[(int)DataTable.Abilities.DuelWelding] = int.Parse(DuelWeldingTextBox.Text);
+            Player.Abilities[(int)DataTable.Abilities.BodyBuilding] = int.Parse(BodyBuildingTextBox.Text);
+            Player.Abilities[(int)DataTable.Abilities.DualWielding] = int.Parse(DualWieldingTextBox.Text);
             Player.Abilities[(int)DataTable.Abilities.Wand] = int.Parse(WandTextBox.Text);
+            Player.Abilities[(int)DataTable.Abilities.Tenebrium] = int.Parse(TenebriumTextBox.Text);
         }
 
         private void TextBoxEventSetter_OnLostFocus(object sender, RoutedEventArgs e)
