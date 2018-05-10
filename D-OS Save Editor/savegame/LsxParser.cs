@@ -44,12 +44,18 @@ namespace D_OS_Save_Editor
                     return;
 
                 players[i].Items = new Item[inventoryData.Count];
+                var notAnItemIdx = new List<int>();
                 Parallel.For(0, inventoryData.Count, j =>
                 {
                     Item item;
                     try
                     {
                         item = ParseItem(inventoryData[j].ParentNode);
+                    }
+                    catch (NotAnItemNodeException e)
+                    {
+                        notAnItemIdx.Add(j);
+                        return;
                     }
                     catch (Exception e)
                     {
@@ -59,6 +65,14 @@ namespace D_OS_Save_Editor
                     players[i].Items[j] = item;
                     players[i].SlotsOccupation[int.Parse(item.Slot)] = true;
                 });
+
+                if (notAnItemIdx.Count == 0) return;
+
+                // remove not an item entry
+                var items = new List<Item>(players[i].Items);
+                foreach (var idx in notAnItemIdx)
+                    items.RemoveAt(idx);
+                players[i].Items = items.ToArray();
             });
             return players;
         }
@@ -133,26 +147,29 @@ namespace D_OS_Save_Editor
 
         public static Item ParseItem(XmlNode node)
         {
-            var item = new Item
+            var item = new Item();
+
+            try
             {
-#if DEBUG && LOG_ITEMXML
-                Xml = XmlUtilities.BeautifyXml(node),
-#endif
-                Flags = node.SelectSingleNode("attribute [@id='Flags']").Attributes[1].Value,
-                IsKey = node.SelectSingleNode("attribute [@id='IsKey']").Attributes[1].Value,
-                StatsName = node.SelectSingleNode("attribute [@id='Stats']").Attributes[1].Value,
-                Parent = node.SelectSingleNode("attribute [@id='Parent']").Attributes[1].Value,
-                Slot = node.SelectSingleNode("attribute [@id='Slot']").Attributes[1].Value,
-                Amount = node.SelectSingleNode("attribute [@id='Amount']").Attributes[1].Value,
-                IsGenerated = node.SelectSingleNode("attribute [@id='IsGenerated']").Attributes[1].Value,
-                LockLevel = node.SelectSingleNode("attribute [@id='LockLevel']").Attributes[1].Value,
-                Vitality = node.SelectSingleNode("attribute [@id='Vitality']").Attributes[1].Value,
-                ItemType = node.SelectSingleNode("attribute [@id='ItemType']").Attributes[1].Value,
-                MaxVitalityPatchCheck =
-                    node.SelectSingleNode("attribute [@id='MaxVitalityPatchCheck']").Attributes[1].Value,
-                MaxDurabilityPatchCheck =
-                    node.SelectSingleNode("attribute [@id='MaxDurabilityPatchCheck']")?.Attributes[1].Value
-            };
+                item.Flags = node.SelectSingleNode("attribute [@id='Flags']").Attributes[1].Value;
+                item.IsKey = node.SelectSingleNode("attribute [@id='IsKey']").Attributes[1].Value;
+                item.StatsName = node.SelectSingleNode("attribute [@id='Stats']").Attributes[1].Value;
+                item.Parent = node.SelectSingleNode("attribute [@id='Parent']").Attributes[1].Value;
+                item.Slot = node.SelectSingleNode("attribute [@id='Slot']").Attributes[1].Value;
+                item.Amount = node.SelectSingleNode("attribute [@id='Amount']").Attributes[1].Value;
+                item.IsGenerated = node.SelectSingleNode("attribute [@id='IsGenerated']").Attributes[1].Value;
+                item.LockLevel = node.SelectSingleNode("attribute [@id='LockLevel']").Attributes[1].Value;
+                item.Vitality = node.SelectSingleNode("attribute [@id='Vitality']").Attributes[1].Value;
+                item.ItemType = node.SelectSingleNode("attribute [@id='ItemType']").Attributes[1].Value;
+                item.MaxVitalityPatchCheck = node.SelectSingleNode("attribute [@id='MaxVitalityPatchCheck']").Attributes[1].Value;
+                item.MaxDurabilityPatchCheck = node.SelectSingleNode("attribute [@id='MaxDurabilityPatchCheck']")?.Attributes[1].Value;
+                item.Stats = new Item.StatsNode();
+            }
+            catch (NullReferenceException e)
+            {
+                throw new NotAnItemNodeException(e, "One or more item nodes are not found.");
+            }
+            
 
             // sort item
             if (item.IsKey == "True")

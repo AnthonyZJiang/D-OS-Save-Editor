@@ -514,7 +514,7 @@ namespace D_OS_Save_Editor
         public ItemSaveException() { }
 
         public ItemSaveException(Exception inner, ItemChange itemChange) :
-            base (GetItemChangeString(itemChange), inner)
+            base(GetItemChangeString(itemChange), inner)
         {
         }
 
@@ -529,6 +529,16 @@ namespace D_OS_Save_Editor
             }
 
             return s;
+        }
+    }
+
+    public class NotAnItemNodeException : Exception
+    {
+        public NotAnItemNodeException() { }
+
+        public NotAnItemNodeException(Exception inner, string message) :
+            base(message, inner)
+        {
         }
     }
 }
