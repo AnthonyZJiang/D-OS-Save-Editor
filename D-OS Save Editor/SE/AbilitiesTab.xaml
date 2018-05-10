@@ -182,9 +182,9 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <TextBlock Text="This Ability appears in game when Player get Tenebrium Skill, not before" Grid.ColumnSpan="2" Margin="5,10"/>
-                <TextBlock Text="Tenebrium" ToolTip="Tenebrium allows you to equip more powerful Tenebrium weapons." Grid.Row="1"/>
-                <TextBox x:Name="TenebriumTextBox" Grid.Row="1" Grid.Column="1" />
+                <TextBlock Text="Tenebrium" ToolTip="Tenebrium allows you to equip more powerful Tenebrium weapons."/>
+                <TextBox x:Name="TenebriumTextBox" Grid.Column="1" HorizontalAlignment="Right" />
+                <TextBlock Text="This ability is unavailable until your character gets the Tenebrium skill." Grid.Row="1" MaxWidth="180" TextWrapping="Wrap" Grid.ColumnSpan="2" Margin="0,10,0,0"/>
             </Grid>
         </GroupBox>
     </WrapPanel>
