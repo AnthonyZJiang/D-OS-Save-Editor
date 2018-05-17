@@ -70,6 +70,7 @@ namespace D_OS_Save_Editor
 
                 // remove not an item entry
                 var items = new List<Item>(players[i].Items);
+                notAnItemIdx.Sort((a,b)=>b.CompareTo(a));
                 foreach (var idx in notAnItemIdx)
                     items.RemoveAt(idx);
                 players[i].Items = items.ToArray();
