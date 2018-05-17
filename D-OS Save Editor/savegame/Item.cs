@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Xml;
-using System.Xml.Serialization;
 
 namespace D_OS_Save_Editor
 {
@@ -17,6 +15,7 @@ namespace D_OS_Save_Editor
     public enum ItemSortType { Item = 0, Potion, Armor, Weapon, Gold, Skillbook, Scroll, Granade, Food, Furniture, Loot, Quest, Tool, Unique, Book, Other, Key, Arrow }
     public class Item
     {
+        #region properties
         /// <summary>
         /// Rarity of the item
         /// </summary>
@@ -220,7 +219,128 @@ namespace D_OS_Save_Editor
         /// Xml node name: stats of the item
         /// </summary>
         public StatsNode Stats { get; set; }
+        #endregion
 
+        #region methods
+        /// <summary>
+        /// Create a deep copy of the object
+        /// </summary>
+        /// <returns></returns>
+        public Item DeepClone()
+        {
+            var item = (Item) MemberwiseClone();
+            try
+            {
+                item.Generation = Generation?.DeepClone();
+                item.Stats = Stats?.DeepClone();
+            }
+            catch (NullReferenceException ex)
+            {
+                throw new ObjectNullException(ex, "Cannot clone item, because one or more list/dictionary object is null.", this);
+            }
+
+            return item;
+
+        }
+
+        /// <summary>
+        /// Get the names of the properties that can be safely and meaningfully changed.
+        /// </summary>
+        /// <returns>The names of the properties</returns>
+        public string GetAllowedChangeType()
+        {
+            var s = "";
+            if (Vitality != "-1")
+            {
+                s += nameof(Vitality);
+            }
+
+            if (ItemSort == ItemSortType.Armor || ItemSort == ItemSortType.Weapon)
+            {
+                s += nameof(ItemRarity);
+                s += nameof(Generation);
+            }
+
+            if (ItemSort == ItemSortType.Potion ||
+                ItemSort == ItemSortType.Gold ||
+                ItemSort == ItemSortType.Granade ||
+                ItemSort == ItemSortType.Scroll ||
+                ItemSort == ItemSortType.Food)
+            {
+                s += nameof(Amount);
+            }
+
+            if (ItemSort == ItemSortType.Furniture)
+            {
+                s += nameof(LockLevel);
+            }
+
+            // generation
+            if (Generation != null)
+            {
+                s += nameof(Generation);
+            }
+
+            // stats
+            if (Stats != null)
+            {
+                s += nameof(Stats);
+            }
+
+            return s;
+        }
+        #endregion
+
+        #region nested class
+        /// <summary>
+        /// Generate an item with some fixed property set
+        /// </summary>
+        public class GenerateItem
+        {
+            public XmlDocument GenerateEquipment(string flags, string statsName, string parent, string itemType, string maxDurabilityPatchCheck, GenerationNode generation, StatsNode stats)
+            {
+                var doc = new XmlDocument();
+
+                // common attributes
+                var baseNode = 
+                    $@"<node id=""Item"">
+<attribute id=""Translate"" value=""0 0 0"" type=""12"" />
+<attribute id=""Flags"" value=""{flags}"" type=""5"" />
+<attribute id=""Level"" value="""" type=""22"" />
+<attribute id=""Rotate"" value="" 1.00  0.00  0.00 &#xD;&#xA; 0.00  1.00  0.00 &#xD;&#xA; 0.00  0.00  1.00 &#xD;&#xA;"" type=""15"" />
+<attribute id=""Scale"" value=""1"" type=""6"" />
+<attribute id=""Global"" value=""True"" type=""19"" />
+<attribute id=""Velocity"" value=""0 0 0"" type=""12"" />
+<attribute id=""GoldValueOverwrite"" value=""-1"" type=""4"" />
+<attribute id=""UnsoldGenerated"" value=""False"" type=""19"" />
+<attribute id=""IsKey"" value=""False"" type=""19"" />
+<attribute id=""TreasureGenerated"" value=""False"" type=""19"" />
+<attribute id=""CurrentTemplate"" value=""50ebbcff-e6d7-4a02-94ba-0978adcdb024"" type=""22"" />
+<attribute id=""CurrentTemplateType"" value=""0"" type=""1"" />
+<attribute id=""OriginalTemplate"" value=""50ebbcff-e6d7-4a02-94ba-0978adcdb024"" type=""22"" />
+<attribute id=""OriginalTemplateType"" value=""0"" type=""1"" />
+<attribute id=""Stats"" value=""{statsName}"" type=""22"" />
+<attribute id=""IsGenerated"" value=""True"" type=""19"" />
+<attribute id=""Inventory"" value=""0"" type=""5"" />
+<attribute id=""Parent"" value=""{parent}"" type=""5"" />
+<attribute id=""Slot"" value=""43"" type=""3"" />
+<attribute id=""Amount"" value=""1"" type=""4"" />
+<attribute id=""Key"" value="""" type=""22"" />
+<attribute id=""LockLevel"" value=""1"" type=""4"" />
+<attribute id=""SurfaceCheckTimer"" value=""0"" type=""6"" />
+<attribute id=""Vitality"" value=""-1"" type=""4"" />
+<attribute id=""LifeTime"" value=""0"" type=""6"" />
+<attribute id=""owner"" value=""67174634"" type=""5"" />
+<attribute id=""ItemType"" value=""{itemType}"" type=""22"" />
+<attribute id=""MaxVitalityPatchCheck"" value=""-1"" type=""4"" />
+<attribute id=""MaxDurabilityPatchCheck"" value=""{maxDurabilityPatchCheck}"" type=""4"" />
+</node>";
+                doc.LoadXml(baseNode);
+
+
+                return doc;
+            }
+        }
 
         public class GenerationNode
         {
@@ -368,117 +488,8 @@ namespace D_OS_Save_Editor
 
             }
         }
+        #endregion
 
-        /// <summary>
-        /// Create a deep copy of the object
-        /// </summary>
-        /// <returns></returns>
-        public Item DeepClone()
-        {
-            if (!(MemberwiseClone() is Item item)) return null;
-
-            item.Generation = Generation?.DeepClone();
-            item.Stats = Stats?.DeepClone();
-            return item;
-
-        }
-
-        /// <summary>
-        /// Generate an item with some fixed property set
-        /// </summary>
-        public class GenerateItem
-        {
-            public XmlDocument GenerateEquipment(string flags, string statsName, string parent, string itemType, string maxDurabilityPatchCheck, GenerationNode generation, StatsNode stats)
-            {
-                var doc = new XmlDocument();
-
-                // common attributes
-                var baseNode = 
-                    $@"<node id=""Item"">
-<attribute id=""Translate"" value=""0 0 0"" type=""12"" />
-<attribute id=""Flags"" value=""{flags}"" type=""5"" />
-<attribute id=""Level"" value="""" type=""22"" />
-<attribute id=""Rotate"" value="" 1.00  0.00  0.00 &#xD;&#xA; 0.00  1.00  0.00 &#xD;&#xA; 0.00  0.00  1.00 &#xD;&#xA;"" type=""15"" />
-<attribute id=""Scale"" value=""1"" type=""6"" />
-<attribute id=""Global"" value=""True"" type=""19"" />
-<attribute id=""Velocity"" value=""0 0 0"" type=""12"" />
-<attribute id=""GoldValueOverwrite"" value=""-1"" type=""4"" />
-<attribute id=""UnsoldGenerated"" value=""False"" type=""19"" />
-<attribute id=""IsKey"" value=""False"" type=""19"" />
-<attribute id=""TreasureGenerated"" value=""False"" type=""19"" />
-<attribute id=""CurrentTemplate"" value=""50ebbcff-e6d7-4a02-94ba-0978adcdb024"" type=""22"" />
-<attribute id=""CurrentTemplateType"" value=""0"" type=""1"" />
-<attribute id=""OriginalTemplate"" value=""50ebbcff-e6d7-4a02-94ba-0978adcdb024"" type=""22"" />
-<attribute id=""OriginalTemplateType"" value=""0"" type=""1"" />
-<attribute id=""Stats"" value=""{statsName}"" type=""22"" />
-<attribute id=""IsGenerated"" value=""True"" type=""19"" />
-<attribute id=""Inventory"" value=""0"" type=""5"" />
-<attribute id=""Parent"" value=""{parent}"" type=""5"" />
-<attribute id=""Slot"" value=""43"" type=""3"" />
-<attribute id=""Amount"" value=""1"" type=""4"" />
-<attribute id=""Key"" value="""" type=""22"" />
-<attribute id=""LockLevel"" value=""1"" type=""4"" />
-<attribute id=""SurfaceCheckTimer"" value=""0"" type=""6"" />
-<attribute id=""Vitality"" value=""-1"" type=""4"" />
-<attribute id=""LifeTime"" value=""0"" type=""6"" />
-<attribute id=""owner"" value=""67174634"" type=""5"" />
-<attribute id=""ItemType"" value=""{itemType}"" type=""22"" />
-<attribute id=""MaxVitalityPatchCheck"" value=""-1"" type=""4"" />
-<attribute id=""MaxDurabilityPatchCheck"" value=""{maxDurabilityPatchCheck}"" type=""4"" />
-</node>";
-                doc.LoadXml(baseNode);
-
-
-                return doc;
-            }
-        }
-
-        /// <summary>
-        /// Get the names of the properties that can be safely and meaningfully changed.
-        /// </summary>
-        /// <returns>The names of the properties</returns>
-        public string GetAllowedChangeType()
-        {
-            var s = "";
-            if (Vitality != "-1")
-            {
-                s += nameof(Vitality);
-            }
-
-            if (ItemSort == ItemSortType.Armor || ItemSort == ItemSortType.Weapon)
-            {
-                s += nameof(ItemRarity);
-                s += nameof(Generation);
-            }
-
-            if (ItemSort == ItemSortType.Potion ||
-                ItemSort == ItemSortType.Gold ||
-                ItemSort == ItemSortType.Granade ||
-                ItemSort == ItemSortType.Scroll ||
-                ItemSort == ItemSortType.Food)
-            {
-                s += nameof(Amount);
-            }
-
-            if (ItemSort == ItemSortType.Furniture)
-            {
-                s += nameof(LockLevel);
-            }
-
-            // generation
-            if (Generation != null)
-            {
-                s += nameof(Generation);
-            }
-
-            // stats
-            if (Stats != null)
-            {
-                s += nameof(Stats);
-            }
-
-            return s;
-        }
     }
 
     /// <summary>
@@ -507,38 +518,5 @@ namespace D_OS_Save_Editor
         public ItemParserException(Exception inner, XmlNode node) : 
             base($"Item XML:\n\n{XmlUtilities.BeautifyXml(node)}\n\n", inner)
         { }
-    }
-
-    public class ItemSaveException : Exception
-    {
-        public ItemSaveException() { }
-
-        public ItemSaveException(Exception inner, ItemChange itemChange) :
-            base(GetItemChangeString(itemChange), inner)
-        {
-        }
-
-        public static string GetItemChangeString(ItemChange itemChange)
-        {
-            var xmlSerializer = new XmlSerializer(itemChange.GetType());
-            string s;
-            using (var sw = new StringWriter())
-            {
-                xmlSerializer.Serialize(sw, itemChange);
-                s = sw.ToString();
-            }
-
-            return s;
-        }
-    }
-
-    public class NotAnItemNodeException : Exception
-    {
-        public NotAnItemNodeException() { }
-
-        public NotAnItemNodeException(Exception inner, string message) :
-            base(message, inner)
-        {
-        }
     }
 }

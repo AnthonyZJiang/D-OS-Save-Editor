@@ -11,6 +11,7 @@ namespace D_OS_Save_Editor
     [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
     public class LsxParser
     {
+        #region read file
         public static List<string> GenerationBoostCollector;
         public static List<string> StatsBoostsCollector;
 
@@ -52,7 +53,7 @@ namespace D_OS_Save_Editor
                     {
                         item = ParseItem(inventoryData[j].ParentNode);
                     }
-                    catch (NotAnItemNodeException e)
+                    catch (ObjectNullException)
                     {
                         notAnItemIdx.Add(j);
                         return;
@@ -60,6 +61,12 @@ namespace D_OS_Save_Editor
                     catch (Exception e)
                     {
                         throw new ItemParserException(e, inventoryData[j].ParentNode);
+                    }
+
+                    if (item == null)
+                    {
+                        notAnItemIdx.Add(j);
+                        return;
                     }
 
                     players[i].Items[j] = item;
@@ -149,9 +156,12 @@ namespace D_OS_Save_Editor
         public static Item ParseItem(XmlNode node)
         {
             var item = new Item();
-
+#if DEBUG
+                item.Xml = XmlUtilities.BeautifyXml(node);
+#endif
             try
             {
+
                 item.Flags = node.SelectSingleNode("attribute [@id='Flags']").Attributes[1].Value;
                 item.IsKey = node.SelectSingleNode("attribute [@id='IsKey']").Attributes[1].Value;
                 item.StatsName = node.SelectSingleNode("attribute [@id='Stats']").Attributes[1].Value;
@@ -164,13 +174,11 @@ namespace D_OS_Save_Editor
                 item.ItemType = node.SelectSingleNode("attribute [@id='ItemType']").Attributes[1].Value;
                 item.MaxVitalityPatchCheck = node.SelectSingleNode("attribute [@id='MaxVitalityPatchCheck']").Attributes[1].Value;
                 item.MaxDurabilityPatchCheck = node.SelectSingleNode("attribute [@id='MaxDurabilityPatchCheck']")?.Attributes[1].Value;
-                item.Stats = new Item.StatsNode();
             }
             catch (NullReferenceException e)
             {
-                throw new NotAnItemNodeException(e, "One or more item nodes are not found.");
+                throw new ObjectNullException(e, "One or more item nodes are not found.");
             }
-            
 
             // sort item
             if (item.IsKey == "True")
@@ -282,7 +290,9 @@ namespace D_OS_Save_Editor
 
             return item;
         }
+        #endregion
 
+        #region write file
         public static XmlDocument WritePlayer(XmlDocument doc, Player[] players)
         {
             // find player data
@@ -462,12 +472,13 @@ namespace D_OS_Save_Editor
                 }
                 catch (Exception ex)
                 {
-                    throw new ItemSaveException(ex, ic.Value);
+                    throw new ObjectNullException(ex, ic.Value);
                 }
             }
 
             return doc;
         }
+        #endregion
     }
 
 

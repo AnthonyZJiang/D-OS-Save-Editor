@@ -24,7 +24,16 @@ namespace D_OS_Save_Editor
 
             Savegame = Savegame.GetSavegameFromJson(jsonFile);
             // make a copy of players
-            EditingPlayers = Savegame.Players.Select(a => a?.DeepClone()).ToArray();
+            try
+            {
+                EditingPlayers = Savegame.Players.Select(a => a?.DeepClone()).ToArray();
+            }
+            catch (Exception ex)
+            {
+                var er = new ErrorReporting($"Fail to clone players.\n\n{ex}", null);
+                er.ShowDialog();
+                throw;
+            }
 
             foreach (var p in Savegame.Players)
             {
@@ -40,7 +49,16 @@ namespace D_OS_Save_Editor
 
             Savegame = savegame;
             // make a copy of players
-            EditingPlayers = Savegame.Players.Select(a => a?.DeepClone()).ToArray();
+            try
+            {
+                EditingPlayers = Savegame.Players.Select(a => a?.DeepClone()).ToArray();
+            }
+            catch (Exception ex)
+            {
+                var er = new ErrorReporting($"Fail to clone players.\n\n{ex}", null);
+                er.ShowDialog();
+                throw;
+            }
 
             foreach (var p in Savegame.Players)
             {

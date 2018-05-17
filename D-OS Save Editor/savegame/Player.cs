@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Xml;
+using System.Xml.Serialization;
 
 namespace D_OS_Save_Editor
 {
@@ -21,7 +23,6 @@ namespace D_OS_Save_Editor
 
         private string _talentPoints;
 
-        private string _gold;
         //<node id="Character">
         #region ...
 
@@ -215,16 +216,7 @@ namespace D_OS_Save_Editor
         /// <summary>
         /// NOT IN USE. Amount of gold.
         /// </summary>
-        public string Gold
-        {
-            get => _gold;
-            set
-            {
-                //if (!XmlUtilities.IsUnint(value))
-                //    throw new XmlValidationException("Gold", value);
-                _gold = value;
-            }
-        }
+        public string Gold { get; set; }
 
         /// <summary>
         /// Indicates whether the slot that has been occupied in the player's inventory.
@@ -243,12 +235,21 @@ namespace D_OS_Save_Editor
         /// <returns></returns>
         public Player DeepClone()
         {
-            var player = MemberwiseClone() as Player;
-            player.Skills = new Dictionary<string, bool>(player.Skills);
-            player.Attributes = new Dictionary<int, int>(player.Attributes);
-            player.Abilities = new Dictionary<int, int>(player.Abilities);
-            player.Talents = new List<uint>(player.Talents);
-            player.Traits = new Dictionary<int, int>(player.Traits);
+            var player= (Player) MemberwiseClone();
+            try
+            {
+                player.Skills = new Dictionary<string, bool>(player.Skills);
+                player.Attributes = new Dictionary<int, int>(player.Attributes);
+                player.Abilities = new Dictionary<int, int>(player.Abilities);
+                player.Talents = new List<uint>(player.Talents);
+                player.Traits = new Dictionary<int, int>(player.Traits);
+            }
+            catch (NullReferenceException ex)
+            {
+                // don't want to pass player because the data could be huge if has lots of items.
+                throw new ObjectNullException(ex, "Cannot clone Player because at least one dictionary object is null.");
+            }
+
             player.Items = Items.Select(a => a.DeepClone()).ToArray();
             return player;
         }
@@ -261,5 +262,35 @@ namespace D_OS_Save_Editor
         public PlayerParserException(Exception inner, XmlNode playerNode) : 
             base($"Player XML:\n\n{XmlUtilities.BeautifyXml(playerNode)}\n\n", inner)
         { }
+    }
+
+    public class ObjectNullException : Exception
+    {
+        public ObjectNullException() { }
+
+        public ObjectNullException(Exception inner, string message) :
+            base(message, inner)
+        { }
+
+        public ObjectNullException(Exception inner, object objToSerialize) :
+            base(GetObjectString(objToSerialize), inner)
+        { }
+
+        public ObjectNullException(Exception inner, string message, object objToSerialize) :
+            base(GetObjectString(objToSerialize, message), inner)
+        { }
+
+        private static string GetObjectString(object obj, string msg ="")
+        {
+            var xmlSerializer = new XmlSerializer(obj.GetType());
+            string s;
+            using (var sw = new StringWriter())
+            {
+                xmlSerializer.Serialize(sw, obj);
+                s = sw.ToString();
+            }
+
+            return $"{(msg == "" ? "" : $"{msg}\n\n")}Serialized item Object:\n{s}";
+        }
     }
 }

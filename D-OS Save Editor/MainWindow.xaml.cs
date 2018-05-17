@@ -443,7 +443,15 @@ namespace D_OS_Save_Editor
             progressIndicator.Close();
             if (!unpackTask) return;
 
-            var se = new SaveEditor(savegame) { Owner = Application.Current.MainWindow };
+            SaveEditor se;
+            try
+            {
+                se = new SaveEditor(savegame) { Owner = Application.Current.MainWindow };
+            }
+            catch (Exception exception)
+            {
+                return;
+            }
             se.ShowDialog();
         }
 

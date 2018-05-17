@@ -59,6 +59,12 @@ namespace D_OS_Save_Editor
             DataContext = this;
         }
 
+        /// <summary>
+        /// Error submission form
+        /// </summary>
+        /// <param name="message">descriptive message to display in the textblock</param>
+        /// <param name="exceptionMessage">exception message that is shown in the scrollable text box</param>
+        /// <param name="data">reserved for later use, supply null.</param>
         public ErrorReporting(string message, string exceptionMessage, object data)
         {
             InitializeComponent();
@@ -69,6 +75,11 @@ namespace D_OS_Save_Editor
             DataContext = this;
         }
 
+        /// <summary>
+        /// Error submission form with default message, "An error has occurred."
+        /// </summary>
+        /// <param name="exceptionMessage">exception message that is shown in the scrollable text box</param>
+        /// <param name="data">reserved for later use, supply null.</param>
         public ErrorReporting(string exceptionMessage, object data)
         {
             InitializeComponent();
