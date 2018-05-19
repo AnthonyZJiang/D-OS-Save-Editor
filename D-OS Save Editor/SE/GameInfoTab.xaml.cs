@@ -13,7 +13,7 @@ namespace D_OS_Save_Editor
     public partial class GameInfoTab
     {
         private string[] difficultyName = { "Story", "Classic", "Tactician", "Honour" };
-        private string[] gameSavetypeName = { "Manual","QuickSave","AutoSave","Honour Save" };
+        private string[] gameSavetypeName = { "Manual", "QuickSave", "AutoSave", "Honour Save" };
 
         private Meta _meta;
 
@@ -38,16 +38,18 @@ namespace D_OS_Save_Editor
             SaveTimeTextBlock.Text = Meta.SaveTime;
             SeedTextBlock.Text = Meta.Seed;
             SaveGameTypeTextBlock.Text = gameSavetypeName[Meta.SaveGameType];
-            foreach (string i in Meta.GameVersion)
-            {
-                if (GameVersionListBox.Items.Count == 0)
+            if (GameVersionListBox.Items.Count == 0)
+                foreach (string i in Meta.GameVersion)
+                {
+
                     GameVersionListBox.Items.Add(new ListBoxItem { Content = i });
-            }
-            foreach (string i in Meta.ModsName)
-            {
-                if (ModsListBox.Items.Count == 0)
+                }
+            if (ModsListBox.Items.Count == 0)
+                foreach (string i in Meta.ModsName)
+                {
+
                     ModsListBox.Items.Add(new ListBoxItem { Content = i });
-            }
+                }
         }
     }
 
