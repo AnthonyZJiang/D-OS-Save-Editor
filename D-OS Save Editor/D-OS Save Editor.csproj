@@ -104,6 +104,7 @@
     <Compile Include="ProgressIndicator.xaml.cs">
       <DependentUpon>ProgressIndicator.xaml</DependentUpon>
     </Compile>
+    <Compile Include="savegame\Meta.cs" />
     <Compile Include="savegame\Talent.cs" />
     <Compile Include="SE\AbilitiesTab.xaml.cs">
       <DependentUpon>AbilitiesTab.xaml</DependentUpon>
@@ -115,6 +116,9 @@
       <DependentUpon>AddBoostDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="savegame\DataTable.cs" />
+    <Compile Include="SE\GameInfoTab.xaml.cs">
+      <DependentUpon>GameInfoTab.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SE\InventoryTab.xaml.cs">
       <DependentUpon>InventoryTab.xaml</DependentUpon>
     </Compile>
@@ -158,6 +162,10 @@
     <Page Include="SE\AddBoostDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SE\GameInfoTab.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="SE\InventoryTab.xaml">
       <SubType>Designer</SubType>
