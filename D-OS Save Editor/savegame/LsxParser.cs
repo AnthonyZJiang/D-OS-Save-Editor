@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -45,7 +46,8 @@ namespace D_OS_Save_Editor
                     return;
 
                 players[i].Items = new Item[inventoryData.Count];
-                var notAnItemIdx = new List<int>();
+                //var notAnItemIdx = new List<int>();
+                var notAnItemIdx = new ConcurrentQueue<int>();
                 Parallel.For(0, inventoryData.Count, j =>
                 {
                     Item item;
@@ -55,7 +57,7 @@ namespace D_OS_Save_Editor
                     }
                     catch (ObjectNullException)
                     {
-                        notAnItemIdx.Add(j);
+                        notAnItemIdx.Enqueue(j);
                         return;
                     }
                     catch (Exception e)
@@ -65,7 +67,7 @@ namespace D_OS_Save_Editor
 
                     if (item == null)
                     {
-                        notAnItemIdx.Add(j);
+                        notAnItemIdx.Enqueue(j);
                         return;
                     }
 
@@ -77,8 +79,9 @@ namespace D_OS_Save_Editor
 
                 // remove not an item entry
                 var items = new List<Item>(players[i].Items);
-                notAnItemIdx.Sort((a,b)=>b.CompareTo(a));
-                foreach (var idx in notAnItemIdx)
+                var list = notAnItemIdx.ToList();
+                list.Sort((a, b) => b.CompareTo(a));
+                foreach (var idx in list)
                     items.RemoveAt(idx);
                 players[i].Items = items.ToArray();
             });
