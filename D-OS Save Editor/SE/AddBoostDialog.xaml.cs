@@ -23,34 +23,13 @@ namespace D_OS_Save_Editor
                 });
             }
 
-            if (DataTable.IsOnlineBoostsGenerated)
+            foreach (var s in DataTable.UserGenerationBoosts)
             {
-                foreach (var s in DataTable.GenerationBoostsAddOnline)
+                if (DataTable.GenerationBoosts.Contains(s)) continue;
+                BoostListBox.Items.Add(new ListBoxItem
                 {
-                    BoostListBox.Items.Add(new ListBoxItem
-                    {
-                        Content = s
-                    });
-                }
-
-                foreach (var s in DataTable.UnlistedStatsBoosts)
-                {
-                    BoostListBox.Items.Add(new ListBoxItem
-                    {
-                        Content = s
-                    });
-                }
-            }
-            else
-            {
-                foreach (var s in DataTable.UserGenerationBoosts)
-                {
-                    if (DataTable.GenerationBoosts.Contains(s)) continue;
-                    BoostListBox.Items.Add(new ListBoxItem
-                    {
-                        Content = s
-                    });
-                }
+                    Content = s
+                });
             }
 
             BoostTextBox.Text = predictedKeyword;

@@ -66,8 +66,6 @@ namespace D_OS_Save_Editor
             }
 
             PlayerSelectionComboBox.SelectedIndex = 0;
-
-            CheckUnlisted();
         }
 
         private void ShowContent(int id)
@@ -82,15 +80,6 @@ namespace D_OS_Save_Editor
             {
                 //TraitsTab.IsEnabled = false;
             }
-        }
-
-        private async void CheckUnlisted()
-        {
-            await DataTable.GetUnlistedStrings();
-            if (DataTable.UnlistedGenerationBoosts.Length <= 0) return;
-
-            UnlistedCountHyperlink.Text = DataTable.UnlistedGenerationBoosts.Length.ToString();
-            SubmitPanel.Visibility = Visibility.Visible;
         }
 
         private void PlayerSelectionComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -216,24 +205,6 @@ namespace D_OS_Save_Editor
 
         private void Hyperlink_OnRequestNavigate(object sender, RoutedEventArgs e)
         {
-            var s = sender as Hyperlink;
-            if (s.Tag as string != "submit") return;
-            // copy text in clipboard
-            var builder = new StringBuilder();
-
-            foreach (var m in DataTable.UnlistedGenerationBoosts)
-            {
-                builder.Append(m).Append(Environment.NewLine);
-            }
-            Clipboard.SetText(builder.ToString());
-
-            MessageBox.Show(this, 
-                "I truly appreciate your willingness to help :). The text you will need to submit has been copied.\n\nClick \"OK\" to go to the website and paste them in the description.");
-
-            Process.Start(
-                @"https://docs.google.com/forms/d/e/1FAIpQLSeUeKYdV8InQslbvCvA1rmffJ5t1ieond4W6hpUHkHTH7I7dg/viewform?usp=pp_url&entry.1687355392=Unlisted+Modifiers&entry.43915833&entry.404388531");
-
-            SubmitPanel.Visibility = Visibility.Collapsed;
         }
 
         private void SaveEditor_OnClosing(object sender, CancelEventArgs e)

@@ -52,7 +52,6 @@ namespace D_OS_Save_Editor
             // update
             UpdatePanel.Visibility = Visibility.Collapsed;
             CheckUpdate();
-            DataTable.GetTableFromOnline();
         }
 
         #region private methods
