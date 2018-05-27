@@ -19,6 +19,7 @@ namespace D_OS_Save_Editor
         public string SavegameFullFile { get; set; }
         public string UnpackDirectory { get; }
         public Player[] Players { get; set; }
+        public Meta Meta { get; set; }
         public string[] AllSkills { get; set; }
         public Game GameVersion { get; }
 
@@ -39,12 +40,15 @@ namespace D_OS_Save_Editor
             await Task.Delay(1);
             // load xml
             var doc = new XmlDocument();
+            var metaDoc = new XmlDocument();
             doc.Load(UnpackDirectory + Path.DirectorySeparatorChar + "globals.lsx");
+            metaDoc.Load(UnpackDirectory + Path.DirectorySeparatorChar + "meta.lsx");
             // update progress
             progress.Report("Analysing savegame.");
             await Task.Delay(1);
             // parse xlml
             Players = LsxParser.ParsePlayer(doc);
+            Meta = LsxParser.ParseMeta(metaDoc);
             // update progress
             progress.Report("Loading data.");
             await Task.Delay(1);
@@ -94,6 +98,8 @@ namespace D_OS_Save_Editor
             // save package
             ResourceUtils.SaveResource(global, UnpackDirectory + Path.DirectorySeparatorChar + "globals.lsx",
                 ResourceFormat.LSX, outputVersion);
+            // uncompress and save meta.lsf
+            ResourceUtils.SaveResource(ResourceUtils.LoadResource(UnpackDirectory + Path.DirectorySeparatorChar + "meta.lsf"), UnpackDirectory + Path.DirectorySeparatorChar + "meta.lsx",ResourceFormat.LSX, outputVersion);
         }
 
         /// <summary>
@@ -116,6 +122,7 @@ namespace D_OS_Save_Editor
 
             // delete .lsx
             File.Delete(UnpackDirectory + Path.DirectorySeparatorChar + "globals.lsx");
+            File.Delete(UnpackDirectory + Path.DirectorySeparatorChar + "meta.lsx");
 
             // update progress
             progress.Report("Packing savegame.");
