@@ -34,7 +34,7 @@ namespace D_OS_Save_Editor
         private readonly string _defaultProfileDir = $"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}{DirectorySeparatorChar}Larian Studios{DirectorySeparatorChar}Divinity Original Sin Enhanced Edition{DirectorySeparatorChar}PlayerProfiles";
         private enum BackupStatus { None, Current, Old, NoChecksum, NoImage }
 
-        public static string Version { get; } = "v1.5.4";
+        public static string Version { get; } = "v1.6.0";
         private BackgroundWorker _getMetaBackgroundWorker;
         private string _updateLink;
         public MainWindowData MainWindowData;
@@ -478,9 +478,9 @@ namespace D_OS_Save_Editor
             if (MainWindowData.Meta.IsOutdatedVersion)
             {
                 var dlgResult = MessageBox.Show(this,
-                    "Your game version is unsupported and therefore, your savegame may become corrupted after editing. Do you wish to continue?",
-                    "Game version incompatible", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                if (dlgResult == MessageBoxResult.No)
+                    $"It appears that the version of your game is different from what this SE is purposely created for (ver. {DataTable.SupportedGameVersion}). As a result, changes made to your savegame may corrupt the savegame. Make sure you make a backup before continuing.",
+                    "Game version incompatible", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+                if (dlgResult == MessageBoxResult.Cancel)
                 {
                     progressIndicator.Close();
                     return;
@@ -491,9 +491,9 @@ namespace D_OS_Save_Editor
             if (MainWindowData.Meta.IsModWarning)
             {
                 var dlgResult = MessageBox.Show(this,
-                    "Your game used mods and therefore, your savegame may become corrupted after it being editted. Do you wish to continue?",
-                    "Mods found", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                if (dlgResult == MessageBoxResult.No)
+                    "It appears that you have used mods. As a result, changes made to your savegame may corrupt the savegame. Make sure you make a backup before continuing.",
+                    "Mods found", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+                if (dlgResult == MessageBoxResult.Cancel)
                 {
                     progressIndicator.Close();
                     return;
@@ -509,7 +509,7 @@ namespace D_OS_Save_Editor
             {
                 se = new SaveEditor(savegame) { Owner = Application.Current.MainWindow };
             }
-            catch (Exception exception)
+            catch
             {
                 return;
             }

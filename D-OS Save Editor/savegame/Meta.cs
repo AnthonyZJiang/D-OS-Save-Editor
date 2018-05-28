@@ -58,7 +58,7 @@ namespace D_OS_Save_Editor
             }
         }
 
-        public bool IsOutdatedVersion => LastGameVersion != "2.0.119.430";
+        public bool IsOutdatedVersion => LastGameVersion != DataTable.SupportedGameVersion;
 
         public bool IsVersionWarning => !Properties.Settings.Default.AcceptMods.Split('|').Contains(LastGameVersion);
 

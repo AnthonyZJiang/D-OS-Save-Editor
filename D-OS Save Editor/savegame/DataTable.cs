@@ -1,13 +1,9 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-
-namespace D_OS_Save_Editor
+﻿namespace D_OS_Save_Editor
 {
     public class DataTable
     {
+        public const string SupportedGameVersion = "2.0.119.430";
+
         public enum Attributes
         {
             Strength = 0,
