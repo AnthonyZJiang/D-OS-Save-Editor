@@ -22,5 +22,29 @@ namespace D_OS_Save_Editor.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2.0.98.842|")]
+        public string AcceptVersions {
+            get {
+                return ((string)(this["AcceptVersions"]));
+            }
+            set {
+                this["AcceptVersions"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Main|")]
+        public string AcceptMods {
+            get {
+                return ((string)(this["AcceptMods"]));
+            }
+            set {
+                this["AcceptMods"] = value;
+            }
+        }
     }
 }

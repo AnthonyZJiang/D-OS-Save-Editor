@@ -120,9 +120,7 @@
             <TabItem Header="Inventory">
                 <local:InventoryTab x:Name="InventoryTab" Margin="10"/>
             </TabItem>
-            <TabItem Header="Game Info">
-                <local:GameInfoTab x:Name="GameInfoTab" Margin="10"/>
-            </TabItem>
+
             <TabItem Header="Debug" Visibility="Collapsed">
                 <TabItem.Resources>
                     <Style TargetType="Button">

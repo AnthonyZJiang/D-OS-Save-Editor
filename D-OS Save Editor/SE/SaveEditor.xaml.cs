@@ -2,10 +2,8 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Input;
 
 namespace D_OS_Save_Editor
@@ -17,7 +15,6 @@ namespace D_OS_Save_Editor
     {
         private Savegame Savegame { get; set; }
         private Player[] EditingPlayers { get; set; }
-        private Meta ShowMeta { get; set; }
 
 
         public SaveEditor(string jsonFile)
@@ -48,31 +45,8 @@ namespace D_OS_Save_Editor
         public SaveEditor(Savegame savegame)
         {
             InitializeComponent();
-
-            ShowMeta = savegame.Meta;
-            // check number of game version and inform user
-            if (ShowMeta.GameVersion.Count > 1)
-            {
-                string formatedVersions = "";
-                foreach (string gameVersion in ShowMeta.GameVersion)
-                {
-                    formatedVersions += "\n  " + gameVersion;
-                }
-                MessageBox.Show("DOS EE Editor found " + ShowMeta.GameVersion.Count + " game versions for this savegame\nDOS EE Editor and this modified savegame may be unstable: keep play on latest version you have.\nGame Version:" + formatedVersions, "Too many game version", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
-
-            if (ShowMeta.ModsName.Count > 1)
-            {
-                string formatedMods = "";
-                foreach (string modName in ShowMeta.ModsName)
-                {
-                    if (modName != "Shared")
-                        formatedMods += "\n  " + modName;
-                }
-                MessageBox.Show("DOS EE Editor found " + (ShowMeta.ModsName.Count - 1) + " mod" + ((ShowMeta.ModsName.Count - 1) > 1 ? "s" : "") + " for this savegame\nDOS EE Editor and this modified savegame may be unstable.\nThe savegame will be mostly corrupted if it's edited by DOS EE Editor\nMods name:" + formatedMods, "Mod" + (ShowMeta.ModsName.Count > 1 ? "s" : "") + " found", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
-
             Savegame = savegame;
+
             // make a copy of players
             try
             {
@@ -100,7 +74,6 @@ namespace D_OS_Save_Editor
             InventoryTab.Player = EditingPlayers[id];
             TraitsTab.Player = EditingPlayers[id];
             TalentTab.Player = EditingPlayers[id];
-            GameInfoTab.Meta = ShowMeta;
 
             if (EditingPlayers[id].Name == "Henchman")
             {
@@ -170,7 +143,6 @@ namespace D_OS_Save_Editor
         {
             Savegame = null;
             EditingPlayers = null;
-            ShowMeta = null;
         }
 
         private void DebugButton_OnClick(object sender, RoutedEventArgs e)

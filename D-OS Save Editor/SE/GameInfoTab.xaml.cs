@@ -1,9 +1,4 @@
-﻿
-
-using System;
-using System.Diagnostics;
-using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
 namespace D_OS_Save_Editor
 {
@@ -12,8 +7,8 @@ namespace D_OS_Save_Editor
     /// </summary>
     public partial class GameInfoTab
     {
-        private string[] difficultyName = { "Story", "Classic", "Tactician", "Honour" };
-        private string[] gameSavetypeName = { "Manual", "QuickSave", "AutoSave", "Honour Save" };
+        private readonly string[] _difficultyName = { "Story", "Classic", "Tactician", "Honour" };
+        private readonly string[] _gameSavetypeName = { "Manual", "QuickSave", "AutoSave", "Honour Save" };
 
         private Meta _meta;
 
@@ -33,19 +28,20 @@ namespace D_OS_Save_Editor
 
         public void UpdateForm()
         {
-            DifficultyTextBlock.Text = difficultyName[Meta.Difficulty];
+            DifficultyTextBlock.Text = _difficultyName[Meta.Difficulty];
             LevelTextBlock.Text = Meta.Level;
-            SaveTimeTextBlock.Text = Meta.SaveTime;
+            SaveTimeTextBlock.Text = Meta.SavegameTimeString;
             SeedTextBlock.Text = Meta.Seed;
-            SaveGameTypeTextBlock.Text = gameSavetypeName[Meta.SaveGameType];
+            SaveGameTypeTextBlock.Text = _gameSavetypeName[Meta.SavegameType];
             if (GameVersionListBox.Items.Count == 0)
-                foreach (string i in Meta.GameVersion)
+                foreach (var i in Meta.GameVersions)
                 {
 
                     GameVersionListBox.Items.Add(new ListBoxItem { Content = i });
                 }
+
             if (ModsListBox.Items.Count == 0)
-                foreach (string i in Meta.ModsName)
+                foreach (var i in Meta.ModNames)
                 {
 
                     ModsListBox.Items.Add(new ListBoxItem { Content = i });

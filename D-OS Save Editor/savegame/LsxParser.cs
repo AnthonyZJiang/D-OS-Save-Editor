@@ -297,6 +297,8 @@ namespace D_OS_Save_Editor
         public static Meta ParseMeta(XmlDocument doc)
         {
             var metaData = doc.DocumentElement?.SelectSingleNode("./region [@id='MetaData']/node [@id='MetaData']/children/node [@id='MetaData']");
+            var saveTimeNode = metaData.SelectSingleNode("children/node [@id='SaveTime']");
+
             if (metaData == null)
             {
                 throw new XmlException("Unable to find MeteData in meta savegame.");
@@ -307,36 +309,29 @@ namespace D_OS_Save_Editor
                 Level = metaData.SelectSingleNode("attribute [@id='Level']")?.Attributes[1].Value,
                 Seed = metaData.SelectSingleNode("attribute [@id='Seed']")?.Attributes[1].Value,
                 Difficulty = Int16.Parse(metaData.SelectSingleNode("attribute [@id='Difficulty']")?.Attributes[1].Value),
-                SaveGameType = Int16.Parse(metaData.SelectSingleNode("attribute [@id='SaveGameType']")?.Attributes[1].Value)
+                SavegameType = Int16.Parse(metaData.SelectSingleNode("attribute [@id='SaveGameType']")?.Attributes[1].Value),
+                Year = saveTimeNode.SelectSingleNode("attribute [@id='Year']")?.Attributes[1].Value,
+                Month = saveTimeNode.SelectSingleNode("attribute [@id='Month']")?.Attributes[1].Value,
+                Day = saveTimeNode.SelectSingleNode("attribute [@id='Day']")?.Attributes[1].Value,
+                Hours = saveTimeNode.SelectSingleNode("attribute [@id='Hours']")?.Attributes[1].Value,
+                Minutes = saveTimeNode.SelectSingleNode("attribute [@id='Minutes']")?.Attributes[1].Value,
+                Seconds = saveTimeNode.SelectSingleNode("attribute [@id='Seconds']")?.Attributes[1].Value,
+                Milliseconds = saveTimeNode.SelectSingleNode("attribute [@id='Milliseconds']")?.Attributes[1].Value
             };
 
             //Debug.WriteLine("TimeStamp: " + metaData.SelectSingleNode("attribute [@id='TimeStamp']")?.Attributes[1].Value);
             //Debug.WriteLine("Size: " + metaData.SelectSingleNode("attribute [@id='Size']")?.Attributes[1].Value);
-
-
-            var saveTimeNode = metaData.SelectSingleNode("children/node [@id='SaveTime']");
-
-            meta.SaveTimeRead(
-                Int16.Parse(saveTimeNode.SelectSingleNode("attribute [@id='Year']")?.Attributes[1].Value),
-                saveTimeNode.SelectSingleNode("attribute [@id='Month']")?.Attributes[1].Value,
-                saveTimeNode.SelectSingleNode("attribute [@id='Day']")?.Attributes[1].Value,
-                saveTimeNode.SelectSingleNode("attribute [@id='Hours']")?.Attributes[1].Value,
-                saveTimeNode.SelectSingleNode("attribute [@id='Minutes']")?.Attributes[1].Value,
-                saveTimeNode.SelectSingleNode("attribute [@id='Seconds']")?.Attributes[1].Value,
-                Int16.Parse(saveTimeNode.SelectSingleNode("attribute [@id='Milliseconds']")?.Attributes[1].Value)
-                );
             
-
             var gameVersionChildrenNodes = metaData.SelectNodes("children/node [@id='GameVersions']/children/node [@id='GameVersion']");
             foreach (XmlNode gameVersionNode in gameVersionChildrenNodes)
             {
-                meta.GameVersion.Add(gameVersionNode.SelectSingleNode("attribute")?.Attributes[1].Value);
+                meta.GameVersions.Add(gameVersionNode.SelectSingleNode("attribute")?.Attributes[1].Value);
             }
 
             var modsChildrenNodes = metaData.SelectNodes("children/node [@id='ModuleSettings']/children/node [@id='Mods']/children/node [@id='ModuleShortDesc']");
             foreach (XmlNode moduleModNode in modsChildrenNodes)
             {
-                meta.ModsName.Add(moduleModNode.SelectSingleNode("attribute [@id='Name']")?.Attributes[1].Value);
+                meta.ModNames.Add(moduleModNode.SelectSingleNode("attribute [@id='Name']")?.Attributes[1].Value);
             }
 
             return meta;

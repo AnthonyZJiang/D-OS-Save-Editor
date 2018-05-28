@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -79,7 +80,7 @@ namespace D_OS_Save_Editor
         /// <summary>
         /// unpack savegame to UnpackDirectory (lsv->lsx)
         /// </summary>
-        public async Task UnpackSavegameAsync(IProgress<string> progress)
+        public async Task UnpackSavegameAsync(IProgress<string> progress, bool metaOnly = false)
         {
             // update progress
             progress.Report("Unpacking savegame.");
@@ -90,16 +91,17 @@ namespace D_OS_Save_Editor
             // update progress
             progress.Report("Uncompressing package.");
             await Task.Delay(1);
-            // uncompress global.lsf
-            var global = ResourceUtils.LoadResource(UnpackDirectory + Path.DirectorySeparatorChar + "globals.lsf");
             var outputVersion = GameVersion == Game.DivinityOriginalSin2
                 ? FileVersion.VerExtendedNodes
                 : FileVersion.VerChunkedCompress;
-            // save package
-            ResourceUtils.SaveResource(global, UnpackDirectory + Path.DirectorySeparatorChar + "globals.lsx",
-                ResourceFormat.LSX, outputVersion);
+            // uncompress and save global.lsf
+            ResourceUtils.SaveResource(
+                ResourceUtils.LoadResource(UnpackDirectory + Path.DirectorySeparatorChar + "globals.lsf"),
+                UnpackDirectory + Path.DirectorySeparatorChar + "globals.lsx", ResourceFormat.LSX, outputVersion);
             // uncompress and save meta.lsf
-            ResourceUtils.SaveResource(ResourceUtils.LoadResource(UnpackDirectory + Path.DirectorySeparatorChar + "meta.lsf"), UnpackDirectory + Path.DirectorySeparatorChar + "meta.lsx",ResourceFormat.LSX, outputVersion);
+            ResourceUtils.SaveResource(
+                ResourceUtils.LoadResource(UnpackDirectory + Path.DirectorySeparatorChar + "meta.lsf"),
+                UnpackDirectory + Path.DirectorySeparatorChar + "meta.lsx", ResourceFormat.LSX, outputVersion);
         }
 
         /// <summary>
@@ -132,6 +134,39 @@ namespace D_OS_Save_Editor
             packager.CreatePackage(SavegameFullFile, UnpackDirectory, PackageVersion.V13, CompressionMethod.LZ4, false);
         }
 
+        /// <summary>
+        /// unpack savegame to UnpackDirectory (lsv->lsx)
+        /// </summary>
+        public void GetMetaBackgroundWorker(object sender, DoWorkEventArgs e)
+        {
+            var worker = sender as BackgroundWorker;
+            
+            // unpackage
+            var packager = new Packager();
+            packager.UncompressPackage(SavegameFullFile, UnpackDirectory);
+            if (worker?.CancellationPending == true)
+            {
+                e.Cancel = true;
+                return;
+            }
+            var outputVersion = GameVersion == Game.DivinityOriginalSin2
+                ? FileVersion.VerExtendedNodes
+                : FileVersion.VerChunkedCompress;
+            // uncompress and save meta.lsf
+            ResourceUtils.SaveResource(
+                ResourceUtils.LoadResource(UnpackDirectory + Path.DirectorySeparatorChar + "meta.lsf"),
+                UnpackDirectory + Path.DirectorySeparatorChar + "meta.lsx", ResourceFormat.LSX, outputVersion);
+            if (worker?.CancellationPending == true)
+            {
+                e.Cancel = true;
+                return;
+            }
+            var metaDoc = new XmlDocument();
+            metaDoc.Load(UnpackDirectory + Path.DirectorySeparatorChar + "meta.lsx");
+            e.Result = LsxParser.ParseMeta(metaDoc);
+        }
+
+        #region dump methods
         /// <summary>
         /// Serialize the Savegame object to a zipped json file. This json file can be deserialized back to the Savegame object using GetSavegameFromJson method.
         /// </summary>
@@ -329,4 +364,6 @@ namespace D_OS_Save_Editor
             return sg;
         }
     }
+
+    #endregion
 }

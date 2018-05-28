@@ -4,10 +4,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -16,6 +18,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using D_OS_Save_Editor.Annotations;
 using LSLib.LS;
 using LSLib.LS.Enums;
 using static System.IO.Path;
@@ -32,11 +35,16 @@ namespace D_OS_Save_Editor
         private enum BackupStatus { None, Current, Old, NoChecksum, NoImage }
 
         public static string Version { get; } = "v1.5.4";
+        private BackgroundWorker _getMetaBackgroundWorker;
         private string _updateLink;
+        public MainWindowData MainWindowData;
 
         public MainWindow()
         {
             InitializeComponent();
+
+            MainWindowData = new MainWindowData();
+            DataContext = MainWindowData;
 
 #if LOAD_FROM_JSON
             var se = new SaveEditor(@"E:\Documents\Visual Studio 2017\Projects\D-OS SE\D-OS Save Editor\test\SaveGame_180404_120803.json");
@@ -357,31 +365,51 @@ namespace D_OS_Save_Editor
             }
         }
 
-        private void SavegameListBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void SavegameListBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count == 0 || ((ListBox) sender).Items.Count < 1)
             {
                 LoadButton.IsEnabled = false;
                 BackupButton.IsEnabled = false;
                 RestoreButton.IsEnabled = false;
-                SavegameTimeTextBox.Text = "";
-                SavegameDateTextBox.Text = "";
                 SavegameImage.Source = null;
                 return;
             }
-                
-
+            
             LoadButton.IsEnabled = true;
             BackupButton.IsEnabled = true;
             RestoreButton.IsEnabled = true;
-            SavegameTimeTextBox.Text = ((TextBlock)e.AddedItems[0]).Tag.ToString().Split('|')[1];
-            SavegameDateTextBox.Text = ((TextBlock)e.AddedItems[0]).Tag.ToString().Split('|')[0];
             var saveGameName = ((TextBlock) e.AddedItems[e.AddedItems.Count-1]).Uid;
-            var imageDir = DirectoryTextBox.Text + DirectorySeparatorChar + saveGameName + DirectorySeparatorChar + saveGameName + ".png";
+            var saveGameNameWithoutExt = DirectoryTextBox.Text + DirectorySeparatorChar + saveGameName + DirectorySeparatorChar +
+                               saveGameName;
+            var imageDir = saveGameNameWithoutExt + ".png";
             if (File.Exists(imageDir))
             {
                 SavegameImage.Source = new BitmapImage(new Uri(imageDir));
             }
+
+            var savegameTemp = new Savegame(saveGameNameWithoutExt + ".lsv",
+                GetTempPath() + "DOSSE" + DirectorySeparatorChar + "temp", 
+                (Game)GameEditionTextBlock.Tag);
+            if (_getMetaBackgroundWorker == null)
+            {
+                _getMetaBackgroundWorker = new BackgroundWorker {WorkerSupportsCancellation = true};
+                _getMetaBackgroundWorker.RunWorkerCompleted += (o, args) =>
+                {
+                    if (args.Cancelled || args.Error != null || args.Result == null) return;
+                    MainWindowData.Meta = (Meta) args.Result;
+                    _getMetaBackgroundWorker.Dispose();
+                };
+            }
+
+            if (_getMetaBackgroundWorker.IsBusy)
+                _getMetaBackgroundWorker.CancelAsync();
+            while (_getMetaBackgroundWorker.IsBusy)
+                await Task.Delay(5);
+
+            _getMetaBackgroundWorker.DoWork += savegameTemp.GetMetaBackgroundWorker;
+            MainWindowData.Meta = new Meta();
+            _getMetaBackgroundWorker.RunWorkerAsync();
         }
 
         private async void LoadButton_OnClick(object sender, RoutedEventArgs e)
@@ -437,7 +465,41 @@ namespace D_OS_Save_Editor
             {
                 progressIndicator.ProgressText = s;
             };
+
+            if (_getMetaBackgroundWorker.IsBusy)
+                progressIndicator.ProgressText = "Waiting for meta info...";
+
             progressIndicator.Show();
+
+            while (_getMetaBackgroundWorker.IsBusy)
+                await Task.Delay(5);
+
+            // version check
+            if (MainWindowData.Meta.IsOutdatedVersion)
+            {
+                var dlgResult = MessageBox.Show(this,
+                    "Your game version is unsupported and therefore, your savegame may become corrupted after editing. Do you wish to continue?",
+                    "Game version incompatible", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if (dlgResult == MessageBoxResult.No)
+                {
+                    progressIndicator.Close();
+                    return;
+                }
+
+            }
+            // mod check
+            if (MainWindowData.Meta.IsModWarning)
+            {
+                var dlgResult = MessageBox.Show(this,
+                    "Your game used mods and therefore, your savegame may become corrupted after it being editted. Do you wish to continue?",
+                    "Mods found", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if (dlgResult == MessageBoxResult.No)
+                {
+                    progressIndicator.Close();
+                    return;
+                }
+            }
+
             var unpackTask = await UnpackSaveAsync(savegame, progress);
             progressIndicator.Close();
             if (!unpackTask) return;
@@ -548,6 +610,35 @@ namespace D_OS_Save_Editor
         {
             Process.Start(
                 "https://docs.google.com/forms/d/e/1FAIpQLSeUeKYdV8InQslbvCvA1rmffJ5t1ieond4W6hpUHkHTH7I7dg/viewform");
+        }
+    }
+
+    public class MainWindowData: INotifyPropertyChanged
+    {
+        private Meta _meta;
+
+        public Meta Meta
+        {
+            get => _meta;
+            set
+            {
+                if (Equals(value, _meta)) return;
+                _meta = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public MainWindowData()
+        {
+            Meta = new Meta();
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

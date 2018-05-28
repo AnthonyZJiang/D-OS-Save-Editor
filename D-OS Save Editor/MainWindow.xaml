@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="D-OS Save Editor: Select a save" Height="428.713" Width="624.947" SizeToContent="Height" MinWidth="625" MinHeight="500" MaxHeight="700" ResizeMode="CanMinimize"
+        Title="D-OS Save Editor: Select a save" Height="615" Width="674" SizeToContent="Height" MinWidth="625" MinHeight="615" MaxHeight="700" ResizeMode="CanMinimize"
         WindowStartupLocation="CenterScreen" UseLayoutRounding="True">
     <Window.Resources>
         <Style TargetType="Button">
@@ -164,21 +164,62 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition/>
                         <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <Image Grid.ColumnSpan="4"  x:Name="SavegameImage" Margin="0,0,0,20"/>
+                    <Image Grid.ColumnSpan="5"  x:Name="SavegameImage" Margin="0,0,0,20"/>
                     <Rectangle Grid.Row="1" Grid.Column="1" Margin="0,3" Stroke="Black" StrokeThickness="0.5"/>
                     <Rectangle Grid.Row="2" Grid.Column="1" Margin="0,3" Stroke="Black" StrokeThickness="0.5"/>
+                    <Rectangle Grid.Row="3" Grid.Column="1" Margin="0,3" Stroke="Black" StrokeThickness="0.5"/>
+                    <Rectangle Grid.Row="1" Grid.Column="3" Margin="0,3" Stroke="Black" StrokeThickness="0.5"/>
+                    <Rectangle Grid.Row="2" Grid.Column="3" Margin="0,3" Stroke="Black" StrokeThickness="0.5"/>
+                    <Rectangle Grid.Row="3" Grid.Column="3" Margin="0,3" Stroke="Black" StrokeThickness="0.5"/>
                     <TextBlock Grid.Row="1" Text="Date:" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                    <TextBlock Grid.Row="1" Grid.Column="1"  x:Name="SavegameDateTextBox" Width="100" Margin="5"/>
+                    <TextBlock Grid.Row="1" Grid.Column="1" Width="100" Margin="5" Text="{Binding Meta.SavegameDateString}"/>
                     <TextBlock Grid.Row="2" Text="Time:" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                    <TextBlock Grid.Row="2" Grid.Column="1"  x:Name="SavegameTimeTextBox" Margin="5"/>
-                    <StackPanel Grid.Row="3" Grid.ColumnSpan="4" HorizontalAlignment="Right" Orientation="Horizontal">
+                    <TextBlock Grid.Row="2" Grid.Column="1" Width="100" Margin="5" Text="{Binding Meta.SavegameTimeString}"/>
+                    <TextBlock Grid.Row="3" Text="Map:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                    <TextBlock Grid.Row="3" Grid.Column="1" Width="100" Margin="5" Text="{Binding Meta.Level}" ToolTip="{Binding Meta.Level}"/>
+                    <TextBlock Grid.Row="3" Grid.Column="2" Text="Difficulty:" VerticalAlignment="Center" Margin="10,0,10,0"/>
+                    <TextBlock Grid.Row="3" Grid.Column="3" Width="100" Margin="5" Text="{Binding Meta.DifficultyString}"/>
+                    <TextBlock Grid.Row="1" Grid.Column="2" Text="Version:" VerticalAlignment="Center" Margin="10,0,10,0"/>
+                    <TextBlock Grid.Row="1" Grid.Column="3" Width="100" Margin="5" Text="{Binding Meta.LastGameVersion}">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Foreground" Value="Black"/>
+                                <Setter Property="ToolTip" Value="Game version is supported!"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Meta.IsOutdatedVersion}" Value="True">
+                                        <Setter Property="Foreground" Value="Crimson"/>
+                                        <Setter Property="ToolTip" Value="Only ver 2.0.119.430 is fully supported."/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <TextBlock Grid.Row="2" Grid.Column="2" Text="Mod:" VerticalAlignment="Center" Margin="10,0,10,0"/>
+                    <TextBlock Grid.Row="2" Grid.Column="3" Width="100" Margin="5" Text="{Binding Meta.ModCountDisplayText}" ToolTip="{Binding Meta.ModDisplayText}">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Foreground" Value="Black"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsModed}" Value="True">
+                                        <Setter Property="Foreground" Value="Crimson"></Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <StackPanel Grid.Row="10" Grid.ColumnSpan="4" HorizontalAlignment="Right" Orientation="Horizontal">
                         <Button x:Name="BackupButton" Content="Backup" Width="60" Margin="0,30,10,0" Click="BackupButton_OnClick" IsEnabled="False"/>
                         <Button x:Name="RestoreButton" Content="Restore" Width="60" Margin="0,30,80,0" Click="RestoreButton_OnClick" IsEnabled="False"/>
                         <Button x:Name="LoadButton" Content="Load" HorizontalAlignment="Right" IsEnabled="False" Width="60" Margin="0,30,0,0" Click="LoadButton_OnClick"/>
