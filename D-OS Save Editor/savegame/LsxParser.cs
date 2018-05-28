@@ -54,6 +54,7 @@ namespace D_OS_Save_Editor
                     try
                     {
                         item = ParseItem(inventoryData[j].ParentNode);
+                        item.ItemXmlNodeIdx = j;
                     }
                     catch (ObjectNullException)
                     {
@@ -63,12 +64,6 @@ namespace D_OS_Save_Editor
                     catch (Exception e)
                     {
                         throw new ItemParserException(e, inventoryData[j].ParentNode);
-                    }
-
-                    if (item == null)
-                    {
-                        notAnItemIdx.Enqueue(j);
-                        return;
                     }
 
                     players[i].Items[j] = item;
@@ -382,7 +377,7 @@ namespace D_OS_Save_Editor
                     }
                     else if (ic.Value.ChangeType == ChangeType.Modify)
                     {
-                        var itemNode = inventoryData[ic.Value.ItemIndex].ParentNode;
+                        var itemNode = inventoryData[ic.Value.Item.ItemXmlNodeIdx].ParentNode;
 
                         var allowedChanges = ic.Value.Item.GetAllowedChangeType();
                         if (allowedChanges.Contains(nameof(ic.Value.Item.Amount)))
