@@ -47,6 +47,8 @@ namespace D_OS_Save_Editor
             InitializeComponent();
             Savegame = savegame;
 
+            Title = $"D-OS Save Editor: {savegame.SavegameName.Substring(0,savegame.SavegameName.Length-4)}";
+
             // make a copy of players
             try
             {

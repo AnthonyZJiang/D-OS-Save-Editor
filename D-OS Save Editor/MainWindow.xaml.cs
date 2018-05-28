@@ -214,6 +214,111 @@ namespace D_OS_Save_Editor
             return null;
         }
 
+        private async Task LoadSavegame()
+        {
+            LoadButton.IsEnabled = false;
+
+            if (SavegameListBox.SelectedItem == null) return;
+
+            var unpackDir = GetTempPath() + "DOSSE" + DirectorySeparatorChar + "unpackaged";
+            var saveGameName = ((TextBlock)SavegameListBox.SelectedItem).Uid;
+
+            // check backup
+            switch (IsBackedUp(saveGameName))
+            {
+                case BackupStatus.None:
+                    var dlgResult = MessageBox.Show(this, "The savegame is not backed up. Do you want to make a backup first?",
+                        "No backup found.", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                    if (dlgResult == MessageBoxResult.Yes)
+                        BackupSavegame(saveGameName);
+                    break;
+                case BackupStatus.Current:
+                    break;
+                case BackupStatus.Old:
+                    dlgResult = MessageBox.Show(this,
+                        "The backup seems to be old because it failed checksum validation. Do you want to make a new backup?",
+                        "Old backup found", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                    if (dlgResult == MessageBoxResult.Yes)
+                        BackupSavegame(saveGameName);
+                    break;
+                case BackupStatus.NoChecksum:
+                    dlgResult = MessageBox.Show(this,
+                        "The backup may be old because it does not have a checksum file. Do you want to make a new backup?",
+                        "No checksum file", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                    if (dlgResult == MessageBoxResult.No) return;
+                    else break;
+                case BackupStatus.NoImage:
+                    dlgResult = MessageBox.Show(this,
+                        "The backup may be old because it does not have a checksum file. Do you want to make a new backup?",
+                        "No image file", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                    if (dlgResult == MessageBoxResult.No) return;
+                    else break;
+            }
+
+            var savegame = new Savegame(
+            DirectoryTextBox.Text + DirectorySeparatorChar + saveGameName + DirectorySeparatorChar + saveGameName + ".lsv",
+            unpackDir,
+            (Game)GameEditionTextBlock.Tag);
+
+            // unpack
+            var progressIndicator = new ProgressIndicator($"Loading {saveGameName}", false) { Owner = Application.Current.MainWindow };
+            var progress = new Progress<string>();
+            progress.ProgressChanged += (o, s) =>
+            {
+                progressIndicator.ProgressText = s;
+            };
+
+            if (_getMetaBackgroundWorker.IsBusy)
+                progressIndicator.ProgressText = "Waiting for meta info...";
+
+            progressIndicator.Show();
+
+            while (_getMetaBackgroundWorker.IsBusy)
+                await Task.Delay(5);
+
+            // TODO DNSA (Do Not Show Again) message box 
+            // version check
+            if (MainWindowData.Meta.IsOutdatedVersion)
+            {
+                var dlgResult = MessageBox.Show(this,
+                    $"It appears that the version of your game is different from what this SE is purposely created for (ver. {DataTable.SupportedGameVersion}). As a result, changes made to your savegame may corrupt the savegame.\n\nMake sure you make a backup before continuing.",
+                    "Game version incompatible", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+                if (dlgResult == MessageBoxResult.Cancel)
+                {
+                    progressIndicator.Close();
+                    return;
+                }
+
+            }
+            // mod check
+            if (MainWindowData.Meta.IsModWarning)
+            {
+                var dlgResult = MessageBox.Show(this,
+                    "It appears that you have used mods. As a result, changes made to your savegame may corrupt the savegame.\n\nMake sure you make a backup before continuing.",
+                    "Mods found", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+                if (dlgResult == MessageBoxResult.Cancel)
+                {
+                    progressIndicator.Close();
+                    return;
+                }
+            }
+
+            var unpackTask = await UnpackSaveAsync(savegame, progress);
+            progressIndicator.Close();
+            if (!unpackTask) return;
+
+            SaveEditor se;
+            try
+            {
+                se = new SaveEditor(savegame) { Owner = Application.Current.MainWindow };
+            }
+            catch
+            {
+                return;
+            }
+            se.ShowDialog();
+        }
+
         /// <summary>
         /// Unpacks lsv files
         /// </summary>
@@ -414,107 +519,7 @@ namespace D_OS_Save_Editor
 
         private async void LoadButton_OnClick(object sender, RoutedEventArgs e)
         {
-            LoadButton.IsEnabled = false;
-            
-            if (SavegameListBox.SelectedItem == null) return;
-
-            var unpackDir = GetTempPath() + "DOSSE" + DirectorySeparatorChar + "unpackaged";
-            var saveGameName = ((TextBlock)SavegameListBox.SelectedItem).Uid;
-
-            // check backup
-            switch (IsBackedUp(saveGameName))
-            {
-                case BackupStatus.None:
-                    var dlgResult = MessageBox.Show(this, "The savegame is not backed up. Do you want to make a backup first?",
-                        "No backup found.", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                    if (dlgResult == MessageBoxResult.Yes)
-                        BackupSavegame(saveGameName);
-                    break;
-                case BackupStatus.Current:
-                    break;
-                case BackupStatus.Old:
-                    dlgResult = MessageBox.Show(this,
-                        "The backup seems to be old because it failed checksum validation. Do you want to make a new backup?",
-                        "Old backup found", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                    if (dlgResult == MessageBoxResult.Yes)
-                        BackupSavegame(saveGameName);
-                    break;
-                case BackupStatus.NoChecksum:
-                    dlgResult = MessageBox.Show(this,
-                        "The backup may be old because it does not have a checksum file. Do you want to make a new backup?",
-                        "No checksum file", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                    if (dlgResult == MessageBoxResult.No) return;
-                    else break;
-                case BackupStatus.NoImage:
-                    dlgResult = MessageBox.Show(this,
-                        "The backup may be old because it does not have a checksum file. Do you want to make a new backup?",
-                        "No image file", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                    if (dlgResult == MessageBoxResult.No) return;
-                    else break;
-            }
-
-            var savegame = new Savegame(
-            DirectoryTextBox.Text + DirectorySeparatorChar + saveGameName + DirectorySeparatorChar + saveGameName + ".lsv", 
-            unpackDir,
-            (Game)GameEditionTextBlock.Tag);
-            
-            // unpack
-            var progressIndicator = new ProgressIndicator($"Loading {saveGameName}", false) {Owner = Application.Current.MainWindow};
-            var progress = new Progress<string>();
-            progress.ProgressChanged += (o, s) =>
-            {
-                progressIndicator.ProgressText = s;
-            };
-
-            if (_getMetaBackgroundWorker.IsBusy)
-                progressIndicator.ProgressText = "Waiting for meta info...";
-
-            progressIndicator.Show();
-
-            while (_getMetaBackgroundWorker.IsBusy)
-                await Task.Delay(5);
-
-            // TODO DNSA (Do Not Show Again) message box 
-            // version check
-            if (MainWindowData.Meta.IsOutdatedVersion)
-            {
-                var dlgResult = MessageBox.Show(this,
-                    $"It appears that the version of your game is different from what this SE is purposely created for (ver. {DataTable.SupportedGameVersion}). As a result, changes made to your savegame may corrupt the savegame.\n\nMake sure you make a backup before continuing.",
-                    "Game version incompatible", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
-                if (dlgResult == MessageBoxResult.Cancel)
-                {
-                    progressIndicator.Close();
-                    return;
-                }
-
-            }
-            // mod check
-            if (MainWindowData.Meta.IsModWarning)
-            {
-                var dlgResult = MessageBox.Show(this,
-                    "It appears that you have used mods. As a result, changes made to your savegame may corrupt the savegame.\n\nMake sure you make a backup before continuing.",
-                    "Mods found", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
-                if (dlgResult == MessageBoxResult.Cancel)
-                {
-                    progressIndicator.Close();
-                    return;
-                }
-            }
-
-            var unpackTask = await UnpackSaveAsync(savegame, progress);
-            progressIndicator.Close();
-            if (!unpackTask) return;
-
-            SaveEditor se;
-            try
-            {
-                se = new SaveEditor(savegame) { Owner = Application.Current.MainWindow };
-            }
-            catch
-            {
-                return;
-            }
-            se.ShowDialog();
+            await LoadSavegame();
         }
 
         private void BackupButton_OnClick(object sender, RoutedEventArgs e)
