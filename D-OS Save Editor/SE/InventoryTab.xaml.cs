@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -299,13 +298,12 @@ namespace D_OS_Save_Editor
                 // add changes
                 if (Player.ItemChanges.ContainsKey(item.Slot))
                 {
-                    Player.ItemChanges[item.Slot] = new ItemChange(item, Player.ItemChanges[item.Slot].ChangeType,
-                        ItemsListBox.SelectedIndex);
+                    Player.ItemChanges[item.Slot] = new ItemChange(item, Player.ItemChanges[item.Slot].ChangeType);
                 }
                 else
                 {
                     Player.ItemChanges.Add(item.Slot,
-                        new ItemChange(item, ChangeType.Modify, ItemsListBox.SelectedIndex));
+                        new ItemChange(item, ChangeType.Modify));
                 }
 
                 // apply changes to the original item

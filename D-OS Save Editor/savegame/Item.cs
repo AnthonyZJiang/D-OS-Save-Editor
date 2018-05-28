@@ -39,6 +39,11 @@ namespace D_OS_Save_Editor
         public string Xml { get; set; }
 
         /// <summary>
+        /// The index of the item in xml inventory node list.
+        /// </summary>
+        public int ItemXmlNodeIdx { get; set; }
+
+        /// <summary>
         /// Item category
         /// </summary>
         public ItemSortType ItemSort { get; set; }
@@ -499,15 +504,13 @@ namespace D_OS_Save_Editor
     {
         public Item Item { get; }
         public ChangeType ChangeType { get;}
-        public int ItemIndex { get; set; }
 
         public ItemChange() { }
 
-        public ItemChange(Item item, ChangeType changeType, int itemIndex)
+        public ItemChange(Item item, ChangeType changeType)
         {
             Item = item.DeepClone();
             ChangeType = changeType;
-            ItemIndex = itemIndex;
         }
     }
 

@@ -474,11 +474,12 @@ namespace D_OS_Save_Editor
             while (_getMetaBackgroundWorker.IsBusy)
                 await Task.Delay(5);
 
+            // TODO DNSA (Do Not Show Again) message box 
             // version check
             if (MainWindowData.Meta.IsOutdatedVersion)
             {
                 var dlgResult = MessageBox.Show(this,
-                    $"It appears that the version of your game is different from what this SE is purposely created for (ver. {DataTable.SupportedGameVersion}). As a result, changes made to your savegame may corrupt the savegame. Make sure you make a backup before continuing.",
+                    $"It appears that the version of your game is different from what this SE is purposely created for (ver. {DataTable.SupportedGameVersion}). As a result, changes made to your savegame may corrupt the savegame.\n\nMake sure you make a backup before continuing.",
                     "Game version incompatible", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
                 if (dlgResult == MessageBoxResult.Cancel)
                 {
@@ -491,7 +492,7 @@ namespace D_OS_Save_Editor
             if (MainWindowData.Meta.IsModWarning)
             {
                 var dlgResult = MessageBox.Show(this,
-                    "It appears that you have used mods. As a result, changes made to your savegame may corrupt the savegame. Make sure you make a backup before continuing.",
+                    "It appears that you have used mods. As a result, changes made to your savegame may corrupt the savegame.\n\nMake sure you make a backup before continuing.",
                     "Mods found", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
                 if (dlgResult == MessageBoxResult.Cancel)
                 {
