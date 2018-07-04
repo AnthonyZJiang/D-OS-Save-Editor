@@ -60,7 +60,7 @@ namespace D_OS_Save_Editor
 
         public bool IsOutdatedVersion => LastGameVersion != DataTable.SupportedGameVersion;
 
-        public bool IsVersionWarning => !Properties.Settings.Default.AcceptMods.Split('|').Contains(LastGameVersion);
+        public bool IsVersionWarning => !Properties.Settings.Default.AcceptVersions.Split('|').Contains(LastGameVersion);
 
         /// <summary>
         /// List of Mod's Name load in game
